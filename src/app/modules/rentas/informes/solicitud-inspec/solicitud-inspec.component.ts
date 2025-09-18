@@ -68,8 +68,9 @@ export class SolicitudInspecComponent {
       });
     
       // Realizar la petición POST
-      this.http.post('https://www.lalibertad.gob.ec/wsLibertad_v2/api/rentas/solicitudRecorrido/', body.toString(), { headers })
+     // this.http.post('https://www.lalibertad.gob.ec/wsLibertad_v2/api/rentas/solicitudRecorrido/', body.toString(), { headers })
       // this.http.post('http://120.40.73.73:8080/wsLibertad_v2/api/rentas/solicitudRecorrido/', body.toString(), { headers })
+      this.http.post('http://localhost:8080/wsLibertad_v2/api/rentas/solicitudRecorrido/', body.toString(), { headers })
       .subscribe((response: any) => {
         if (response.data && response.data.length > 0) {
           this.inspecciones = response.data; // Guardamos los resultados en la tabla

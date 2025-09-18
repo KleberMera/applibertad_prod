@@ -15,7 +15,8 @@ export class CorreosComponent {
   correoForm: FormGroup;
   identificacion!: string;
   // ip: string = '120.40.73.73:8080';
-  ip: string = 'www.lalibertad.gob.ec';
+  //ip: string = 'www.lalibertad.gob.ec';
+    ip: string = 'localhost:8080';
 
   //Para validar la cédula
   validador!: boolean;
