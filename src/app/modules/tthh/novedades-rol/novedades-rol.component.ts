@@ -265,7 +265,7 @@ export class NovedadesRolComponent {
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
 
-        const rawData: { [key: string]: any }[] = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
+        const rawData: { [key: string]: any }[] = XLSX.utils.sheet_to_json(worksheet, { defval: '' , raw: false});
 
         if (rawData.length === 0) return;
 
