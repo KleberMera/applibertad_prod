@@ -93,6 +93,163 @@ export class FinancieroService {
   }
 
   
+  generateReporteExoneracionesPDF(
+    data: Array<{
+      usuario: string;
+      exoneraciones: Array<{
+        FECHA_EXONERACION: string;
+        CONTRIBUYENTE: string;
+        CEDULA: string;
+        CODIGO_DACTILAR: string;
+        TITULO: string;
+        FECHA_EMISION: string;
+        EMITIDO_POR: string;
+        DESCRIPCION_INGRESO: string;
+      }>;
+    }>,
+    titulo: string,
+    fechaConsulta: string
+  ): Observable<Blob> {
+    return new Observable(observer => {
+      import('jspdf').then(jsPDFModule => {
+        const { jsPDF } = jsPDFModule;
+        import('jspdf-autotable').then(autoTableModule => {
+          const doc = new jsPDF('landscape');
+          const autoTable = autoTableModule.default;
+          
+          const pageWidth = doc.internal.pageSize.getWidth();
+          const pageHeight = doc.internal.pageSize.getHeight();
+          const margins = { top: 15, bottom: 15, left: 15, right: 15 };
+          const paginasConEncabezado = new Set<number>();
+          
+          const drawEncabezado = () => {
+            const currentPage = doc.getCurrentPageInfo().pageNumber;
+            if (paginasConEncabezado.has(currentPage)) return;
+            paginasConEncabezado.add(currentPage);
+          
+            const totalPagesExp = '{total_pages_count_string}';
+            const pad = (n: number) => n.toString().padStart(2, '0');
+            const mesesAbreviados = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEPT', 'OCT', 'NOV', 'DIC'];
+          
+            const now = new Date();
+            const hours = now.getHours();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const hour12 = hours % 12 || 12;
+          
+            const fechaHora = `${pad(now.getDate())}/${mesesAbreviados[now.getMonth()]}/${now.getFullYear()}, ${pad(hour12)}:${pad(now.getMinutes())}:${pad(now.getSeconds())} ${ampm}`;
+          
+            const [year, month, day] = fechaConsulta.split('-');
+            const nombreMes = mesesAbreviados[parseInt(month, 10) - 1];
+            const fechaFormateada = `${pad(parseInt(day))}/${nombreMes}/${year}`;
+          
+            const yBase = margins.top;
+            const rightX = pageWidth - 10;
+          
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(12);
+            doc.text('GAD Municipal del Cantón La Libertad', pageWidth / 2, yBase + 4, { align: 'center' });
+          
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(11);
+            doc.text('Reporte de Exoneraciones', pageWidth / 2, yBase + 10, { align: 'center' });
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(10);
+            doc.text(`Período: ${fechaConsulta}`, pageWidth / 2, yBase + 16, { align: 'center' });
+          
+            doc.setFontSize(8);
+            doc.text(`Página ${currentPage} de ${totalPagesExp}`, rightX - 10, yBase + 4, { align: 'right' });
+            doc.text(fechaHora, rightX - 10, yBase + 10, { align: 'right' });
+          };
+          
+          // Agrupar por usuario
+          data.forEach((grupo, grupoIndex) => {
+            if (grupoIndex > 0) {
+              doc.addPage('landscape');
+            }
+            
+            // Configurar la tabla
+            const headers = [
+              'Fecha',
+              'Contribuyente',
+              'Cédula',
+              'Código Dactilar',
+              'Título',
+              'Fecha Emisión',
+              'Emitido por',
+              'Descripción'
+            ];
+            
+            const rows = grupo.exoneraciones.map(item => [
+              item.FECHA_EXONERACION || '',
+              item.CONTRIBUYENTE || '',
+              item.CEDULA || '',
+              item.CODIGO_DACTILAR || '',
+              item.TITULO || '',
+              item.FECHA_EMISION || '',
+              item.EMITIDO_POR || '',
+              item.DESCRIPCION_INGRESO || ''
+            ]);
+            
+            // Título del usuario
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(12);
+            doc.text(`Usuario: ${grupo.usuario}`, margins.left, margins.top + 25);
+            
+            // Añadir tabla al PDF
+            autoTable(doc, {
+              startY: margins.top + 30,
+              head: [headers],
+              body: rows,
+              margin: { top: 10 },
+              styles: {
+                fontSize: 7,
+                cellPadding: 2,
+                overflow: 'linebreak',
+                lineWidth: 0.1,
+                textColor: [0, 0, 0],
+                font: 'helvetica'
+              },
+              headStyles: {
+                fillColor: [41, 128, 185],
+                textColor: [255, 255, 255],
+                fontStyle: 'bold',
+                fontSize: 7,
+                halign: 'center'
+              },
+              alternateRowStyles: {
+                fillColor: [245, 245, 245]
+              },
+              columnStyles: {
+                0: { cellWidth: 20, halign: 'center' },
+                1: { cellWidth: 40 },
+                2: { cellWidth: 25, halign: 'center' },
+                3: { cellWidth: 25, halign: 'center' },
+                4: { cellWidth: 30 },
+                5: { cellWidth: 20, halign: 'center' },
+                6: { cellWidth: 30 },
+                7: { cellWidth: 50 }
+              },
+              didDrawPage: () => {
+                drawEncabezado();
+              }
+            });
+          });
+          
+          // Generar el PDF como Blob
+          const pdfBlob = doc.output('blob');
+          observer.next(pdfBlob);
+          observer.complete();
+        }).catch(error => {
+          console.error('Error al cargar jspdf-autotable:', error);
+          observer.error(error);
+        });
+      }).catch(error => {
+        console.error('Error al cargar jspdf:', error);
+        observer.error(error);
+      });
+    });
+  }
+
   generateReportePDF(data: any[], usuario: string, fechaConsulta: string, base64Logo: string) {
     const doc = new jsPDF('landscape');
     const redondear = (n: number) => Number(n || 0).toFixed(2);

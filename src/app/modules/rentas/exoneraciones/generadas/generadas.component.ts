@@ -5,14 +5,13 @@ import { UsuariosService } from '@data/services/api/usaurios/usuarios.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Table } from 'primeng/table';
 import Swal from 'sweetalert2';
-import { FinancieroService } from '@data/services/financiero/financiero.service';
 import { SisoService } from '@data/services/tthh/siso/siso.service';
 import { TthhService } from '@data/services/tthh/tthh.service';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import saveAs from 'file-saver';
 import * as XLSX from 'xlsx';
 import { API_ROUTES } from '@data/constants/routes';
 import * as FileSaver from 'file-saver';
+import { FinancieroService } from '@data/services/financiero/financiero.service';
 
 @Component({
   selector: 'app-generadas',
@@ -54,7 +53,8 @@ export class GeneradasComponent {
     constructor(
       private fb: FormBuilder,
       private tthhService: TthhService,
-      private http: HttpClient
+      private http: HttpClient,
+      private financieroService: FinancieroService
     ) { }
   
   
@@ -239,6 +239,79 @@ export class GeneradasComponent {
         title: 'Archivo Excel generado exitosamente',
         showConfirmButton: false,
         timer: 1500
+      });
+    }
+
+    exportarPDF() {
+      const fecha_desde = this.formularioMarcaciones.get('fecha_desde')?.value;
+      const fecha_hasta = this.formularioMarcaciones.get('fecha_hasta')?.value;
+      const usuario = this.formularioMarcaciones.get('usuario')?.value;
+      const username = usuario ? usuario : '';
+
+      if (!fecha_desde || !fecha_hasta) {
+        Swal.fire('Error', 'Debe seleccionar un rango de fechas', 'error');
+        return;
+      }
+
+      const formattedFecha_desde = this.formatDate(fecha_desde);
+      const formattedFecha_hasta = this.formatDate(fecha_hasta);
+
+      // Mostrar loading
+      Swal.fire({
+        title: 'Generando reporte PDF...',
+        text: 'Por favor espere',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+
+      // Agrupar por usuario
+      const groupedByUser = this.marcaciones.reduce((acc, item) => {
+        const user = item.EXONERADO_POR || 'Sin usuario';
+        if (!acc[user]) {
+          acc[user] = [];
+        }
+        acc[user].push(item);
+        return acc;
+      }, {} as { [key: string]: any[] });
+
+      // Convertir a array de objetos con usuario y sus exoneraciones
+      const usersWithExoneraciones = Object.entries(groupedByUser).map((entry) => {
+        const [usuario, exoneraciones] = entry as [string, any[]];
+        return {
+          usuario,
+          exoneraciones: exoneraciones.map((e: any) => ({
+          FECHA_EXONERACION: e.FECHA_EXONERACION ? new Date(e.FECHA_EXONERACION).toLocaleDateString() : '',
+          CONTRIBUYENTE: e.CONTRIBUYENTE,
+          CEDULA: e.CEDULA,
+          CODIGO_DACTILAR: e.CODIGO_DACTILAR,
+          TITULO: e.TITULO,
+          FECHA_EMISION: e.FECHA_EMISION ? new Date(e.FECHA_EMISION).toLocaleDateString() : '',
+          EMITIDO_POR: e.EMITIDO_POR,
+          DESCRIPCION_INGRESO: e.DESCRIPCION_INGRESO,
+          DETALLE: e.DETALLE
+        }))
+        };
+      });
+
+      // Llamar al servicio para generar el PDF
+      // @ts-ignore - El método será implementado en el servicio
+      this.financieroService.generateReporteExoneracionesPDF(
+        usersWithExoneraciones,
+        'Sistema de Exoneraciones',
+        `${formattedFecha_desde} - ${formattedFecha_hasta}`
+      ).subscribe({
+        next: (response: Blob) => {
+          Swal.close();
+          const blob = new Blob([response], { type: 'application/pdf' });
+          const fileName = `Reporte_Exoneraciones_${formattedFecha_desde}_a_${formattedFecha_hasta}.pdf`;
+          FileSaver.saveAs(blob, fileName);
+        },
+        error: (error: any) => {
+          console.error('Error al generar el PDF:', error);
+          Swal.fire('Error', 'No se pudo generar el PDF', 'error');
+        }
       });
     }
 
