@@ -30,9 +30,11 @@
                   [options]="tipos" 
                   optionLabel="DESCRIPCION" 
                   optionValue="CODIGO" 
-                  placeholder="Tipos de Conceptos">
+                  placeholder="Tipos de Conceptos"
+                  styleClass="tipo-dropdown">
                 </p-dropdown>
               </div>
+              &bne;
               <div class="p-field ">
                 <div class="custom-file-upload">
                   <label for="archivoExcel" class="btn-subir">📁 Seleccionar Archivo</label>
@@ -132,17 +134,19 @@
               </ng-template>
 
               <ng-template pTemplate="summary">
-                <div>Total de registros: {{ excelPreviewData.length }}</div>
-              </ng-template>  
-              
-              <ng-template pTemplate="summary">
-  <div style="display: flex; justify-content: space-between; align-items: center;">
-    <span>Total de registros: {{ excelPreviewData.length }}</span>
-    <span>
-      Total: {{ totalValor | number:'1.2-2' }}
-    </span>
-  </div>
-</ng-template>
+                <div class="summary-bar">
+                  <div class="summary-item registros" aria-label="Total de registros">
+                    <i class="pi pi-database"></i>
+                    <span class="label">Total de registros</span>
+                    <span class="value">{{ excelPreviewData.length }}</span>
+                  </div>
+                  <div class="summary-item total" aria-label="Total de valores">
+                    <i class="pi pi-calculator"></i>
+                    <span class="label">Total</span>
+                    <span class="value">{{ totalValor | number:'1.2-2' }}</span>
+                  </div>
+                </div>
+              </ng-template>
 
               <ng-template pTemplate="emptymessage">
                 <tr>
