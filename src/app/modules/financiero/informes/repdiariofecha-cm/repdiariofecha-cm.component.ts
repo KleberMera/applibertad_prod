@@ -7,6 +7,7 @@ import { Table } from 'primeng/table';
 import Swal from 'sweetalert2';
 
 import { saveAs } from 'file-saver'
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-repdiariofecha-cm',
@@ -168,10 +169,60 @@ export class RepdiariofechaCmComponent {
     }
   
   
+    exportarExcel() {
+      const fechaDesde = this.formularioConceptosMensuales.get('date_start')?.value;
+      const fechaHasta = this.formularioConceptosMensuales.get('date_end')?.value;
+
+      const desde = fechaDesde ? this.formatDate(fechaDesde) : '';
+      const hasta = fechaHasta ? this.formatDate(fechaHasta) : '';
+      const nombreArchivo = `CMR_desde_${desde}_hasta_${hasta}.xlsx`;
+
+      // Mostrar loader
+      Swal.fire({
+        title: 'Generando archivo Excel...',
+        text: 'Por favor, espere',
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading()
+      });
+
+      // Validar que haya datos
+      if (!this.recaudaciones || this.recaudaciones.length === 0) {
+        Swal.close();
+        Swal.fire('Info', 'No hay datos para exportar.', 'info');
+        return;
+      }
+
+      // Transformar los datos como en la tabla
+      const data = this.recaudaciones.map(r => ({
+        'UBICACION': r.UBICACION,
+        'TRANSAC': r.CAJA_TRAN,
+        'EMISION': r.EMISION,
+        'TITCRED': r.TITCRED,
+        'CONTRIBUYENTE': r.CONTRIBUYENTE,
+        'NOM': r.CONCEPTO,
+        '(+)INT': r.INTERES,
+        'COAC': r.COACTIVA,
+        '(-)DESC': r.DESCUENTO,
+        'TOTAL': r.TOTAL
+      }));
+
+      const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+      const workbook: XLSX.WorkBook = { Sheets: { 'CM Mensual' : worksheet }, SheetNames: ['CM Mensual'] };
+      XLSX.writeFile(workbook, nombreArchivo);
+
+      Swal.close();
+      Swal.fire({
+        icon: 'success',
+        title: 'Archivo Excel generado exitosamente',
+        showConfirmButton: false,
+        timer: 1500
+      });
+    }
+
     exportarPDF(){
       const fecha_desde = this.formularioConceptosMensuales.get('date_start')?.value;
       const fecha_hasta = this.formularioConceptosMensuales.get('date_end')?.value;
-  
+
       if (fecha_desde && fecha_hasta) {
         // Asegúrate de que la fecha esté en el formato correcto
         const formattedDate_start = this.formatDate(fecha_desde);

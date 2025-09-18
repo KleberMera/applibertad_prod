@@ -8,6 +8,7 @@ import { Table } from 'primeng/table';
 import Swal from 'sweetalert2';
 
 import { saveAs } from 'file-saver'
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-repdiario-cm',
@@ -166,6 +167,55 @@ export class RepdiarioCmComponent {
     const month = ('0' + (date.getMonth() + 1)).slice(-2);
     const day = ('0' + date.getDate()).slice(-2);
     return `${year}-${month}-${day}`;
+  }
+
+  exportarExcel() {
+    const fecha = this.formularioConceptosMensuales.get('date')?.value;
+    const formattedDate = fecha ? this.formatDate(fecha) : '';
+    const nombreArchivo = `CMR_${formattedDate}.xlsx`;
+
+    // Mostrar loader
+    Swal.fire({
+      title: 'Generando archivo Excel...',
+      text: 'Por favor, espere',
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading()
+    });
+
+    // Validar que haya datos
+    if (!this.recaudaciones || this.recaudaciones.length === 0) {
+      Swal.close();
+      Swal.fire('Info', 'No hay datos para exportar.', 'info');
+      return;
+    }
+
+    // Transformar los datos según columnas visibles en la tabla
+    const data = this.recaudaciones.map(r => ({
+      'UBICACION': r.UBICACION,
+      'TRANSAC': r.CAJA_TRAN,
+      'EMISION': r.EMISION,
+      'TITCRED': r.TITCRED,
+      'CONTRIBUYENTE': r.CONTRIBUYENTE,
+      'NOM': r.CONCEPTO,
+      '(+)INT': r.INTERES,
+      'COAC': r.COACTIVA,
+      '(-)DESC': r.DESCUENTO,
+      'TOTAL': r.TOTAL
+    }));
+
+    // Crear hoja y archivo
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+    const workbook: XLSX.WorkBook = { Sheets: { 'CM Diario': worksheet }, SheetNames: ['CM Diario'] };
+
+    XLSX.writeFile(workbook, nombreArchivo);
+
+    Swal.close();
+    Swal.fire({
+      icon: 'success',
+      title: 'Archivo Excel generado exitosamente',
+      showConfirmButton: false,
+      timer: 1500
+    });
   }
 
 
