@@ -77,6 +77,11 @@ export class NovedadesRolComponent {
         ubicacion: ['', Validators.required],
         tipo: ['', Validators.required]
       });
+      
+      // Suscribirse a cambios en el control tipo para actualizar selectedTipo
+      this.formularioConceptosMensuales.get('tipo')?.valueChanges.subscribe(value => {
+        this.selectedTipo = value;
+      });
     }
   
     ngOnInit(): void {
@@ -116,6 +121,7 @@ export class NovedadesRolComponent {
       this.selectedFecha = periodoActual;
     }
 
+
     mostrarFaltantes2(): void {
       if (!this.selectedFecha) {
         Swal.fire({
@@ -131,6 +137,7 @@ export class NovedadesRolComponent {
 
     onFechaChange(event: any): void {
       this.selectedFecha = event.value;
+      console.log('Fecha seleccionada actualizada:', this.selectedFecha);
     }
 
     mostrarFaltantesConRefresh(): void {
@@ -574,17 +581,32 @@ export class NovedadesRolComponent {
     }
 
     private limpiarDatosTabla(): void {
-      
       this.excelPreviewData = [];
       this.cedulasConError = [];
+ 
+      this.cargaValida = false;
+      
+      // Limpiar formulario y variables
       this.formularioConceptosMensuales.reset();
+      
+      // Forzar la limpieza de selectedFecha y selectedTipo
+      this.selectedFecha = '';
+      this.selectedTipo = '';
+      
+      // Regenerar fechas permitidas para actualizar la UI
+      setTimeout(() => {
+        this.generarFechasPermitidas();
+      }, 0);
       
       if (this.tbhistorial) {
         this.tbhistorial.reset();
       }
-      this.cargaValida = false;
-      
-      this.selectedFecha = '';
-      this.selectedTipo = '';
     }
+
+
+    get totalValor(): number {
+        return (this.excelPreviewData || []).reduce((acc, row) => acc + (Number(row.valor) || 0), 0);
+    }
+
+   
 }

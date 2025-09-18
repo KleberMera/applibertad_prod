@@ -11,6 +11,7 @@
                 <p-dropdown
                   [options]="fechaOptions"
                   [(ngModel)]="selectedFecha"
+                  [ngModelOptions]="{standalone: true}"
                   optionLabel="label"
                   optionValue="value"
                   placeholder="Seleccione Periodo"
@@ -29,7 +30,6 @@
                   [options]="tipos" 
                   optionLabel="DESCRIPCION" 
                   optionValue="CODIGO" 
-                  [(ngModel)]="selectedTipo" 
                   placeholder="Tipos de Conceptos">
                 </p-dropdown>
               </div>
@@ -133,7 +133,16 @@
 
               <ng-template pTemplate="summary">
                 <div>Total de registros: {{ excelPreviewData.length }}</div>
-              </ng-template>
+              </ng-template>  
+              
+              <ng-template pTemplate="summary">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <span>Total de registros: {{ excelPreviewData.length }}</span>
+    <span>
+      Total: {{ totalValor | number:'1.2-2' }}
+    </span>
+  </div>
+</ng-template>
 
               <ng-template pTemplate="emptymessage">
                 <tr>

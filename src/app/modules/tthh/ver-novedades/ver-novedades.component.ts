@@ -76,6 +76,8 @@ export class VerNovedadesComponent {
           tipos_conceptos: ['', Validators.required]
         });
       }
+
+   
     
       ngOnInit(): void {
         this.mostrarFormulario2();
