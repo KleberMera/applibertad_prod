@@ -1,0 +1,275 @@
+<div class="container">
+    <div class="form-container">
+      <h2 class="ha-title">Actas</h2>
+      <hr>
+
+      <form [formGroup]="formularioActas" class="ha-form">
+        <div>
+          <!-- <div class="button-container"> -->
+            <!-- Botón para mostrar el formulario -->
+            <!-- <p-button severity="primary" label="Agregar" icon="pi pi-plus" ></p-button> -->
+            <!-- Agrega otros botones aquí si es necesario -->
+          <!-- </div> -->
+        
+          <!-- <div *ngIf="formularioVisible"> -->
+          <!-- <div [@formularioAnimacion]="formularioVisible ? 'visible' : 'oculto'"> -->
+            <!-- <hr> -->
+            <h4>Usuario Entrega</h4>
+              <div class="p-field-group">
+                <div class="p-field" style="flex: 0 0 33%; display: flex;">
+                  <input id="usuarioEntrega" 
+                      (keydown.enter)="$event.preventDefault()" 
+                      (keydown)="validateNumber($event)"
+                      type="text" 
+                      formControlName="usuarioEntrega" 
+                      class="p-inputtext ha-input" 
+                      required 
+                      placeholder="Cedula"
+                      autocomplete="off"
+                      maxlength="10"
+                      style="flex: 1;"> <!-- El campo de entrada de texto ocupa todo el espacio restante -->
+                  <p-button severity="primary" icon="pi pi-search" (click)="buscaUsuario(1)"></p-button> <!-- Botón con estilo primeng -->
+              </div>
+              
+                <div class="p-field" style="flex: 0 0 33%;">
+                    <!-- <label for="usuarioEntregaNombre" class="ha-label">Nombre</label> -->
+                    <input id="usuarioEntregaNombre" 
+                        readonly 
+                        (keydown.enter)="$event.preventDefault()" 
+                        type="text" 
+                        formControlName="usuarioEntregaNombre"
+                        class="p-inputtext ha-input" 
+                        required 
+                        placeholder="Nombre"
+                        autocomplete="off">
+                </div>
+                <div class="p-field" style="flex: 1;">
+                  <!-- <label for="usuarioEntregaDepart" class="ha-label">Departamento</label> -->
+                    <input id="usuarioEntregaDepart" 
+                        readonly
+                        (keydown.enter)="$event.preventDefault()" 
+                        type="text" 
+                        formControlName="usuarioEntregaDepart" 
+                        class="p-inputtext ha-input" 
+                        required 
+                        placeholder="Departamento"
+                        autocomplete="off">
+                </div>
+            </div>
+            <hr>
+            <h4>Usuario Recibe</h4>
+              <div class="p-field-group">
+                <div class="p-field" style="flex: 0 0 33%; display: flex;">
+                    <input id="usuarioRecibe" 
+                        (keydown)="validateNumber($event)"
+                        (keydown.enter)="$event.preventDefault()" 
+                        type="text" 
+                        formControlName="usuarioRecibe" 
+                        class="p-inputtext ha-input" 
+                        required 
+                        placeholder="Cedula"
+                        autocomplete="off"
+                        maxlength="10"
+                        style="flex: 1;">
+                        <p-button severity="primary" icon="pi pi-search" (click)="buscaUsuario(0)"></p-button> <!-- Botón con estilo primeng -->
+                </div>
+                <div class="p-field" style="flex: 0 0 33%;">
+                    <input id="usuarioRecibeNombre" 
+                        readonly
+                        (keydown.enter)="$event.preventDefault()" 
+                        type="text" 
+                        formControlName="usuarioRecibeNombre" 
+                        class="p-inputtext ha-input" 
+                        required 
+                        placeholder="Nombre"
+                        autocomplete="off">
+                      
+                </div>
+                <div class="p-field" style="flex: 1;">
+                    <input id="usuarioRecibeDepart" 
+                        readonly
+                        (keydown.enter)="$event.preventDefault()" 
+                        type="text" 
+                        formControlName="usuarioRecibeDepart" 
+                        class="p-inputtext ha-input" 
+                        required 
+                        placeholder="Departamento"
+                        autocomplete="off">
+                </div>
+            </div>
+            <hr>
+            <!-- <h4>Datos Generales</h4> -->
+            <div style="display: flex;">
+              <div style="flex: 0 0 30%; margin-right: 10px;">
+                  <div class="p-field">
+                      <p-calendar 
+                          [iconDisplay]="'input'" 
+                          [showIcon]="true" 
+                          placeholder="Fecha Entrega"
+                          formControlName="fechaEntrega" 
+                          inputId="fecEntrega"
+                          dateFormat="yy-mm-dd" />
+                  </div>
+                  <div class="p-field">
+                      <p-calendar 
+                          [iconDisplay]="'input'" 
+                          [showIcon]="true" 
+                          placeholder="Fecha Recepcion"
+                          formControlName="fechaRecepcion" 
+                          inputId="fecRecepcion"
+                          dateFormat="yy-mm-dd" />
+                  </div>
+              </div>
+              <div style="flex: 1;">
+                  <div class="p-field">
+                      <label for="observaciones" class="ha-label">Observaciones</label>
+                      <textarea id="observaciones" 
+                          (keydown.enter)="$event.preventDefault()" 
+                          formControlName="observaciones" 
+                          class="p-inputtext ha-input" 
+                          required 
+                          autocomplete="off"
+                          style="width: 100%; height: 100%;"></textarea>
+                  </div>
+              </div>
+          </div>
+          
+          <hr>  
+          <h4>Añadir componentes</h4>
+              <div class="p-field-group">
+                <div class="p-field" style="flex: 0 0 33%; display: flex;">
+                    <input id="codComponente" 
+                        (keydown.enter)="$event.preventDefault()" 
+                        type="text" 
+                        formControlName="codComponente" 
+                        class="p-inputtext ha-input" 
+                        required 
+                        placeholder="Código componente"
+                        autocomplete="off"
+                        style="flex: 1;">
+                        <p-button severity="primary" icon="pi pi-search" (click)="buscarComp()"></p-button> <!-- Botón con estilo primeng -->
+                </div>
+                <div class="p-field" style="flex: 0 0 33%;">
+                    <input id="tipoComponente" 
+                        readonly
+                        (keydown.enter)="$event.preventDefault()" 
+                        type="text" 
+                        formControlName="tipoComponente" 
+                        class="p-inputtext ha-input" 
+                        required 
+                        placeholder="Tipo componente"
+                        autocomplete="off">
+                      
+                </div>
+                <div class="p-field" style="flex: 1; display: flex;">
+                    <input id="estadoComponente" 
+                        readonly
+                        (keydown.enter)="$event.preventDefault()" 
+                        type="text" 
+                        formControlName="estadoComponente" 
+                        class="p-inputtext ha-input" 
+                        required 
+                        placeholder="Estado"
+                        autocomplete="off"
+                        style="flex: 1;"
+                        >
+                        <p-button severity="info" icon="pi pi-plus" (click)="aniadirComponente()"/> <!-- Botón con estilo primeng -->
+                </div>
+            </div>  
+            
+          <!-- </div> -->
+        </div>
+        
+
+        <div class="p-table">
+            
+          <!-- <h4>Lista de Estados</h4> -->
+          <!-- <div class="button-container"> -->
+            <!-- Botón para mostrar los datos en JSON -->
+            <!-- <p-button severity="primary" label="Agregar" icon="pi pi-plus"></p-button> -->
+            <!-- Agrega otros botones aquí si es necesario -->
+          <!-- </div> -->
+          <p-table 
+            #tbComponentes
+            [globalFilterFields]="['componenteid', 'codcomponente', 'tipocomponenteid', 'tip_comp_descripcion',
+                                    'marca', 'modelo', 'numeroserie', 'estadoid', 'estado_descripcion', 'cod_estado'
+                                    ]"
+            [value]="componentes" 
+            dataKey="componenteid"
+            [paginator]="true" 
+            [rows]="5"
+            >
+            <!-- <ng-template pTemplate="caption">
+              <p-iconField iconPosition="left">
+                    <p-inputIcon class="input-icon">
+                        <i class="pi pi-search"></i>
+                    </p-inputIcon>
+                    <input 
+                        pInputText 
+                        type="text" 
+                        (input)="applyFilterGlobal($event)" 
+                        (keydown.enter)="$event.preventDefault()" 
+                        placeholder="Buscar" 
+                        class="input-text p-inputtext"/>
+                </p-iconField>
+            </ng-template> -->
+            <ng-template pTemplate="header">
+                <tr>
+                    <!-- <th pSortableColumn="componenteid">ID <p-sortIcon field="componenteid"></p-sortIcon></th> -->
+                    <th pSortableColumn="codcomponente">Código<p-sortIcon field="codcomponente"></p-sortIcon></th>
+                    <!-- <th pSortableColumn="tipocomponenteid">TIPO COMPONENTE ID<p-sortIcon field="tipocomponenteid"></p-sortIcon></th> -->
+                    <th pSortableColumn="tip_comp_descripcion">TipoComp <p-sortIcon field="tip_comp_descripcion"></p-sortIcon></th>
+                    <th pSortableColumn="marca">Marca<p-sortIcon field="marca"></p-sortIcon></th>
+                    <th pSortableColumn="modelo">Modelo<p-sortIcon field="modelo"></p-sortIcon></th>
+                    <th pSortableColumn="numeroserie">Num. Seire<p-sortIcon field="numeroserie"></p-sortIcon></th>
+                    <th pSortableColumn="cod_estado">Estado<p-sortIcon field="cod_estado"></p-sortIcon></th>
+                    <th>Acciones</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-componente>
+                <tr>
+                    <!-- <td>{{ usuario.usuarioid }}</td> -->
+                    <td>{{ componente.codcomponente }}</td>
+                    <td>{{ componente.componente }}</td>
+                    <td>{{ componente.marca }}</td>
+                    <td>{{ componente.modelo }}</td>
+                    <td>{{ componente.numeroserie }}</td>
+                    <td>{{ componente.cod_estado }}</td>
+                    <td>
+                        <!-- <button (click)="editaComponente(componente)" class="ha-button ha-edit-button">
+                            <i class="pi pi-pencil"></i>
+                        </button> -->
+                        <button (click)="eliminarItem(componente)" class="ha-button ha-delete-button">
+                            <i class="pi pi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="7">No se encontraron componentes.</td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+
+  
+        </div>
+        <!-- Contenedor para alinear el botón a la derecha -->
+        <!-- <div class="button-container"> -->
+          <!-- Botón para mostrar los datos en JSON -->
+          <!-- <p-button severity="success" label="Guardar" icon="pi pi-save"></p-button> -->
+          <!-- Agrega otros botones aquí si es necesario -->
+        <!-- </div> -->
+        <hr>
+        <div class="button-container" style="margin: 0px; margin-top: 15px;">
+          <!-- Botón para guardar -->
+          <p-button severity="success" label="Guardar" icon="pi pi-save" (click)="guardarActa()"></p-button>
+          <!-- Botón para cancelar -->
+          <p-button severity="danger" label="Cancelar" icon="pi pi-times" (click)="restablecerActa()"></p-button>
+          <!-- Agrega otros botones aquí si es necesario -->
+        </div>
+      </form>
+    </div>
+  </div>
+  

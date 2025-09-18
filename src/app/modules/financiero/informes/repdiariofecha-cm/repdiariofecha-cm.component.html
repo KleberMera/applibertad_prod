@@ -1,0 +1,122 @@
+<div class="container">
+  <div class="form-container">
+    <h5 class="ha-title">Reporte Conceptos Mensuales</h5>
+    <hr>
+
+    <form [formGroup]="formularioConceptosMensuales" class="ha-form">
+      <div class="form-content">
+        <!-- Formulario Visible 2 -->
+        <div *ngIf="formularioVisible2" class="form-section">
+          <div class="p-field-group caja_reps_mensuales">
+            <div class="p-field calendar-field fechas">
+              <p-calendar 
+              formControlName="date_start"
+              [iconDisplay]="'input'" 
+              [showIcon]="true" 
+              dateFormat="yy-mm-dd"
+              placeholder="Fecha desde"
+               />
+
+            </div>
+            <div class="p-field calendar-field fechas">
+              <p-calendar 
+              formControlName="date_end"
+              [iconDisplay]="'input'" 
+              [showIcon]="true" 
+              dateFormat="yy-mm-dd"
+              placeholder="Fecha hasta"
+               />
+
+            </div>
+            <div class="button-container">
+              <!-- Botón para Buscar -->
+              <p-button severity="primary" label="" icon="pi pi-search" (click)="loadDataCM()" type="submit" ></p-button>
+              <!-- Botón para cancelar -->
+              <p-button severity="danger" label="" icon="pi pi-times" (click)="ocultarFormulario2()"></p-button>
+            </div>
+          </div>
+          <hr class="section-divider high">
+        </div>
+
+        <!-- Formulario Visible -->
+        <div *ngIf="formularioVisible" class="form-section">
+          <div class="button-container">
+            <!-- Botón para Exportar a Excel -->
+            <!-- <p-button severity="success" label="Generar PDF" icon="pi pi-file-pdf" (click)="exportarPDF()"></p-button> -->
+            <p-button severity="success" label="Generar PDF" icon="pi pi-file-pdf" (click)="exportarPDF2()"></p-button>
+          </div>
+          <hr class="section-divider high">
+        </div>
+
+        <!-- Tabla de Datos -->
+        <div *ngIf="formularioVisible2" class="table-container">
+          <p-table
+            #tbHistorial
+            [globalFilterFields]="['CAJA_TRAN',	'EMISION',	'TITCRED',	'CONTRIBUYENTE', 'NTRAN']"
+            [value]="recaudaciones"
+            styleClass="p-datatable-striped"
+            dataKey="CAJA_TRAN"
+            [paginator]="true"
+            [rows]="10"
+          >
+            <ng-template pTemplate="caption">
+              <p-iconField iconPosition="left">
+                <p-inputIcon class="input-icon">
+                  <i class="pi pi-search"></i>
+                </p-inputIcon>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="applyFilterGlobal($event)"
+                  (keydown.enter)="$event.preventDefault()"
+                  placeholder="Buscar en tabla"
+                  class="input-text p-inputtext buscar_rep_mensual"
+                />
+              </p-iconField>
+            </ng-template>
+            <ng-template pTemplate="header">
+              <tr>
+                <th pSortableColumn="UBICACION">Ubicación</th>
+                <th pSortableColumn="CAJA_TRAN">Transac</th>
+                <th pSortableColumn="EMISION">Emi</th>
+                <th pSortableColumn="TITCRED">TitCred</th>
+                <!-- <th pSortableColumn="CEDULA">Cédula</th> -->
+                <th pSortableColumn="CONTRIBUYENTE">Contrib</th>
+                <th pSortableColumn="CONCEPTO">Nom</th>
+                <th pSortableColumn="INTERES">(+)Int</th>
+                <th pSortableColumn="COACTIVA">Coac</th>
+                <th pSortableColumn="DESCUENTO" style="width: 4%;">(-)Desc</th>
+                <th pSortableColumn="TOTAL" style="width: 4%;">Total</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-recaudacion>
+              <tr>
+                <td>{{ recaudacion.UBICACION }}</td>
+                <td>{{ recaudacion.CAJA_TRAN }}</td>
+                <td>{{ recaudacion.EMISION }}</td>
+                <td>{{ recaudacion.TITCRED }}</td>
+                <!-- <td>{{ recaudacion.CEDULA }}</td> -->
+                <td>{{ recaudacion.CONTRIBUYENTE }}</td>
+                <td class="text-right">{{ recaudacion.CONCEPTO | number:'1.2-2' }}</td>
+                <td class="text-right">{{ recaudacion.INTERES | number:'1.2-2' }}</td>
+                <td class="text-right">{{ recaudacion.COACTIVA | number:'1.2-2' }}</td>
+                <td class="text-right">{{ recaudacion.DESCUENTO | number:'1.2-2' }}</td>
+                <td class="text-right">{{ recaudacion.TOTAL | number:'1.2-2' }}</td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="summary">
+              <div class="flex align-items-center justify-content-between">
+                Total de registros {{ recaudaciones ? recaudaciones.length : 0 }}.
+              </div>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="10">No se encontraron usuarios.</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

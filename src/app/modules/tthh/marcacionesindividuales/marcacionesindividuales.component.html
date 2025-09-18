@@ -1,0 +1,149 @@
+<div class="container">
+    <div class="form-container">
+      <h5 class="ha-title">Mis Marcaciones</h5>
+      <hr>
+  
+      <form [formGroup]="formularioMarcaciones" class="ha-form">
+        <div class="form-content">
+          <!-- Formulario Visible 2 -->
+          <div *ngIf="formularioVisible2" class="form-section">
+            <div class="p-field-group">
+              <div class="p-field">
+                <!-- <p-iconField iconPosition="left">
+                  <p-inputIcon class="input-icon">
+                    <i class="pi pi-user"></i>
+                  </p-inputIcon>
+                  <input
+                    pInputText
+                    formControlName="cedula"
+                    type="text"
+                    placeholder="Cédula"
+                    class="p-inputtext"
+                  />
+                </p-iconField> -->
+              </div>
+              <div class="p-field calendar-field fecha_desde">
+                <p-calendar 
+                formControlName="fecha_desde"
+                [iconDisplay]="'input'" 
+                [showIcon]="true" 
+                dateFormat="yy-mm-dd"
+                placeholder="Fecha desde"
+                 />
+  
+              </div>
+              <div class="p-field calendar-field fecha_hasta">
+                <p-calendar 
+                formControlName="fecha_hasta"
+                [iconDisplay]="'input'" 
+                [showIcon]="true" 
+                dateFormat="yy-mm-dd"
+                placeholder="Fecha hasta"
+                 />
+  
+              </div>
+
+
+              <div class="button-container">
+                <!-- Botón para Buscar -->
+                <p-button severity="primary" label="" icon="pi pi-search" (click)="loadDataCM()" type="submit"></p-button>
+                <!-- Botón para cancelar -->
+                <p-button severity="danger" label="" icon="pi pi-times" (click)="ocultarFormulario2()"></p-button>
+              </div>
+            </div>
+            <hr class="section-divider">
+          </div>
+  
+          <!-- Formulario Visible -->
+          <!-- <div *ngIf="formularioVisible" class="form-section">
+            <div class="button-container">
+              Botón para Exportar a Excel
+              <p-button severity="success" label="Generar XLSX" icon="pi pi-file-excel" (click)="exportarExcel()"></p-button>
+            </div>
+            <hr class="section-divider">
+          </div> -->
+  
+          <!-- Tabla de Datos -->
+          <div *ngIf="formularioVisible2" class="table-container">
+            <p-table
+              #tbMarcaciones
+              [value]="marcaciones"
+              [globalFilterFields]="['CEDULA', 'NOMBRE', 'FECHA', 'HORA']"
+              styleClass="p-datatable-striped"
+              [paginator]="true"
+              [rows]="10"
+            >
+              <ng-template pTemplate="caption">
+                <p-iconField iconPosition="left">
+                  <p-inputIcon class="input-icon">
+                    <i class="pi pi-search"></i>
+                  </p-inputIcon>
+                  <input
+                    pInputText
+                    type="text"
+                    (input)="applyFilterGlobal($event)"
+                    (keydown.enter)="$event.preventDefault()"
+                    placeholder="Buscar en tabla"
+                    class="input-text p-inputtext"
+                  />
+                </p-iconField>
+              </ng-template>
+          
+              <ng-template pTemplate="header">
+                <tr>
+                  <th pSortableColumn="CEDULA">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Cédula <p-sortIcon field="CEDULA"></p-sortIcon>
+                    </span>
+                  </th>
+                  <th pSortableColumn="NOMBRE">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Nombre <p-sortIcon field="NOMBRE"></p-sortIcon>
+                    </span>
+                  </th>
+                  <!-- <th pSortableColumn="DEPARTAMENTO">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Departamento <p-sortIcon field="DEPARTAMENTO"></p-sortIcon>
+                    </span>
+                  </th> -->
+                  <th pSortableColumn="FECHA">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Fecha <p-sortIcon field="FECHA"></p-sortIcon>
+                    </span>
+                  </th>
+                  <th pSortableColumn="HORA">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Hora <p-sortIcon field="HORA"></p-sortIcon>
+                    </span>
+                  </th>
+                </tr>
+              </ng-template>              
+          
+              <ng-template pTemplate="body" let-row>
+                <tr>
+                  <td>{{ row.CEDULA }}</td>
+                  <td>{{ row.NOMBRE }}</td>
+                  <!-- <td>{{ row.DEPARTAMENTO }}</td> -->
+                  <td>{{ row.FECHA }}</td>
+                  <td>{{ row.HORA }}</td>
+                </tr>
+              </ng-template>
+          
+              <ng-template pTemplate="summary">
+                <div class="flex align-items-center justify-content-between">
+                  Total de registros: {{ marcaciones.length || 0 }}.
+                </div>
+              </ng-template>
+          
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="5">No se encontraron registros.</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>          
+        </div>
+      </form>
+    </div>
+  </div>
+  

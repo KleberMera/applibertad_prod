@@ -1,0 +1,23 @@
+
+<div class="login-container" [ngStyle]="data.STYLE_BACKGROUND">
+    <div class="login-form">
+        <img [src]="data.LOGO_LOGIN" alt="Logo" class="login-form-logo" width="300" >
+        <!-- La sigueinte linea contiene el tag app-login-form el cual llama al componente del formulario
+             de esta forma se evita crear un nuevo div-->
+        <div class="login-form-content" app-login-form> 
+        </div>
+        <div class="login-form-footer">
+            <p>GADM La Libertad © {{ currentYear }}. Todos los derechos reservados.</p>
+            <!-- <div class="login-form-footer__links">
+                <a href="#">Acerca de</a>
+                <a href="#">Contáctanos</a>
+                <a href="#">Blogs</a>
+            </div>
+            <div class="login-form-footer__socials">
+                <i class="fab fa-facebook-square login-form-footer__socials_social"></i>
+                <i class="fab fa-twitter-square login-form-footer__socials_social"></i>
+                <i class="fab fa-instagram-square login-form-footer__socials_social"></i>
+            </div> -->
+        </div>
+    </div>
+</div>

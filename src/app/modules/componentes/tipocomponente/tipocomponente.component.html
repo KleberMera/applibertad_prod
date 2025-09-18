@@ -1,0 +1,107 @@
+<div class="container">
+    <div class="form-container">
+      <h2 class="ha-title">Tipo Componentes</h2>
+      <hr>
+
+      <form [formGroup]="formTipComp" class="ha-form">
+        <div>
+          <div class="button-container">
+            <!-- Botón para mostrar el formulario -->
+            <p-button severity="primary" label="Agregar" icon="pi pi-plus" (click)="mostrarFormulario()"></p-button>
+            <!-- Agrega otros botones aquí si es necesario -->
+          </div>
+        
+          <!-- <div *ngIf="formularioVisible"> -->
+          <div [@formularioAnimacion]="formularioVisible ? 'visible' : 'oculto'">
+            <hr>
+            <h4>Ingresar Tipo Componente</h4>
+            <div class="p-field-group">
+              <!-- <div class="p-field" style="flex: 0 0 30%;">
+                <label for="codEstado" class="ha-label">Código</label>
+                <input id="codEstado" type="text" formControlName="codEstado" class="p-inputtext ha-input" required autocomplete="off">
+              </div> -->
+              <div class="p-field" style="flex: 0 0 50%;">
+                <label for="descripcion" class="ha-label">Descripción</label>
+                <input id="descripcion" 
+                        type="text" 
+                        formControlName="descripcion" 
+                        (keydown.enter)="$event.preventDefault()"
+                        class="p-inputtext ha-input" 
+                        required autocomplete="off">
+              </div>
+              <div class="button-container" style="margin: 0px;" style="flex: 1;">
+                <!-- Botón para guardar -->
+                <p-button severity="success" label="Guardar" icon="pi pi-save" (click)="guardarTipComp()"></p-button>
+                <!-- Botón para cancelar -->
+                <p-button severity="danger" label="Cancelar" icon="pi pi-times" (click)="ocultarFormulario()"></p-button>
+                <!-- Agrega otros botones aquí si es necesario -->
+              </div>
+            </div>
+            <!-- <div class="button-container" style="margin: 0px;"> -->
+              <!-- Botón para guardar -->
+              <!-- <p-button severity="success" label="Guardar" icon="pi pi-save" (click)="guardarTipComp()"></p-button> -->
+              <!-- Botón para cancelar -->
+              <!-- <p-button severity="danger" label="Cancelar" icon="pi pi-times" (click)="ocultarFormulario()"></p-button> -->
+              <!-- Agrega otros botones aquí si es necesario -->
+            <!-- </div> -->
+            <hr>
+          </div>
+        </div>
+        
+
+        <div class="p-table">
+            
+          <p-table 
+            #tbTipComp
+            [globalFilterFields]="['tipocomponenteid', 'descripcion']"
+            [value]="tipoComponentes" 
+            dataKey="tipocomponenteid"
+            [paginator]="true" 
+            [rows]="5">
+            <ng-template pTemplate="caption">
+              <p-iconField iconPosition="left">
+                    <p-inputIcon class="input-icon">
+                        <i class="pi pi-search"></i>
+                    </p-inputIcon>
+                    <input 
+                        pInputText 
+                        type="text" 
+                        (input)="applyFilterGlobal($event)" 
+                        (keydown.enter)="$event.preventDefault()"
+                        placeholder="Buscar" 
+                        class="input-text p-inputtext"/>
+                </p-iconField>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <!-- <th pSortableColumn="tipocomponenteid">Código de Estado <p-sortIcon field="tipocomponenteid"></p-sortIcon></th> -->
+                    <th pSortableColumn="descripcion">Descripción <p-sortIcon field="descripcion"></p-sortIcon></th>
+                    <th>Acciones</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-tipcomp>
+                <tr>
+                    <!-- <td>{{ tipcomp.tipocomponenteid }}</td> -->
+                    <td>{{ tipcomp.descripcion }}</td>
+                    <td>
+                        <button (click)="editarTipComp(tipcomp)" class="ha-button ha-edit-button">
+                            <i class="pi pi-pencil"></i>
+                        </button>
+                        <button (click)="eliminarTipComp(tipcomp)" class="ha-button ha-delete-button">
+                            <i class="pi pi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="4">No se encontraron datos.</td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+        </div>
+      </form>
+    </div>
+  </div>
+  

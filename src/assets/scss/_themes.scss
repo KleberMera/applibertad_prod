@@ -1,0 +1,7 @@
+@import './themes/blue-dark-theme';
+@import './themes/dark-theme';
+
+$themes: (
+    'blue-dark' : $blue_dark_theme,
+    'dark' : $dark_theme
+)

@@ -1,0 +1,35 @@
+<!-- header.component.html -->
+<div class="ha-header__brand">
+    <fa-icon [icon]="faBars" class="ha-header__brand-menu" (click)="showMenu.emit(); toggleIcons()"></fa-icon>
+    
+    <div class="ha-header__brand-logo">
+        <span class="intranet-texto">Intranet</span>
+    </div>
+</div>
+
+<div class="ha-header__submenu">
+    <!-- Menú desplegable con PrimeNG -->
+    <p-menu #menu [model]="items" [popup]="true" [baseZIndex]="10000" appendTo="body"></p-menu>
+    
+    <!-- Botón para abrir el menú -->
+    <button type="button"
+        class="avatar-menu-button"
+        (click)="menu.toggle($event)"
+        [attr.aria-expanded]="menu.visible"
+        aria-haspopup="true">
+        
+        <div class="ha-header__submenu-usr" 
+             [ngStyle]="{
+                'border-radius': '5px',
+                'background-color': isLoggedIn ? '#dc3545' : '#6c757d',
+                'color': 'white',
+                'padding': '8px 12px',
+                'display': 'flex',
+                'align-items': 'center',
+                'gap': '8px'
+             }">
+            <span class="avatar-initials">{{ avatarInitials }}</span>
+            <i class="fa-solid fa-chevron-down"></i>
+        </div>
+    </button>
+</div>

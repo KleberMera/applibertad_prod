@@ -1,0 +1,110 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  //height: 100vh;
+}
+
+.form-container {
+  max-width: 750px;
+  width: 100%;
+  padding: 20px 40px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.ha-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.ha-form .p-field {
+  margin-bottom: 20px;
+}
+
+.ha-label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.ha-input {
+  width: 100%;
+}
+
+.p-table {
+  margin-top: 15px !important;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px; /* Ajusta el margen superior según sea necesario */
+  p-button{
+    margin: 2px !important
+  }
+}
+//   .ha-button {
+//     width: 100%;
+//     margin-top: 20px;
+//   }
+
+@media screen and (max-width: 750px) {
+  .button-container {
+    justify-content: center;
+  }
+}
+
+.pi-plus::before{
+  margin-right: 15px !important;
+}
+
+
+.ha-p-button {
+  margin: 0px !important;
+  padding: 0px !important;
+}
+
+.pi {
+  margin-right: 5px !important;
+}
+
+
+.p-field-group {
+  display: flex;
+  flex-wrap: wrap; /* Permite que los elementos se envuelvan a una nueva línea en pantallas más pequeñas */
+}
+
+.p-field {
+  flex: 1 1 40%; /* El campo de código ocupa el 40% del ancho */
+  margin-right: 10px; /* Ajusta el espacio entre los campos */
+}
+
+#descripcion {
+  flex: 1 1 calc(60% - 10px); /* El campo de descripción ocupa el resto del espacio (60% - 10px de margen) */
+}
+
+
+/*estilo para botones de la tabla */
+
+.ha-button {
+  background-color: transparent; // Hacer el fondo transparente
+  border: none; // Eliminar el borde
+  padding: 0; // Eliminar el relleno
+}
+
+.ha-edit-button .pi {
+  color: green; // Color del icono de editar
+  margin: 0 !important;
+}
+
+.ha-delete-button .pi {
+  color: red; // Color del icono de eliminar
+  margin: 0 !important;
+}
+
+
+.ha-p-table-content{
+  padding: 10px !important;
+}

@@ -1,0 +1,281 @@
+<div class="container">
+    <div class="form-container">
+        <h5 class="ha-title">Documentos Internos</h5>
+        <hr>
+
+      <form [formGroup]="formularioUsuarios" class="ha-form">
+        <div>
+          <div class="button-container_head">
+            <!-- Botón para mostrar el formulario -->
+            <p-button severity="primary" label="Agregar" icon="pi pi-plus" (click)="mostrarFormulario()"></p-button>
+            <p-button severity="primary" label="Buscar" icon="pi pi-search" (click)="mostrarFormulario2()"></p-button>
+            <!-- Agrega otros botones aquí si es necesario -->
+          </div>
+
+          <hr>
+
+          <div *ngIf="formularioVisible2" [@formularioAnimacion]>
+            
+          </div>
+        
+          <div *ngIf="formularioVisible" [@formularioAnimacion]>
+
+            <!-- <div class="p-field-group"> -->
+              <div class="p-field-group dropdown-row">
+                <!-- Dropdown: Departamento -->
+                <div class="p-field" style="flex: 0 0 35%;">
+                  <p-iconField iconPosition="left">
+                    <p-inputIcon styleClass="pi pi-info-circle"></p-inputIcon>
+                    <p-dropdown 
+                      class="dropdown-limitado"
+                      formControlName="tipo"
+                      [options]="tiposFijos"
+                      optionLabel="label"
+                      optionValue="value"
+                      placeholder="Departamento">
+                    </p-dropdown>
+                  </p-iconField>
+                </div>
+              
+                <!-- Dropdown: Jefes -->
+                <div class="p-field" style="flex: 0 0 35%;">
+                  <p-iconField iconPosition="left">
+                    <p-inputIcon styleClass="pi pi-info-circle"></p-inputIcon>
+                    <p-dropdown 
+                      class="dropdown-limitado"
+                      formControlName="tipo_jefe"
+                      [options]="tiposFijosJefes"
+                      optionLabel="label"
+                      optionValue="value"
+                      placeholder="Jefes">
+                    </p-dropdown>
+                  </p-iconField>
+                </div>
+              
+                <!-- Botón: Buscar -->
+                <div class="p-field" style="flex: 0 0 auto;">
+                  <p-button 
+                    severity="primary" 
+                    label="" 
+                    icon="pi pi-search" 
+                    (click)="usuarioByCed()">
+                  </p-button>
+                </div>
+              </div>
+            <hr style="margin-bottom: 1.5rem; margin-top: -0.5rem !important;">
+            <div class="p-field-group">
+              <div class="p-field dropdown-container" style="flex: 0 0 37%;">
+                <p-iconField iconPosition="left">
+                  <p-inputIcon styleClass="pi pi-info-circle"></p-inputIcon>
+                  <p-dropdown 
+                    class="dropdown-limitado"
+                    formControlName="tipo2"
+                    [options]="tiposFijos"
+                    optionLabel="label"
+                    optionValue="value"
+                    placeholder="Departamento"
+                    >
+                  </p-dropdown>
+                </p-iconField>
+              </div>   
+              <div class="p-field" style="flex: 0 0 35%;">
+                <p-iconField iconPosition="left">
+                  <p-inputIcon styleClass="pi pi-info-circle"></p-inputIcon>
+                  <p-dropdown 
+                    class="dropdown-limitado"
+                    formControlName="tipo_jefe2"
+                    [options]="tiposFijosJefes"
+                    optionLabel="label"
+                    optionValue="value"
+                    placeholder="Jefes">
+                  </p-dropdown>
+                </p-iconField>
+              </div>
+            </div>
+            <div class="p-field-group">
+              <div class="p-field" style="flex: 0 0 20%;">
+                <input id="no_oficio"
+                  (keydown.enter)="$event.preventDefault()" 
+                  type="text" 
+                  formControlName="no_oficio" 
+                  class="p-inputtext ha-input" 
+                  required 
+                  autocomplete="off"
+                  placeholder="No. de documento"
+                >
+              </div>
+              <div class="p-field" style="flex: 1;">
+                <input id="asunto" 
+                  (keydown.enter)="$event.preventDefault()" 
+                  type="text" 
+                  formControlName="asunto" 
+                  class="p-inputtext ha-input" 
+                  required 
+                  autocomplete="off"
+                  placeholder="Solicitud"
+                >
+              </div>
+            </div>
+            <div class="p-field-group">
+              <div class="p-field" style="flex: 0 0 20%;">
+                <p-calendar 
+                  formControlName="fecha_ingreso"
+                  [iconDisplay]="'input'" 
+                  [showIcon]="true" 
+                  dateFormat="yyyy-mm-dd"
+                  placeholder="Fecha Ingreso"
+                />
+              </div>                         
+            </div>
+            <hr style="margin-bottom: 1.5rem; margin-top: -0.5rem !important;">
+            <div class="p-field-group" style="display: flex; flex-wrap: nowrap; gap: 1rem;">
+              <div class="p-field" style="flex: 0 0 20%;">
+                <p-fileUpload 
+                  mode="basic" 
+                  name="imagen1" 
+                  chooseLabel="Cédula"
+                  accept="image/*"
+                  customUpload="true"
+                  (onSelect)="onFileSelect($event, 1)">
+                </p-fileUpload>
+              </div>
+              <div class="p-field" style="flex: 0 0 20%;">
+                <p-fileUpload 
+                  mode="basic" 
+                  name="imagen2" 
+                  chooseLabel="Oficio (PDF)"
+                  accept="application/pdf"
+                  customUpload="true"
+                  maxFileSize="10000000"
+                  (onSelect)="onFileSelect($event, 2)">
+                </p-fileUpload>
+              </div>
+              <div class="p-field" style="flex: 0 0 20%;">
+                <p-fileUpload 
+                  mode="basic" 
+                  name="imagen3" 
+                  chooseLabel="Evidencia"
+                  accept="image/*"
+                  customUpload="true"
+                  (onSelect)="onFileSelect($event, 3)">
+                </p-fileUpload>
+              </div>
+              <div class="p-field" style="flex: 0 0 20%;">
+                <p-fileUpload 
+                  mode="basic" 
+                  name="imagen4" 
+                  chooseLabel="Otros"
+                  accept="image/*"
+                  customUpload="true"
+                  (onSelect)="onFileSelect($event, 4)">
+                </p-fileUpload>
+              </div>
+            </div>  
+            
+            <!-- Agregar después de los file uploads -->
+            <div *ngIf="Object.keys(imagenesSeleccionadas).length > 0" class="mt-3">
+              <h5>Imágenes seleccionadas:</h5>
+              <div class="flex gap-2">
+                <div *ngFor="let item of Object.entries(imagenesSeleccionadas)" class="text-center">
+                  <small>Imagen {{ item[0] }}</small><br>
+                  <span class="text-sm">{{ item[1].name }}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="button-container" style="margin: 0px;">
+              <!-- Botón para guardar -->
+              <p-button severity="success" label="Guardar" icon="pi pi-save" (click)="guardarUsuario()"></p-button>
+              <!-- Botón para cancelar -->
+              <p-button severity="danger" label="Cancelar" icon="pi pi-times" (click)="ocultarFormulario()"></p-button>
+              <!-- Agrega otros botones aquí si es necesario -->
+            </div>
+            <hr>
+          </div>
+          <div *ngIf="formularioVisible2" [@formularioAnimacion]>
+              <div class="p-table">
+                  
+                <p-table 
+                  #tbUsuarios
+                  [globalFilterFields]="['NUMERO_TRAMITE', 'CEDULA_RUC', 'SOLICITANTE', 'BENEFICIARIO', 'NUMERO_OFICIO', 'ASUNTO', 'REFERENCIA', 'FECHA_INGRESO']"
+                  [value]="usuarios" 
+                  dataKey="usuarioid"
+                  styleClass="p-datatable-striped" 
+                  [paginator]="true" 
+                  [rows]="4">
+                  <ng-template pTemplate="caption">
+                    <p-iconField iconPosition="left">
+                      <p-inputIcon class="input-icon">
+                        <i class="pi pi-search"></i>
+                      </p-inputIcon>
+                      <input 
+                        pInputText 
+                        type="text" 
+                        (input)="applyFilterGlobal($event)" 
+                        (keydown.enter)="$event.preventDefault()" 
+                        placeholder="Buscar en tabla" 
+                        class="input-text p-inputtext"
+                      />
+                    </p-iconField>
+                  </ng-template>
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th>
+                        Acciones
+                      </th>
+                      <th pSortableColumn="DEPARTAMENTO">
+                        DPTO.
+                      </th>
+                      <th pSortableColumn="ASIGNADO_POR">
+                        ASIGNADO POR
+                      </th>
+                      <th pSortableColumn="ASIGNADO_A">
+                        ASIGNADO A 
+                      </th>
+                      <th pSortableColumn="NUMERO_TRÁMITE">
+                        NO. TRÁMITE 
+                      </th>
+                      <th pSortableColumn="FECHA">
+                        FECHA
+                      </th>
+                      <th pSortableColumn="NUMERO_DOCUMENTO">
+                        NO. DOCUMENTO 
+                      </th>
+                      <th pSortableColumn="SIOLICITUD">
+                        SOLICITUD 
+                      </th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-usuario>
+                    <tr>
+                      <td>
+                        <button 
+                          pButton 
+                          type="button" 
+                          icon="pi pi-search" 
+                          class="p-button-rounded p-button-text" 
+                          (click)="mostrarMensaje()"
+                          title="Buscar">
+                        </button>
+                      </td>
+                      <td>ALCALDIA</td>
+                      <td>JOHN REYES</td>
+                      <td>HECTOR QUIMI</td>
+                      <td>TRI-2025-0000001</td>
+                      <td>29-05-2025</td>
+                      <td>S/N</td>
+                      <td>PRUEBA FRONT</td>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="emptymessage">
+                    <tr>
+                      <td colspan="5">No se encontraron usuarios.</td>
+                    </tr>
+                  </ng-template>
+              </p-table>
+            </div>    
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>

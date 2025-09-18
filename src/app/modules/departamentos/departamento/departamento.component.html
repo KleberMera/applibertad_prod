@@ -1,0 +1,121 @@
+<div class="container">
+    <div class="form-container">
+      <h2 class="ha-title">Departamentos</h2>
+      <hr>
+
+      <form [formGroup]="formularioDepartamento" class="ha-form">
+        <div>
+          <div class="button-container">
+            <!-- Botón para mostrar el formulario -->
+            <p-button severity="primary" label="Agregar" icon="pi pi-plus" (click)="mostrarFormulario()"></p-button>
+            <!-- Agrega otros botones aquí si es necesario -->
+          </div>
+        
+          <!-- <div *ngIf="formularioVisible"> -->
+          <div [@formularioAnimacion]="formularioVisible ? 'visible' : 'oculto'">
+            <hr>
+            <h4>Ingresar Departamento</h4>
+            <div class="p-field-group">
+              <div class="p-field" style="flex: 0 0 50%;">
+                <label for="nombre" class="ha-label">Nombre</label>
+                <input id="nombre" 
+                        (keydown.enter)="$event.preventDefault()" 
+                        type="text" 
+                        formControlName="nombre" 
+                        class="p-inputtext ha-input" 
+                        required autocomplete="off">
+              </div>
+              <div class="p-field" style="flex: 1;">
+                <label for="ubicacion" class="ha-label">Ubicación</label>
+                <input id="ubicacion" 
+                        (keydown.enter)="$event.preventDefault()" 
+                        type="text" 
+                        formControlName="ubicacion" 
+                        class="p-inputtext ha-input" 
+                        required autocomplete="off">
+              </div>
+            </div>
+            <div class="button-container" style="margin: 0px;">
+              <!-- Botón para guardar -->
+              <p-button severity="success" label="Guardar" icon="pi pi-save" (click)="guardarDepartamento()"></p-button>
+              <!-- Botón para cancelar -->
+              <p-button severity="danger" label="Cancelar" icon="pi pi-times" (click)="ocultarFormulario()"></p-button>
+              <!-- Agrega otros botones aquí si es necesario -->
+            </div>
+            <hr>
+          </div>
+        </div>
+        
+
+        <div class="p-table">
+            
+          <!-- <h4>Lista de Estados</h4> -->
+          <!-- <div class="button-container"> -->
+            <!-- Botón para mostrar los datos en JSON -->
+            <!-- <p-button severity="primary" label="Agregar" icon="pi pi-plus"></p-button> -->
+            <!-- Agrega otros botones aquí si es necesario -->
+          <!-- </div> -->
+          <p-table 
+            #tbDepartamentos
+            [globalFilterFields]="['departamentoid', 'nombre', 'ubicacion']"
+            [value]="departamentos" 
+            dataKey="departamentoid"
+            [paginator]="true" 
+            [rows]="5">
+            <ng-template pTemplate="caption">
+              <p-iconField iconPosition="left">
+                    <p-inputIcon class="input-icon">
+                        <i class="pi pi-search"></i>
+                    </p-inputIcon>
+                    <input 
+                        pInputText 
+                        type="text" 
+                        (input)="applyFilterGlobal($event)" 
+                        (keydown.enter)="$event.preventDefault()" 
+                        placeholder="Buscar" 
+                        class="input-text p-inputtext"/>
+                </p-iconField>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="departamentoid">ID <p-sortIcon field="departamentoid"></p-sortIcon></th>
+                    <th pSortableColumn="nombre">Nombre <p-sortIcon field="nombre"></p-sortIcon></th>
+                    <th pSortableColumn="ubicacion">Ubicación <p-sortIcon field="ubicacion"></p-sortIcon></th>
+                    <th>Acciones</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-departamento>
+                <tr>
+                    <td>{{ departamento.departamentoid }}</td>
+                    <td>{{ departamento.nombre }}</td>
+                    <td>{{ departamento.ubicacion }}</td>
+                    <td>
+                        <button (click)="editarDepartamento(departamento)" class="ha-button ha-edit-button">
+                            <i class="pi pi-pencil"></i>
+                        </button>
+                        <button (click)="eliminarDepartamento(departamento)" class="ha-button ha-delete-button">
+                            <i class="pi pi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="4">No se encontraron departamentos.</td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+
+  
+        </div>
+        <!-- Contenedor para alinear el botón a la derecha -->
+        <!-- <div class="button-container"> -->
+          <!-- Botón para mostrar los datos en JSON -->
+          <!-- <p-button severity="success" label="Guardar" icon="pi pi-save"></p-button> -->
+          <!-- Agrega otros botones aquí si es necesario -->
+        <!-- </div> -->
+      </form>
+    </div>
+  </div>
+  

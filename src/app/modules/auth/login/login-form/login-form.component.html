@@ -1,0 +1,104 @@
+<h1 style="color: #007aff !important;">Intranet</h1>
+<div>
+    <p style="color: rgba(0, 0, 0, 0.60) !important; width: 100%;">Gobierno Autónomo Descentralizado Municipal Del Cantón La Libertad</p>
+</div>
+<form [formGroup]="loginForm" (ngSubmit)="autenticate()">
+    <!----------------- Field person name & lastnames ----------------->
+    <!-- <div formGroupName="person">
+        <div class="login-form-input">
+            SE UTILIZA CORREO PERO HABRIA QUE REALIZAR LOS CAMBIOS PARA UTILIZAR EL USUARIO
+            <label>Nombre*:</label>
+            <input type="text" placeholder="Nombre" formControlName="name">
+            <small  class="bg-danger rounded text-light mt-1 px-1 py-1" 
+                *ngIf="fp['name'].errors && loginSubmitted"
+            >
+                <ng-container [ngSwitch]="fp['name'].value">
+                    <ng-container *ngSwitchCase="''">{{errors.ALERTS.NAME_REQUIRED}}</ng-container>
+                    <ng-container *ngSwitchDefault>{{errors.ALERTS.NAME_MAX_LENGTH_ERROR}}</ng-container>
+                </ng-container>
+            </small>
+        </div>
+        <div class="login-form-input">
+            SE UTILIZA CORREO PERO HABRIA QUE REALIZAR LOS CAMBIOS PARA UTILIZAR EL USUARIO
+            <label>Apellido*:</label>
+            <input type="text" placeholder="Apellido" formControlName="lastname">
+            <small  class="bg-danger rounded text-light mt-1 px-1 py-1" 
+                *ngIf="fp['lastname'].errors && loginSubmitted"
+            >
+                <ng-container [ngSwitch]="fp['lastname'].value">
+                    <ng-container *ngSwitchCase="''">{{errors.ALERTS.LASTNAME_REQUIRED}}</ng-container>
+                    <ng-container *ngSwitchDefault>{{errors.ALERTS.LASTNAME_MAX_LENGTH_ERROR}}</ng-container>
+                </ng-container>
+            </small>
+        </div>
+    </div> -->
+    <!----------------- Field email ----------------->
+    <div class="login-form-input">
+        <!-- SE UTILIZA CORREO PERO HABRIA QUE REALIZAR LOS CAMBIOS PARA UTILIZAR EL USUARIO -->
+        <!-- <label>Usuario*:</label> -->
+        <!-- <input style="border-radius: 5px !important;" type="text" placeholder="Usuario" formControlName="user" (input)="forzarMinuscula()"> -->
+        <div class="animated-input-container" 
+            [class.focused]="isFocused"
+            [class.invalid]="loginSubmitted && fm['user'].invalid"
+            (click)="focusInput()">
+        
+        <div class="character-display">
+            <span 
+                *ngFor="let char of characters; let i = index"
+                class="character"
+                [class.animating]="char.isAnimating"
+                [class.last-char]="i === characters.length - 1">
+                {{ char.char }}
+            </span>
+            <span class="cursor" *ngIf="isFocused"></span>
+            <span class="placeholder" *ngIf="characters.length === 0">Usuario</span>
+        </div>
+        
+        <input 
+            class="hidden-input"
+            type="text"
+            [value]="getDisplayValue()"
+            (input)="onUserInputChange($event)"
+            (focus)="onFocus()"
+            (blur)="onBlur()"
+            formControlName="user"
+            autocomplete="off">
+        </div>
+        <!-- <input style="border-radius: 5px !important;" type="text" placeholder="Usuario" formControlName="user"> -->
+        <small  class="bg-danger rounded text-light mt-1 px-1 py-1" 
+            *ngIf="fm['user'].errors && loginSubmitted"
+        >
+            <ng-container [ngSwitch]="fm['user'].value">
+                <ng-container *ngSwitchCase="''">{{errors.ALERTS.USER_REQUIRED}}</ng-container>
+                <ng-container *ngSwitchDefault>{{errors.ALERTS.USER_ERROR}}</ng-container>
+            </ng-container>
+        </small>
+    </div>
+    <!----------------- Field password ----------------->
+    <div class="login-form-input">
+        <!-- <label>Contraseña*:</label> -->
+        <input
+            style="border-radius: 5px !important;"
+            type="password"
+            placeholder="Contraseña"
+            formControlName="password"
+            (keydown)="checkCapsLock($event)"
+            (keyup)="checkCapsLock($event)"
+            >
+            <small *ngIf="capsLockOn" class="text-danger d-block mt-1">
+            ¡Bloq Mayús está activado!
+            </small>
+            <small class="bg-danger rounded text-light mt-1 px-1 py-1"
+                *ngIf="fm['password']?.errors && loginSubmitted">
+            <ng-container [ngSwitch]="fm['password'].value">
+                <ng-container *ngSwitchCase="''">{{errors.ALERTS.PASSWORD_REQUIRED}}</ng-container>
+                <ng-container *ngSwitchDefault>{{errors.ALERTS.PASSWORD_LENGTH_ERROR}}</ng-container>
+            </ng-container>
+            </small>
+    </div>
+    <!-- <small class="small">Olvidé mi contraseña</small> -->
+    <div class="login-form-buttons">
+        <!-- <button class="login-form-buttons__signup">Registrarse</button> -->
+        <button type="submit" class="login-form-buttons__signin">Iniciar sesión</button>
+    </div>
+</form>

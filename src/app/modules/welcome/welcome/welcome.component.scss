@@ -1,0 +1,15 @@
+.ha-welcome-container {
+    display: flex;
+    flex-direction: column; // Mantiene el orden vertical
+    align-items: center;    // Centra horizontalmente
+    justify-content: center; // Centra verticalmente
+    height: 80vh; // Ocupa el 100% de la altura de la pantalla
+    text-align: center;
+    color: #003366;
+  
+    &__logo {
+        width: 25%;
+        height: auto; /* Mantiene la proporción */
+        padding: 0.5rem;
+    }
+  }

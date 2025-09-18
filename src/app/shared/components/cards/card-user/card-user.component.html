@@ -1,0 +1,20 @@
+<div class="ha-card" *ngIf="data" routerLink="/panel/user/detail/{{data.id}}">
+
+    <div class="ha-card__img">
+        <img [src]="data.avatar" alt="">
+    </div>
+    <div class="ha-card__info">
+        <h2>{{data.name}}</h2>
+        <h4>Edad: {{data.age}}</h4>
+        <p>Género:
+            <ng-container [ngSwitch]="data.gender">
+                <span *ngSwitchCase="'M'">Masculino</span>
+                <span *ngSwitchCase="'F'">Femenino</span>
+                <span *ngSwitchDefault>No definido</span>
+            </ng-container>
+        </p>
+        <p>{{data.description}}</p>
+        <p *ngIf="data.work">{{data.work}}</p>
+    </div>
+
+</div>

@@ -1,0 +1,177 @@
+<div class="container">
+    <div class="form-container">
+      <h5 class="ha-title">Exoneraciones Generadas por Liquidador</h5>
+      <hr>
+  
+      <form [formGroup]="formularioMarcaciones" class="ha-form">
+        <div class="form-content">
+          <!-- Formulario Visible 2 -->
+          <div *ngIf="formularioVisible2" class="form-section">
+            <div class="p-field-group caja_fechas">
+              <div class="p-field calendar-field fechas">
+                <p-calendar 
+                formControlName="fecha_desde"
+                [iconDisplay]="'input'" 
+                [showIcon]="true" 
+                dateFormat="yy-mm-dd"
+                placeholder="Fecha desde"
+                 />
+  
+              </div>
+              <div class="p-field calendar-field fechas">
+                <p-calendar 
+                formControlName="fecha_hasta"
+                [iconDisplay]="'input'" 
+                [showIcon]="true" 
+                dateFormat="yy-mm-dd"
+                placeholder="Fecha hasta"
+                 />
+              </div>
+              <div class="button-container">
+                <!-- Botón para Buscar -->
+                <p-button severity="primary" label="" icon="pi pi-search" (click)="loadDataCM()" type="submit" ></p-button>
+                <!-- Botón para cancelar -->
+                <p-button severity="danger" label="" icon="pi pi-times" (click)="ocultarFormulario2()"></p-button>
+              </div>
+            </div>
+            <hr class="section-divider high">
+          </div>
+  
+          <!-- Formulario Visible -->
+          <div *ngIf="!formularioVisible" class="form-section">
+            <div class="button-container">
+              <p-button severity="success" label="Generar XLSX" icon="pi pi-file-excel" (click)="exportarExcel()"></p-button>
+            </div>
+            <hr class="section-divider">
+          </div>
+  
+          <!-- Tabla de Datos -->
+          <div *ngIf="formularioVisible2" class="table-container">
+            <p-table
+              #tbMarcaciones
+              [value]="marcaciones"
+              [globalFilterFields]="['NOMBRE','CEDULA','CODIGO_DACTILAR','TITULO', 'DES_INGRESO', 'DETALLE', 'FECHA', 'USUARIO', 'VALOR']"
+              styleClass="p-datatable-striped"
+              [paginator]="true"
+              [rows]="10"
+            >
+              <ng-template pTemplate="caption">
+                <p-iconField iconPosition="left">
+                  <p-inputIcon class="input-icon">
+                    <i class="pi pi-search"></i>
+                  </p-inputIcon>
+                  <input
+                    pInputText
+                    type="text"
+                    (input)="applyFilterGlobal($event)"
+                    (keydown.enter)="$event.preventDefault()"
+                    placeholder="Buscar en tabla"
+                    class="input-text p-inputtext buscar_marcaciones"
+                  />
+                </p-iconField>
+              </ng-template>
+          
+              <ng-template pTemplate="header">
+                <tr>
+                  <th pSortableColumn="FECHA_EXONERACION">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Fecha Exoneración <p-sortIcon field="FECHA_EXONERACION"></p-sortIcon>
+                    </span>
+                  </th>
+                  <th pSortableColumn="EXONERADO_POR">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Exonerado por <p-sortIcon field="EXONERADO_POR"></p-sortIcon>
+                    </span>
+                  </th>
+                  <th pSortableColumn="NOMBRE">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Contribuyente <p-sortIcon field="NOMBRE"></p-sortIcon>
+                    </span>
+                  </th>
+                  <th pSortableColumn="CEDULA">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Cédula <p-sortIcon field="CEDULA"></p-sortIcon>
+                    </span>
+                  </th>
+                  <th pSortableColumn="CODIGO_DACTILAR">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Código dactilar <p-sortIcon field="CODIGO_DACTILAR"></p-sortIcon>
+                    </span>
+                  </th>
+                  <th pSortableColumn="TITULO">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Título <p-sortIcon field="TITULO"></p-sortIcon>
+                    </span>
+                  </th>
+                  <th pSortableColumn="FECHA_EMISION">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Fecha Emisión <p-sortIcon field="FECHA_EMISION"></p-sortIcon>
+                    </span>
+                  </th>
+                  <th pSortableColumn="EMITIDO_POR">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Emitido por <p-sortIcon field="EMITIDO_POR"></p-sortIcon>
+                    </span>
+                  </th>
+                  <th pSortableColumn="DES_INGRESO">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Descripción Ingreso <p-sortIcon field="DES_INGRESO"></p-sortIcon>
+                    </span>
+                  </th>
+                  <th pSortableColumn="DETALLE">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Detalle <p-sortIcon field="CEDULA"></p-sortIcon>
+                    </span>
+                  </th>
+                  <th pSortableColumn="VALOR">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Valor <p-sortIcon field="VALOR"></p-sortIcon>
+                    </span>
+                  </th>
+                </tr>
+              </ng-template>
+          
+              <ng-template pTemplate="body" let-row>
+                <tr>
+                  <td>{{ row.FECHA_EXONERACION | date: 'yyyy-MM-dd' }}</td>
+                  <td>{{ row.EXONERADO_POR }}</td>
+                  <td>{{ row.CONTRIBUYENTE }}</td>
+                  <td>{{ row.CEDULA }}</td>
+                  <td>{{ row.CODIGO_DACTILAR }}</td>
+                  <td>{{ row.TITULO }}</td>
+                  <td>{{ row.FECHA_EMISION | date: 'yyyy-MM-dd' }}</td>
+                  <td>{{ row.EMITIDO_POR }}</td>
+                  <td>{{ row.DESCRIPCION_INGRESO }}</td>
+                  <td>
+                    <div class="text-center">
+                      <button 
+                        type="button"
+                        class="btn-detalle"
+                        (click)="verDetalle(row)">&nbsp;&nbsp;
+                        <i class="pi pi-ellipsis-h"></i>
+                      </button>
+                    </div>
+                  </td>
+                  <!-- <td>{{ row.DETALLE }}</td> -->
+                  <td>{{ row.VALOR }}</td>
+                </tr>
+              </ng-template>
+          
+              <ng-template pTemplate="summary">
+                <div class="flex align-items-center justify-content-between">
+                  Total de registros: {{ marcaciones.length || 0 }}.
+                </div>
+              </ng-template>
+          
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="9">No se encontraron registros.</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>          
+        </div>
+      </form>
+    </div>
+  </div>
+  

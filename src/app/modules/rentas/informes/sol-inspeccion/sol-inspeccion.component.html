@@ -1,0 +1,127 @@
+<div class="container">
+  <div class="form-container">
+    <h5 class="ha-title">Reporte de Solicitudes de Recorrido</h5>
+    <hr>
+    <form [formGroup]="inspeccionForm" class="ha-form">
+      <div class="form-content">
+        <div class="form-section">
+          <div class="p-field-group caja_sol_inspec">
+            <!-- Selector de Fecha -->
+            <div class="p-field calendar-field fechas">
+              <p-calendar 
+                formControlName="date_start"
+                [iconDisplay]="'input'" 
+                [showIcon]="true" 
+                dateFormat="yy-mm-dd"
+                placeholder="Fecha"
+              />
+            </div>
+    
+            <!-- Input de Inspector -->
+            <div class="p-field fechas">
+              <p-iconField iconPosition="left">
+                <p-inputIcon class="input-icon">
+                  <i class="pi pi-user"></i>
+                </p-inputIcon>
+                <input
+                  pInputText
+                  type="text"
+                  formControlName="inspector"
+                  placeholder="Inspector"
+                  class="input-text p-inputtext"
+                />
+              </p-iconField>
+            </div>
+    
+            <!-- Input de Arrendatario -->
+            <div class="p-field fechas">
+              <p-iconField iconPosition="left">
+                <p-inputIcon class="input-icon">
+                  <i class="pi pi-briefcase"></i>
+                </p-inputIcon>
+                <input
+                  pInputText
+                  type="text"
+                  formControlName="arrendatario"
+                  placeholder="Arrendatario"
+                  class="input-text p-inputtext"
+                />
+              </p-iconField>
+            </div>
+    
+            <!-- Botón para Buscar -->
+            <div class="button-container">
+              <p-button severity="primary" icon="pi pi-search" (click)="buscar()" type="submit"></p-button>
+              <p-button severity="danger" label="" icon="pi pi-times" (click)="ocultarFormulario2()"></p-button>
+            </div>
+          </div>
+          <hr class="section-divider high">
+        </div>
+      </div>
+    </form>
+
+    <div class="form-section">
+      <div class="button-container" *ngIf="inspecciones.length > 0">
+        <p-button severity="danger" label="Generar PDF" icon="pi pi-file-pdf" (click)="generarPDF()"></p-button>
+        <!-- <p-button severity="success" label="Generar Excel" icon="pi pi-file-excel" (click)="generarExcel()"></p-button> -->
+      </div>
+      <hr class="section-divider">
+    </div>    
+    
+    <!-- Tabla de Resultados -->
+    <div class="table-container" >
+      <p-table [value]="inspecciones" [paginator]="true" [rows]="10" class="p-datatable-striped"  [globalFilterFields]="['DIRECCION', 'ESTADO', 'INSPECTOR', 'ARRENDATARIO', 'FECHA', 'RAZON', 'CEDULA', 'OBSERVACION', 'CODIGO_CATASTRAL', 'ASIGNA']">
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="DIRECCION">Dirección</th>
+            <th pSortableColumn="ESTADO">Estado</th>
+            <th pSortableColumn="INSPECTOR">Inspector</th>
+            <th pSortableColumn="ARRENDATARIO">Arrendatario</th>
+            <th pSortableColumn="FECHA">Fecha</th>
+            <th pSortableColumn="RAZON">Razón</th>
+            <th pSortableColumn="CEDULA">Cédula</th>
+            <th pSortableColumn="OBSERVACION">Observación</th>
+            <th pSortableColumn="CODIGO_CATASTRAL">Código Catastral</th>
+            <th pSortableColumn="ASIGNA">Asignado</th>
+          </tr>
+        </ng-template>
+        <!-- <ng-template pTemplate="caption">
+          <p-iconField iconPosition="left">
+            <p-inputIcon class="input-icon">
+              <i class="pi pi-search"></i>
+            </p-inputIcon>
+            <input
+              pInputText
+              type="text"
+              [(ngModel)]="globalFilter" 
+              (input)="applyFilterGlobal($event)"
+              (keydown.enter)="$event.preventDefault()"
+              placeholder="Buscar en tabla"
+              class="input-text p-inputtext"
+            />
+          </p-iconField>
+        </ng-template> -->
+        <ng-template pTemplate="body" let-inspeccion>
+          <tr>
+            <td>{{ inspeccion.DIRECCION }}</td>
+            <td>{{ inspeccion.ESTADO }}</td>
+            <td>{{ inspeccion.INSPECTOR }}</td>
+            <td>{{ inspeccion.ARRENDATARIO }}</td>
+            <td>{{ inspeccion.FECHA }}</td>
+            <td>{{ inspeccion.RAZON }}</td>
+            <td>{{ inspeccion.CEDULA }}</td>
+            <td>{{ inspeccion.OBSERVACION }}</td>
+            <td>{{ inspeccion.CODIGO_CATASTRAL }}</td>
+            <td>{{ inspeccion.ASIGNA }}</td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="10">No se encontraron registros.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

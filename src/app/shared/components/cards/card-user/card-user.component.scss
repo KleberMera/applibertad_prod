@@ -1,0 +1,44 @@
+.ha-card{
+    height: 190px;
+    max-width: 350px;
+    border: 1px solid rgba(0,0,0,0.25);
+    border-radius: 10px;
+    box-shadow: 0px 0px 6px 1px rgba(0,0,0,0.15);
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    border-left: 4px solid rgb(18, 140, 227);
+    transition: 0.5s all ease-in-out;
+    margin: 0.5rem auto;
+    &__img{
+        height: 100px;
+        width: 100px;
+        padding: 0.5rem;
+        overflow: hidden; /* Para ocultar cualquier parte de la imagen que sobresalga del contenedor */
+        border-radius: 50%; /* Asegura que el contenedor tenga una forma circular */
+        box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, 0.15);
+        position: relative; /* Añadimos posición relativa para el contenedor */
+
+        img{
+            position: absolute; /* Añadimos posición absoluta para la imagen */
+            top: 50%; /* La movemos al 50% de la altura del contenedor */
+            left: 50%; /* La movemos al 50% de la anchura del contenedor */
+            transform: translate(-50%, -50%); /* La ajustamos para centrarla */
+            max-width: 100%; /* Asegura que la anchura de la imagen sea al menos del 100% del contenedor */
+            min-height: 100%; /* Asegura que la altura de la imagen sea al menos del 100% del contenedor */
+            border-radius: 50%;
+        }
+    }
+    &__info{
+        border-left: 1px solid rgba(0,0,0,0.25);
+        padding: 0.5rem;
+        p{
+            opacity: 5;
+            margin: 0;
+        }
+    }
+    &:hover{
+        transform: scale(1.05);
+        cursor: pointer;
+    }
+}

@@ -1,0 +1,47 @@
+@import './normalize';
+@import './variables';
+@import './layout/main-content';
+@import './layout/header';
+@import './layout/left-nav';
+@import './layout/footer';
+@import './layout';
+
+//PRIME NG
+
+//@import "primeng/resources/themes/lara-light-blue/theme.css";
+
+/*************************/
+
+
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+// Importa otros estilos de Bootstrap según sea necesario, omitiendo 'reboot'
+@import "bootstrap/scss/bootstrap"; // Excluye el reinicio (`reboot`) al importar directamente los estilos de Bootstrap
+
+
+
+// @import "primeng/resources/themes/nova/theme.css";
+@import "primeng/resources/themes/aura-light-blue/theme.css";
+// @import "primeng/resources/themes";
+
+@import "primeng/resources/primeng.min.css";
+// @import "primeng/resources/themes/nova/theme.css";
+// @import 'primeng/resources/primeng.min.css';
+@import 'primeicons/primeicons.css';
+/*********************************************/
+
+//@import "primeng/resources/primeng.css";
+
+//@import 'primeng/resources/themes/nova-light/theme.css';
+
+
+//@import 'primeng/resources/themes/lara-light-blue/theme.css';
+//@import 'primeng/resources/themes/nova/theme.css';
+//@import 'primeng/resources/primeng.min.css';
+
+//@import 'primeicons/primeicons.min.css';
+
+.container {
+    padding-top: 5% !important;
+    padding-bottom: 5% !important;
+}

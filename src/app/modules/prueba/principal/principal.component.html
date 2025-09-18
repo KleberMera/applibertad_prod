@@ -1,0 +1,29 @@
+<!-- <p>principal works!</p>
+
+    <p-button label="Submit"></p-button>
+
+    <button type="button" pButton label="Aceptar"></button>
+    
+    <button type="button" class="btn btn-primary">Primary</button>
+    <button pButton pRipple label="Submit" class="p-button-success"></button>
+    
+    
+
+    <p-button icon="pi pi-check"></p-button>
+     -->
+
+     <!-- <button type="button" label="Aceptar"></button> -->
+
+    <div class="row flex flex-wrap">
+        <div class="col-12">
+            <p-button severity="danger" label="Mostrar Error" (onClick)="showError()" icon="pi pi-times-circle"></p-button>
+            <p-button severity="success" label="Mostrar Success" (onClick)="showSuccess()" icon="pi pi-check"></p-button>
+
+        </div>
+    </div>
+        
+    
+
+<div class="ha-error" [ngStyle]="style" *ngIf="isShow">
+    {{msg}}
+</div>

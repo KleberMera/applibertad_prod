@@ -1,0 +1,118 @@
+<div class="container">
+    <div class="form-container">
+      <h5 class="ha-title">Reporte Permisos Aprobados</h5>
+      <hr>
+      <form [formGroup]="formularioPermisos" class="ha-form">
+        <div class="form-content">
+          <!-- Formulario Visible 2 -->
+          <div *ngIf="formularioVisible2" class="form-section">
+            <div class="p-field-group caja_fechas">
+              <div class="p-field calendar-field fechas">
+                <p-calendar 
+                formControlName="fecha_desde"
+                [iconDisplay]="'input'" 
+                [showIcon]="true" 
+                dateFormat="yy-mm-dd"
+                placeholder="Fecha desde"
+                 />
+  
+              </div>
+              <div class="p-field calendar-field fechas">
+                <p-calendar 
+                formControlName="fecha_hasta"
+                [iconDisplay]="'input'" 
+                [showIcon]="true" 
+                dateFormat="yy-mm-dd"
+                placeholder="Fecha hasta"
+                 />
+  
+              </div>
+              <div class="button-container">
+                <!-- Botón para Buscar -->
+                <p-button severity="primary" label="" icon="pi pi-search" (click)="loadDataCM()" type="submit"></p-button>
+                <!-- Botón para cancelar -->
+                <p-button severity="danger" label="" icon="pi pi-times" (click)="ocultarFormulario2()"></p-button>
+              </div>
+            </div>
+            <hr class="section-divider">
+          </div>
+  
+          <!-- Formulario Visible -->
+          <div *ngIf="formularioVisible" class="form-section">
+            <div class="button-container">
+              <!-- Botón para Exportar a Excel -->
+              <p-button severity="success" label="Generar XLSX" icon="pi pi-file-excel" (click)="exportarExcel()"></p-button>
+            </div>
+            <hr class="section-divider">
+          </div>
+  
+          <!-- Tabla de Datos -->
+          <div *ngIf="formularioVisible2" class="table-container">
+            <p-table
+              #tbPermisos
+              [globalFilterFields]="[
+                'numeroSolicitud',
+                'fechaDesde', 
+                'fechaHasta', 
+                'apellidosNombres',	
+                'diasPermiso', 
+                'tipoPermiso']"
+              [value]="permisos"
+              styleClass="p-datatable-striped"
+              dataKey="numeroSolicitud"
+              [paginator]="true"
+              [rows]="10"
+            >
+              <ng-template pTemplate="caption">
+                <p-iconField iconPosition="left">
+                  <p-inputIcon class="input-icon">
+                    <i class="pi pi-search"></i>
+                  </p-inputIcon>
+                  <input
+                    pInputText
+                    type="text"
+                    (input)="applyFilterGlobal($event)"
+                    (keydown.enter)="$event.preventDefault()"
+                    placeholder="Buscar en tabla"
+                    class="input-text p-inputtext buscar_permisos"
+                  />
+                </p-iconField>
+              </ng-template>
+              <ng-template pTemplate="header">
+                <tr>
+                  <th pSortableColumn="numeroSolicitud"># Solic.</th>
+                  <th pSortableColumn="apellidosNombres">Apellidos y Nombres</th>
+                  <th pSortableColumn="fechaDesde">Fec.Desde</th>
+                  <th pSortableColumn="fechaHasta">Fec.Hasta</th>
+                  <th pSortableColumn="diasPermiso">Dias</th>
+                  <th pSortableColumn="tipoPermiso">Tipo</th>
+                  
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-permiso>
+                <tr>
+                  <td>{{ permiso.numeroSolicitud }}</td>
+                  <td>{{ permiso.apellidosNombres }}</td>
+                  <td>{{ permiso.fechaDesde }}</td>
+                  <td>{{ permiso.fechaHasta }}</td>
+                  <td>{{ permiso.diasPermiso }}</td>
+                  <td>{{ permiso.tipoPermiso }}</td>                  
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="summary">
+                <div class="flex align-items-center justify-content-between">
+                  Total de registros {{ permisos ? permisos.length : 0 }}.
+                </div>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="11">No se encontraron usuarios.</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  

@@ -1,0 +1,312 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    //height: 100vh;
+  }
+  
+  .form-container {
+    min-width: 850px;
+    // width: 850px;
+    padding: 20px 40px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    overflow: auto;
+  }
+  
+  h5{
+    font-size: large;
+    color: slategrey;
+    font-weight: bold;
+  }
+  
+  .ha-title {
+    text-align: center;
+    //  margin-bottom: 20px;
+  }
+  
+  .ha-form .p-field {
+    margin-bottom: 20px;
+  }
+  
+  .ha-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .ha-input {
+    width: 100%;
+  }
+  
+  .p-table {
+    margin-top: 15px !important;
+    overflow-x: auto; /* Permitir desplazamiento horizontal si los datos son anchos */
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: flex-end;
+    // margin-top: 20px; /* Ajusta el margen superior según sea necesario */
+    margin-bottom: 6px;
+    p-button{
+      margin: 2px !important
+    }
+  }
+  
+  
+  .button-container_head {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 20px; /* Ajusta el margen superior según sea necesario */
+    p-button{
+      margin: 2px !important
+    }
+  }
+  
+  .p-icon-field .p-input-icon {
+          margin-top: -10rem !important;
+      }
+  //   .ha-button {
+  //     width: 100%;
+  //     margin-top: 20px;
+  //   }
+  
+  @media screen and (max-width: 750px) {
+    .button-container {
+      justify-content: center;
+    }
+  
+    .form-container {
+      min-width: 250px;
+      width: 400px;
+      padding: 20px 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+      overflow: auto;
+    }
+
+    .buscar_flujo_tramite {
+      width: 100%;
+    }
+  }
+  
+  
+  .pi-plus::before{
+    margin-right: 15px !important;
+  }
+  
+  
+  .ha-p-button {
+    margin: 0px !important;
+    padding: 0px !important;
+  }
+  
+  .pi {
+    margin-right: 5px !important;
+  }
+  
+  
+  .p-field-group {
+    display: flex;
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan a una nueva línea en pantallas más pequeñas */
+    //margin-bottom: 0.5rem;
+  }
+  
+  .p-field {
+    flex: 1 1 40%; /* El campo de código ocupa el 40% del ancho */
+    margin-right: 10px; /* Ajusta el espacio entre los campos */
+  }
+  
+  #descripcion {
+    flex: 1 1 calc(60% - 10px); /* El campo de descripción ocupa el resto del espacio (60% - 10px de margen) */
+  }
+  
+  
+  /*estilo para botones de la tabla */
+  
+  .ha-button {
+    background-color: transparent; // Hacer el fondo transparente
+    border: none; // Eliminar el borde
+    padding: 0; // Eliminar el relleno
+    margin-right: 5px;
+  }
+  
+  .ha-edit-button .pi {
+    color: green; // Color del icono de editar
+    margin: 0 !important;
+  }
+  
+  .ha-delete-button .pi {
+    color: red; // Color del icono de eliminar
+    margin: 0 !important;
+  }
+  
+  
+  .ha-p-table-content{
+    padding: 10px !important;
+  }
+  
+  :host ::ng-deep .p-dropdown {
+    width: 100%;
+  }
+  
+  .p-table {
+    font-size: 14px; /* Tamaño del texto en la tabla */
+  }
+  
+  .p-table td, .p-table th {
+    font-size: 12px; /* Tamaño del texto en celdas */
+  }
+  
+  .p-table th {
+    font-size: 14px; /* Tamaño del texto en encabezados de tabla */
+  }
+
+/* Contenedor principal - NO usar overflow hidden */
+::ng-deep .dropdown-container {
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+/* El dropdown debe ocupar todo el espacio disponible pero no expandirse */
+::ng-deep .dropdown-limitado {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+::ng-deep .dropdown-limitado .p-dropdown {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Solo el texto del label debe tener ellipsis */
+::ng-deep .dropdown-limitado .p-dropdown-label {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  max-width: calc(100% - 32px) !important; /* Restar espacio para la flecha */
+  display: inline-block !important;
+}
+
+/* El iconField debe respetar los límites */
+::ng-deep .dropdown-container .p-iconfield {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Forzar que el p-field-group mantenga su estructura */
+::ng-deep .p-field-group {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+}
+
+::ng-deep .p-dropdown-panel {
+  transform: none !important;
+  left: 0 !important;
+  top: calc(100% + 2px) !important;
+}
+
+.p-field-group {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1rem; /* Espacio uniforme entre elementos */
+}
+
+.p-field {
+  flex: 1; /* Todos los campos ocupan el mismo espacio */
+  min-width: 0; /* Permite que el contenido se contraiga */
+}
+
+.file-field-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 100%; /* Altura completa del contenedor padre */
+}
+
+.uniform-file-upload {
+  flex: 1; /* Ocupa todo el espacio disponible */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Estilos para el componente p-fileUpload */
+.uniform-file-upload ::ng-deep .p-fileupload-basic {
+  width: 100%;
+}
+
+.uniform-file-upload ::ng-deep .p-fileupload-choose {
+  width: 100% !important;
+  min-height: 2.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Botón de cambiar con tamaño uniforme */
+.change-button {
+  width: 100%;
+  min-height: 2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Para pantallas más pequeñas, permitir flex-wrap */
+@media (max-width: 768px) {
+  .p-field-group {
+    flex-wrap: wrap;
+  }
+  
+  .p-field {
+    flex: 1 1 calc(50% - 0.5rem); /* 2 columnas en móvil */
+    min-width: calc(50% - 0.5rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .p-field {
+    flex: 1 1 100%; /* 1 columna en móviles muy pequeños */
+    min-width: 100%;
+  }
+}
+
+/* En tu archivo de estilos */
+.swal-extra-wide {
+  max-width: 95vw !important;
+  width: 95vw !important;
+  max-height: 90vh !important;
+  height: auto !important;
+}
+
+.swal-container-wide {
+  padding: 10px !important;
+}
+
+/* Para hacer la tabla más responsiva */
+.swal-extra-wide table {
+  font-size: 12px;
+  width: 100%;
+  table-layout: fixed; /* Ancho fijo de columnas */
+}
+
+.swal-extra-wide td, 
+.swal-extra-wide th {
+  padding: 6px !important;
+  word-wrap: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Hacer que el contenido sea scrolleable horizontalmente si es necesario */
+.swal-extra-wide .swal2-html-container {
+  overflow-x: auto;
+  max-height: 70vh;
+  overflow-y: auto;
+}

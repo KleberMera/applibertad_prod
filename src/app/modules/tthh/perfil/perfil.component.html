@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="perfil-container form-container" *ngIf="userData; else noData">
+    <h5 class="ha-title">Mis Datos</h5>
+    <hr style="color: #8d8d8d;">
+    <ul class="perfil-lista">
+      <li>
+        <i class="fa fa-id-card" inert></i>
+        <span><strong>Cédula:</strong> {{ userData.CEDULA }}</span>
+      </li>
+      <li>
+        <i class="fa fa-user" inert></i>
+        <span><strong>Nombres:</strong> {{ obtenerApellidos(userData.NOMBRE) }}</span>
+      </li>
+      <li>
+        <i class="fa fa-user" inert></i>
+        <span><strong>Apellidos:</strong> {{ obtenerNombres(userData.NOMBRE) }}</span>
+      </li>
+      <li>
+        <i class="fa-solid fa-briefcase"></i>
+        <span><strong>Departamento:</strong> {{ userData.DEPARTAMENTO }}</span>
+      </li>
+      <li>
+        <i class="fa-solid fa-user-tie"></i>
+        <span><strong>Cargo:</strong> {{ userData.CARGO }}</span>
+      </li>
+    </ul>
+  </div>
+  
+  <ng-template #noData>
+    <!-- <p>No se encontraron datos para la cédula {{ cedula }}.</p> -->
+  </ng-template>
+</div>

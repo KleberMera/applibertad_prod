@@ -1,0 +1,33 @@
+@mixin create-footer ($name, $theme) {
+    .ha-#{$name}{
+        .ha-footer{
+            // grid-column: 2;
+            // grid-row: 3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0.25rem;
+            // margin: 0 1rem 0.5rem 1rem;
+            // border-radius: 3px;
+            background: map-get($map: $theme, $key: 'primary');
+            // color: map-get($map: $theme, $key: 'light');
+            // color: #002373;
+            color: #fff;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            &__text{
+                font-weight: 400;
+                margin-right: 0.5rem;
+                font-size: 1rem;
+                margin-bottom: 0px;
+                // font-weight: bold;
+            }
+            // &__socials{
+            //     &-social{
+            //         font-size: 0.75rem;
+            //         margin: 0 0.35rem;
+            //     }
+            // }
+        }
+    }
+}

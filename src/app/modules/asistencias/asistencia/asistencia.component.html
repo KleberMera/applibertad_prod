@@ -1,0 +1,75 @@
+<div class="container">
+    <div class="form-container">
+      <h2 class="ha-title">Ingreso de Eventos</h2>
+      <hr>
+            
+      <form [formGroup]="formularioAsistencia" class="ha-form">
+      
+        <!-- Dropdown de Eventos -->
+        <div class="p-field">
+          <label for="eventos" class="ha-label">Evento</label>
+          <p-dropdown 
+            id="eventos" 
+            [options]="events" 
+            optionLabel="descripcion" 
+            placeholder="Seleccione un evento" 
+            formControlName="selectedEvent"
+            [autoDisplayFirst]="true"
+            />
+        </div>
+
+        <div class="p-field">
+          <label for="cedula" class="ha-label">Cédula</label>
+          <div class="p-field_search">
+            <input 
+              id="cedula" 
+              type="text" 
+              formControlName="cedula" 
+              class="p-inputtext ha-input" 
+              required 
+              autocomplete="off" 
+              pattern="[0-9]*" 
+              maxlength="10"
+              (input)="validarCedula()"
+            >
+            <p-button 
+              id="buscar"
+              severity="primary" 
+              [disabled]="!botonBuscarHabilitado"
+              label="Buscar"
+              icon="pi pi-search"
+              (click)="buscarEmpleado()"
+            ></p-button>
+          </div>
+        </div>
+        <div *ngIf="mostrarCampos">
+          <div class="p-field">
+            <label for="nombre" class="ha-label">Nombre</label>
+            <input id="nombre" type="text" formControlName="nombre" class="p-inputtext ha-input" required autocomplete="off" [readonly]="true">
+          </div>
+          <div class="p-field">
+            <label for="departamento" class="ha-label">Departamento</label>
+            <input id="departamento" type="text" formControlName="departamento" class="p-inputtext ha-input" required autocomplete="off" [readonly]="true">
+          </div>
+          <div class="p-field">
+            <label for="cargo" class="ha-label">Cargo</label>
+            <input id="cargo" type="text" formControlName="cargo" class="p-inputtext ha-input" required autocomplete="off" [readonly]="true">
+          </div>
+          <!-- Contenedor para alinear el botón a la derecha -->
+          <div class="button-container">
+            <!-- Botón para mostrar los datos en JSON -->
+            <p-button 
+              severity="success" 
+              label="Registrar Asistencia" 
+              icon="pi pi-check-circle"
+              (click)="insertarAsistencia()"
+            ></p-button>
+            
+            <!-- Agrega otros botones aquí si es necesario -->
+          </div>
+        </div>
+        
+      </form>
+    </div>
+  </div>
+  

@@ -1,0 +1,174 @@
+<div class="container">
+    <div class="form-container">
+      <h5 class="ha-title">Reporte Estado de Contratos</h5>
+      <hr>
+  
+      <form [formGroup]="formularioConceptosMensuales" class="ha-form">
+        <div class="form-content">
+          <!-- Formulario Visible 2 -->
+          <div *ngIf="formularioVisible2" class="form-section">
+            <div class="p-field-group caja_reporte_contratos">
+              <div class="p-field calendar-field fecha">
+                <p-calendar 
+                  formControlName="dateDesde"
+                  [iconDisplay]="'input'" 
+                  [showIcon]="true" 
+                  dateFormat="yy-mm-dd"
+                  placeholder="Fecha Desde"
+                  class="p-calendar"
+                   />
+              </div>
+              <div class="p-field calendar-field fecha">
+                <p-calendar 
+                  formControlName="dateHasta"
+                  [iconDisplay]="'input'" 
+                  [showIcon]="true" 
+                  dateFormat="yy-mm-dd"
+                  placeholder="Fecha Hasta"
+                   />
+              </div>
+              <div class="p-field calendar-field fecha">
+                <p-iconField iconPosition="left">
+                  <p-inputIcon styleClass="pi pi-map-marker"></p-inputIcon>
+                  <p-dropdown 
+                    formControlName="ubicacion"
+                    [options]="ubicaciones" 
+                    optionLabel="UBICACION" 
+                    optionValue="CODIGO" 
+                    [(ngModel)]="selectedUbicacion" 
+                    placeholder="Ubicación">
+                  </p-dropdown>
+                </p-iconField>
+              </div>
+              <div class="p-field calendar-field fecha">
+                <p-iconField iconPosition="left">
+                  <p-inputIcon styleClass="pi pi-info-circle"></p-inputIcon>
+                  <p-dropdown 
+                    formControlName="tipo"
+                    [options]="tipos" 
+                    optionLabel="DESCRIPCION" 
+                    optionValue="CODIGO" 
+                    [(ngModel)]="selectedTipo" 
+                    placeholder="Estado">
+                  </p-dropdown>
+                </p-iconField>
+              </div>
+              <div class="button-container">
+                <!-- Botón para Buscar -->
+                <p-button severity="primary" label="" icon="pi pi-search" (click)="loadDataCM()" type="submit"></p-button>
+                <!-- Botón para cancelar -->
+                <p-button severity="danger" label="" icon="pi pi-times" (click)="ocultarFormulario2()"></p-button>
+              </div>
+            </div>
+            <hr class="section-divider">
+          </div>
+          <!-- Formulario Visible -->
+          <div *ngIf="formularioVisible" class="form-section">
+            <div class="button-container">
+              <!-- Botón para Exportar a Excel -->
+              <p-button severity="success" label="Generar PDF" icon="pi pi-file-pdf" (click)="exportarPDF2()"></p-button>
+              <!-- <p-button severity="danger" label="Generar PDF" icon="pi pi-file-pdf" (click)="exportarPDF2()"></p-button> -->
+            </div>
+            <hr class="section-divider">
+          </div>
+      
+          <!-- Tabla de Datos -->
+          <div *ngIf="formularioVisible2" class="table-container">
+            <p-table
+              #tbHistorial
+              [globalFilterFields]="['UBICACION', 'PERIODO', 'CONTRATO', 'CONTRIBUYENTE', 'TIPO_DESCRIPCION', 'OBSERVACION', 'REALIZADO_POR', 'FECHA']"
+              [value]="recaudaciones"
+              styleClass="p-datatable-striped"
+              dataKey="CONTRATO"
+              [paginator]="true"
+              [rows]="10"
+            >
+              <ng-template pTemplate="caption">
+                <p-iconField iconPosition="left">
+                  <p-inputIcon class="input-icon">
+                    <i class="pi pi-search"></i>
+                  </p-inputIcon>
+                  <input
+                    pInputText
+                    type="text"
+                    (input)="applyFilterGlobal($event)"
+                    (keydown.enter)="$event.preventDefault()"
+                    placeholder="Buscar en tabla"
+                    class="input-text p-inputtext"
+                  />
+                </p-iconField>
+              </ng-template>
+              <ng-template pTemplate="header">
+                <tr>
+                  <th pSortableColumn="UBICACION">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Ubicación
+                      <p-sortIcon field="UBICACION"></p-sortIcon>
+                    </span>
+                  </th>                  
+                  <th pSortableColumn="PERIODO">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Período <p-sortIcon field="PERIODO"></p-sortIcon>
+                    </span>
+                  </th>
+                  <th pSortableColumn="CONTRATO">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Contrato <p-sortIcon field="CONTRATO"></p-sortIcon>
+                    </span>
+                  </th>
+                  <th pSortableColumn="CONTRIBUYENTE">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Contribuyente <p-sortIcon field="CONTRIBUYENTE"></p-sortIcon>
+                    </span>
+                  </th>
+                  <th pSortableColumn="TIPO_DESCRIPCION">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Tipo Descripción <p-sortIcon field="TIPO_DESCRIPCION"></p-sortIcon>
+                    </span>
+                  </th>
+                  <th pSortableColumn="OBSERVACION">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Observación <p-sortIcon field="OBSERVACION"></p-sortIcon>
+                    </span>
+                  </th>
+                  <th pSortableColumn="REALIZADO_POR">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Realizado Por <p-sortIcon field="REALIZADO_POR"></p-sortIcon>
+                    </span>
+                  </th>
+                  <th pSortableColumn="FECHA">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Fecha <p-sortIcon field="FECHA"></p-sortIcon>
+                    </span>
+                  </th>
+                </tr>
+              </ng-template>              
+              <ng-template pTemplate="body" let-recaudacion>
+                <tr>
+                  <td>{{ recaudacion.UBICACION }}</td>
+                  <td>{{ recaudacion.PERIODO }}</td>
+                  <td>{{ recaudacion.CONTRATO }}</td>
+                  <td>{{ recaudacion.CONTRIBUYENTE }}</td>
+                  <td>{{ recaudacion.TIPO_DESCRIPCION }}</td>
+                  <td>{{ recaudacion.OBSERVACION }}</td>
+                  <td>{{ recaudacion.REALIZADO_POR }}</td>
+                  <td>{{ recaudacion.FECHA | date:'dd/MM/yyyy' }}</td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="summary">
+                <div class="flex align-items-center justify-content-between">
+                  Total de registros {{ recaudaciones ? recaudaciones.length : 0 }}.
+                </div>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="8">No se encontraron registros.</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  

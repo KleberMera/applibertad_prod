@@ -1,0 +1,528 @@
+<div class="container">
+    <div class="form-container">
+      <h5 class="ha-title">Documentos Externos</h5>
+      <hr>
+      <form [formGroup]="formularioUsuarios" class="ha-form">
+        <div>
+          <div class="button-container_head">
+            <!-- Botón para mostrar el formulario -->
+            <p-button severity="primary" label="Agregar" icon="pi pi-plus" (click)="mostrarFormulario()"></p-button>
+            <p-button severity="primary" label="Buscar" icon="pi pi-search" (click)="mostrarFormulario2()"></p-button>
+            <!-- Agrega otros botones aquí si es necesario -->
+          </div>
+
+          <hr>
+
+          <div *ngIf="formularioVisible2" [@formularioAnimacion]>
+            
+          </div>
+        
+          <div *ngIf="formularioVisible" [@formularioAnimacion]>
+
+            <div class="p-field-group" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+  
+              <!-- Lado Izquierdo: Cédula y Buscar -->
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="" style="flex: 0 0 auto; margin-bottom: 8px;">
+                  <input id="cedula_search"
+                         (keyup.enter)="usuarioByCed()"
+                         (keydown.enter)="$event.preventDefault()"
+                         type="text"
+                         formControlName="cedula_search"
+                         class="p-inputtext ha-input"
+                         required
+                         autocomplete="off"
+                         maxlength="10"
+                         pattern="[0-9]*"
+                         placeholder="Cédula a buscar">
+                </div>
+                <div class="button-container">
+                  <p-button severity="primary" label="" icon="pi pi-search" (click)="usuarioByCed()"></p-button>
+                </div>
+              </div>
+            
+              <!-- Lado Derecho: Número de Trámite y Refrescar -->
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="margin-bottom: 10px;">  
+                  <span style="font-size: 16px; font-weight: bold;" *ngIf="num_tramite" class="p-tag p-tag-info">
+                    # {{ num_tramite }}
+                  </span>
+                </div>
+                <!-- <div class="button-container">
+                  <p-button severity="primary" label="" icon="pi pi-refresh" (click)="refrescar()"></p-button>
+                </div> -->
+              </div>
+            
+            </div>
+              
+            <hr style="margin-bottom: 1.5rem; margin-top: 0.5rem !important;">
+            <!-- Sección Formulario -->
+            <div class="p-field-group">
+              <div class="p-field" style="flex: 0 0 20%;">
+                <input id="cedula" 
+                  (keydown.enter)="$event.preventDefault()" 
+                  type="text" 
+                  formControlName="cedula" 
+                  class="p-inputtext ha-input" 
+                  required 
+                  autocomplete="off"
+                  maxlength="13"
+                  pattern="[0-9]*"
+                  placeholder="Cédula"
+                  readonly
+                > 
+              </div>
+            
+              <div class="p-field" style="flex: 1;">
+                <input id="nombre_solicitante" 
+                  type="text" 
+                  formControlName="nombre_solicitante" 
+                  pInputText 
+                  placeholder="Nombre Solicitante" 
+                  readonly
+                  class="p-inputtext ha-input"
+                />
+              </div>
+            
+              <div class="p-field" style="flex: 1;">
+                <input id="nombre_beneficiario" 
+                  (keydown.enter)="$event.preventDefault()" 
+                  type="text" 
+                  formControlName="nombre_beneficiario" 
+                  class="p-inputtext ha-input" 
+                  required autocomplete="off"
+                  placeholder="Nombre Beneficiario"
+                >
+              </div>
+            </div>
+            <div class="p-field-group">
+              <div class="p-field" style="flex: 0 0 20%;">
+                <input id="no_oficio"
+                  (keydown.enter)="$event.preventDefault()" 
+                  type="text" 
+                  formControlName="no_oficio" 
+                  class="p-inputtext ha-input" 
+                  required 
+                  autocomplete="off"
+                  placeholder="No. de oficio"
+                >
+              </div>
+              <div class="p-field dropdown-container" style="flex: 1;">
+                <p-iconField iconPosition="left">
+                  <p-inputIcon styleClass="pi pi-info-circle"></p-inputIcon>
+                  <p-dropdown 
+                    class="dropdown-limitado"
+                    formControlName="tipo"
+                    [options]="tiposFijos"
+                    optionLabel="label"
+                    optionValue="value"
+                    placeholder="Departamento"
+                    [filter]="true"
+                    filterPlaceholder="Buscar departamento...">
+                  </p-dropdown>
+                </p-iconField>
+              </div>   
+              <div class="p-field" style="flex: 1">
+                <p-calendar 
+                  class="ha-input readonly-calendar"
+                  formControlName="fecha_ingreso"
+                  [iconDisplay]="'input'" 
+                  [showIcon]="true" 
+                  dateFormat="yy-mm-dd"
+                  placeholder="Fecha Ingreso"
+                  [style]="{ width: '100%' }"
+                  [readonlyInput]="true"
+                  [showButtonBar]="true"
+                  [disabled]="true"
+                />
+              </div>              
+            </div>
+            <div class="p-field-group">
+              <div class="p-field" style="flex: 50%;">
+                <textarea id="asunto" 
+                  (keydown.enter)="$event.preventDefault()" 
+                  formControlName="asunto" 
+                  class="p-inputtextarea p-inputtext ha-input" 
+                  required 
+                  autocomplete="off"
+                  placeholder="Asunto"
+                  rows="3"
+                ></textarea>
+              </div>
+            </div>
+            <div class="p-field-group">
+              <div class="p-field" style="flex: 50%;">
+                <textarea id="referencia" 
+                  (keydown.enter)="$event.preventDefault()" 
+                  formControlName="referencia" 
+                  class="p-inputtextarea p-inputtext ha-input" 
+                  required 
+                  autocomplete="off"
+                  placeholder="Información Adicional"
+                  rows="3"
+                ></textarea>
+              </div>
+            </div>
+            <!-- Sección de Cara de Imágenes -->
+            <hr style="margin-bottom: 1.5rem; margin-top: -0.5rem !important;">
+            <div class="p-field-group" style="display: flex; flex-wrap: nowrap;">
+              <div class="p-field">
+                <div class="file-field-container">
+                  <div class="uniform-file-upload">
+                    <p-fileUpload 
+                      #fileUpload1
+                      mode="basic" 
+                      name="imagen1" 
+                      chooseLabel="Cédula"
+                      accept="image/*"
+                      customUpload="true"
+                      (onSelect)="onFileSelect($event, 1)">
+                    </p-fileUpload>
+                  </div>
+                  <button 
+                    *ngIf="imagenesSeleccionadas[1]" 
+                    pButton 
+                    type="button" 
+                    label="Cambiar" 
+                    class="p-button-sm p-button-text change-button"
+                    (click)="cambiarArchivo(1)">
+                  </button>
+                </div>
+              </div>
+              
+              <div class="p-field" >
+                <div class="file-field-container">
+                  <div class="uniform-file-upload">
+                    <p-fileUpload 
+                      #fileUpload2
+                      mode="basic" 
+                      name="imagen2" 
+                      chooseLabel="Oficio (PDF)"
+                      accept="application/pdf"
+                      customUpload="true"
+                      maxFileSize="10000000"
+                      (onSelect)="onFileSelect($event, 2)">
+                    </p-fileUpload>
+                  </div>
+                  <button 
+                    *ngIf="imagenesSeleccionadas[2]" 
+                    pButton 
+                    type="button" 
+                    label="Cambiar" 
+                    class="p-button-sm p-button-text change-button"
+                    (click)="cambiarArchivo(2)">
+                  </button>
+                </div>
+              </div>
+              
+              <div class="p-field">
+                <div class="file-field-container">
+                  <div class="uniform-file-upload">
+                    <p-fileUpload 
+                      #fileUpload3
+                      mode="basic" 
+                      name="imagen3" 
+                      chooseLabel="Evidencia"
+                      accept="image/*"
+                      customUpload="true"
+                      (onSelect)="onFileSelect($event, 3)">
+                    </p-fileUpload>
+                  </div>
+                  <button 
+                    *ngIf="imagenesSeleccionadas[3]" 
+                    pButton 
+                    type="button" 
+                    label="Cambiar" 
+                    class="p-button-sm p-button-text change-button"
+                    (click)="cambiarArchivo(3)">
+                  </button>
+                </div>
+              </div>
+              
+              <div class="p-field">
+                <div class="file-field-container">
+                  <div class="uniform-file-upload">
+                    <p-fileUpload 
+                      #fileUpload4
+                      mode="basic" 
+                      name="imagen4" 
+                      chooseLabel="Otros"
+                      accept="image/*"
+                      customUpload="true"
+                      (onSelect)="onFileSelect($event, 4)">
+                    </p-fileUpload>
+                  </div>
+                  <button 
+                    *ngIf="imagenesSeleccionadas[4]" 
+                    pButton 
+                    type="button" 
+                    label="Cambiar" 
+                    class="p-button-sm p-button-text change-button"
+                    (click)="cambiarArchivo(4)">
+                  </button>
+                </div>
+              </div>
+            </div>        
+            
+            <div class="button-container" style="margin: 0px;">
+              <!-- Botón para guardar -->
+              <p-button severity="success" label="Guardar" icon="pi pi-save" (click)="guardarUsuario()"></p-button>
+              <!-- Botón para cancelar -->
+              <p-button severity="danger" label="Cancelar" icon="pi pi-times" (click)="ocultarFormulario()"></p-button>
+              <!-- Agrega otros botones aquí si es necesario -->
+            </div>
+            <hr>
+          </div>
+          <div *ngIf="formularioVisible2" [@formularioAnimacion]>
+              <div class="p-table">
+                <p-table 
+                  #tbUsuarios
+                  [globalFilterFields]="['NUMERO_TRAMITE', 'CEDULA_RUC', 'SOLICITANTE', 'BENEFICIARIO', 'NUMERO_OFICIO', 'ASUNTO', 'REFERENCIA', 'FECHA_INGRESO']"
+                  [value]="usuarios" 
+                  dataKey="usuarioid"
+                  styleClass="p-datatable-striped" 
+                  [paginator]="true" 
+                  [rows]="4">
+                  <ng-template pTemplate="caption">
+                    <p-iconField iconPosition="left">
+                      <p-inputIcon class="input-icon">
+                        <i class="pi pi-search"></i>
+                      </p-inputIcon>
+                      <input 
+                        pInputText 
+                        type="text" 
+                        (input)="applyFilterGlobal($event)" 
+                        (keydown.enter)="$event.preventDefault()" 
+                        placeholder="Buscar en tabla" 
+                        class="input-text p-inputtext buscar_flujo_tramite"
+                      />
+                    </p-iconField>
+                  </ng-template>
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th>
+                        Acciones
+                      </th>
+                      <th pSortableColumn="NUMERO_TRAMITE">
+                        #TRAMITE
+                      </th>
+                      <th pSortableColumn="CEDULA_RUC">
+                        CEDULA/RUC
+                      </th>
+                      <th pSortableColumn="SOLICITANTE">
+                        SOLICITANTE 
+                      </th>
+                      <th pSortableColumn="BENEFICIARIO">
+                        BENEFICIARIO 
+                      </th>
+                      <th pSortableColumn="NUMERO_OFICIO">
+                        #OFICIO
+                      </th>
+                      <th pSortableColumn="ASUNTO">
+                        ASUNTO 
+                      </th>
+                      <th pSortableColumn="REFERENCIA">
+                        REFERENCIA 
+                      </th>
+                      <th pSortableColumn="FECHA_INGRESO">
+                        FECHA INGRESO
+                      </th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-usuario>
+                    <tr>
+                      <td>
+                        <button 
+                          pButton 
+                          type="button" 
+                          icon="pi pi-search" 
+                          class="p-button-rounded p-button-text" 
+                          (click)="mostrarMensaje(usuario)"
+                          title="Ver Detalles">
+                        </button>
+                      </td>
+                      <td>{{ usuario.NUMERO_TRAMITE }}</td>
+                      <td>{{ usuario.CEDULA }}</td>
+                      <td>{{ usuario.SOLICITANTE }}</td>
+                      <td>{{ usuario.BENEFICIARIO }}</td>
+                      <td>{{ usuario.NUMOFICIO }}</td>
+                      <td>{{ usuario.ASUNTO }}</td>
+                      <td>{{ usuario.INFO_ADICIONAL }}</td>
+                      <td>{{ usuario.FECHA_INGRESO }}</td>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="emptymessage">
+                    <tr>
+                      <td colspan="5">No se encontraron usuarios.</td>
+                    </tr>
+                  </ng-template>
+              </p-table>
+            </div>    
+          </div>
+        </div>
+      </form>
+      <div *ngIf="mostrarFormularioNuevoContribuyente" [@formularioAnimacion]>
+        <form [formGroup]="formularioNuevoContribuyente" class="ha-form" (ngSubmit)="guardarNuevoContribuyente()">
+          <div class="p-field-group">
+            <div class="p-field" style="flex: 0 0 20%;">
+              <input id="cedula_nueva"
+                (keydown.enter)="$event.preventDefault()" 
+                type="text" 
+                formControlName="cedula_nueva" 
+                class="p-inputtext ha-input" 
+                required 
+                maxlength="13"
+                pattern="[0-9]*"
+                autocomplete="off"
+                placeholder="Cédula"
+              >
+            </div>
+            <div class="p-field" style="flex: 0 0 20%">
+              <input id="codigo_dactilar"
+                (keydown.enter)="$event.preventDefault()" 
+                type="text" 
+                formControlName="codigo_dactilar" 
+                class="p-inputtext ha-input" 
+                required 
+                maxlength="13"
+                pattern="[0-9]*"
+                autocomplete="off"
+                placeholder="Código Dactilar"
+              >
+            </div>
+          </div>
+          <div class="p-field-group">
+            <div class="p-field" style="flex: 0 0 35%;">
+              <input id="nombre_nuevo"
+                (keydown.enter)="$event.preventDefault()" 
+                type="text" 
+                formControlName="nombre_nuevo" 
+                class="p-inputtext ha-input" 
+                required 
+                autocomplete="off"
+                placeholder="Primer Nombre"
+              >
+            </div>
+            <div class="p-field" style="flex: 0 0 35%;">
+              <input id="segundo_nombre_nuevo"
+                (keydown.enter)="$event.preventDefault()" 
+                type="text" 
+                formControlName="segundo_nombre_nuevo" 
+                class="p-inputtext ha-input" 
+                required 
+                autocomplete="off"
+                placeholder="Segundo Nombre"
+              >
+            </div>
+          </div>
+          <div class="p-field-group">
+            <div class="p-field" style="flex: 0 0 48.1%;">
+              <input id="primer_apellido_nuevo"
+                (keydown.enter)="$event.preventDefault()" 
+                type="text" 
+                formControlName="primer_apellido_nuevo" 
+                class="p-inputtext ha-input" 
+                required 
+                autocomplete="off"
+                placeholder="Primer Apellido"
+              >
+            </div>
+            <div class="p-field" style="flex: 0 0 48.1%;">
+              <input id="segundo_apellido_nuevo"
+                (keydown.enter)="$event.preventDefault()" 
+                type="text" 
+                formControlName="segundo_apellido_nuevo" 
+                class="p-inputtext ha-input" 
+                required 
+                autocomplete="off"
+                placeholder="Segundo Apellido"
+              >
+            </div>
+          </div>
+          <div class="p-field-group">
+            <div class="p-field" style="flex: 0 0 20%">
+              <p-dropdown 
+                class="dropdown-limitado"
+                formControlName="genero"
+                optionLabel="label"
+                [options]="tiposGenero"
+                optionValue="value"
+                placeholder="Género">
+              </p-dropdown>
+            </div>
+            <div class="p-field" style="flex: 0 0 20%">
+              <p-calendar 
+                class="ha-input readonly-calendar"
+                formControlName="fecha_nacimiento"
+                [iconDisplay]="'input'" 
+                [showIcon]="true" 
+                dateFormat="yy-mm-dd"
+                placeholder="Fecha de Nacimiento"
+                [style]="{ width: '100%' }"
+                [readonlyInput]="true"
+                [showButtonBar]="true"
+              />
+            </div>
+            <div class="p-field" style="flex: 0 0 20%">
+              <p-dropdown 
+                class="dropdown-limitado"
+                formControlName="estado_civil_nuevo"
+                optionLabel="label"
+                [options]="tiposEstado"
+                optionValue="value"
+                placeholder="Estado Civil">
+              </p-dropdown>
+            </div>
+            <div class="p-field flex items-center gap-2" style="flex: 0 0 25%; height: 100%; align-items: center; margin-top: 1%;">
+              <p-checkbox formControlName="discapacidad" inputId="discapacidad" />
+              <label for="discapacidad" class="flex items-center">&nbsp;¿Tiene discapacidad?</label>
+            </div>
+          </div>
+          <div class="p-field-group">
+            <div class="p-field" style="flex: 0 0 1;">
+              <textarea id="direccion" 
+                (keydown.enter)="$event.preventDefault()" 
+                formControlName="direccion" 
+                class="p-inputtextarea p-inputtext ha-input" 
+                required 
+                autocomplete="off"
+                placeholder="Dirección"
+                rows="3"
+              ></textarea>
+            </div>
+          </div>
+          <div class="p-field-group">
+            <div class="p-field" style="flex: 0 0 20%;">
+              <input id="celular_contribuyente"
+                (keydown.enter)="$event.preventDefault()" 
+                type="text" 
+                formControlName="celular_contribuyente" 
+                class="p-inputtext ha-input" 
+                required 
+                autocomplete="off"
+                maxlength="10"
+                pattern="[0-9]*"
+                placeholder="Celular"
+              >
+            </div>
+            <div class="p-field" style="flex: 0 0 35%;">
+              <input id="correo_contribuyente"
+                (keydown.enter)="$event.preventDefault()" 
+                type="email" 
+                formControlName="correo_contribuyente" 
+                class="p-inputtext ha-input" 
+                required 
+                autocomplete="off"
+                placeholder="Correo Contribuyente"
+              >
+            </div>
+          </div>
+          <hr style="margin-bottom: 1.5rem; margin-top: 0.5rem !important;">
+          <div class="button-container">
+            <p-button severity="success" label="Guardar" icon="pi pi-save" type="submit"></p-button>
+            <p-button severity="danger" label="Cancelar" icon="pi pi-times" (click)="cancelarNuevoContribuyente()"></p-button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

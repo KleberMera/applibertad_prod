@@ -1,0 +1,164 @@
+<div class="container">
+    <div class="form-container">
+      <h2 class="ha-title">Usuarios</h2>
+      <hr>
+
+      <form [formGroup]="formularioUsuario" class="ha-form">
+        <div>
+          <div class="button-container">
+            <!-- Botón para mostrar el formulario -->
+            <p-button severity="primary" label="Agregar" icon="pi pi-plus" (click)="mostrarFormulario()"></p-button>
+            <!-- Agrega otros botones aquí si es necesario -->
+          </div>
+        
+          <!-- <div *ngIf="formularioVisible"> -->
+          <div [@formularioAnimacion]="formularioVisible ? 'visible' : 'oculto'">
+            <hr>
+            <h4>Ingresar Usuario</h4>
+            <div class="p-field-group">
+              <div class="p-field" style="flex: 0 0 50%;">
+                <!-- <label for="departamento" class="ha-label">Departamento</label>
+                <input id="departamento" 
+                        (keydown.enter)="$event.preventDefault()" 
+                        type="text" 
+                        formControlName="departamento" 
+                        class="p-inputtext ha-input" 
+                        required autocomplete="off"> -->
+                        <!-- Dropdown de Eventos -->
+                
+                <div class="p-field">
+                    <label for="departamento" class="ha-label">Departamento</label>
+                    <p-dropdown 
+                    id="departamento" 
+                    [options]="departamentos" 
+                    optionLabel="nombre" 
+                    class='ha-pdropdown'
+                    placeholder="Seleccione un departamento" 
+                    formControlName="selectedDepart"
+                    [autoDisplayFirst]="false"
+                    />
+                </div>
+              </div>
+              <div class="p-field" style="flex: 1;">
+                <label for="cedula" class="ha-label">Cedula</label>
+                <input id="cedula" 
+                    (keydown.enter)="$event.preventDefault()" 
+                    type="text" 
+                    formControlName="cedula" 
+                    class="p-inputtext ha-input" 
+                    required 
+                    autocomplete="off"
+                    maxlength="10"
+                    pattern="[0-9]*">
+              </div>
+            </div>
+            <div class="p-field-group">
+              <div class="p-field" style="flex: 0 0 50%;">
+                <label for="nombre" class="ha-label">Nombre</label>
+                <input id="nombre" 
+                        (keydown.enter)="$event.preventDefault()" 
+                        type="text" 
+                        formControlName="nombre" 
+                        class="p-inputtext ha-input" 
+                        required autocomplete="off">
+              </div>
+              <div class="p-field" style="flex: 1;">
+                <label for="apellido" class="ha-label">Apellidos</label>
+                <input id="apellido" 
+                        (keydown.enter)="$event.preventDefault()" 
+                        type="text" 
+                        formControlName="apellido" 
+                        class="p-inputtext ha-input" 
+                        required autocomplete="off">
+              </div>
+            </div>
+            <div class="button-container" style="margin: 0px;">
+              <!-- Botón para guardar -->
+              <p-button severity="success" label="Guardar" icon="pi pi-save" (click)="guardarUsuario()"></p-button>
+              <!-- Botón para cancelar -->
+              <p-button severity="danger" label="Cancelar" icon="pi pi-times" (click)="ocultarFormulario()"></p-button>
+              <!-- Agrega otros botones aquí si es necesario -->
+            </div>
+            <hr>
+          </div>
+        </div>
+        
+
+        <div class="p-table">
+            
+          <!-- <h4>Lista de Estados</h4> -->
+          <!-- <div class="button-container"> -->
+            <!-- Botón para mostrar los datos en JSON -->
+            <!-- <p-button severity="primary" label="Agregar" icon="pi pi-plus"></p-button> -->
+            <!-- Agrega otros botones aquí si es necesario -->
+          <!-- </div> -->
+          <p-table 
+            #tbUsuarios
+            [globalFilterFields]="['cedula', 'nombre', 'apellido', 'departamento']"
+            [value]="usuarios" 
+            dataKey="usuarioid"
+            [paginator]="true" 
+            [rows]="5">
+            <ng-template pTemplate="caption">
+              <p-iconField iconPosition="left">
+                    <p-inputIcon class="input-icon">
+                        <i class="pi pi-search"></i>
+                    </p-inputIcon>
+                    <input 
+                        pInputText 
+                        type="text" 
+                        (input)="applyFilterGlobal($event)" 
+                        (keydown.enter)="$event.preventDefault()" 
+                        placeholder="Buscar" 
+                        class="input-text p-inputtext"/>
+                </p-iconField>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <!-- <th pSortableColumn="usuarioid">ID <p-sortIcon field="usuarioid"></p-sortIcon></th> -->
+                    <th pSortableColumn="cedula">Cedula <p-sortIcon field="cedula"></p-sortIcon></th>
+                    <th pSortableColumn="nombre">Nombre <p-sortIcon field="nombre"></p-sortIcon></th>
+                    <th pSortableColumn="apellido">Apellido <p-sortIcon field="apellido"></p-sortIcon></th>
+                    <!-- <th pSortableColumn="departamentoid">DepartamentoID <p-sortIcon field="departamentoid"></p-sortIcon></th> -->
+                    <th pSortableColumn="departamento">Depart. <p-sortIcon field="departamento"></p-sortIcon></th>
+                    <th>Acciones</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-usuario>
+                <tr>
+                    <!-- <td>{{ usuario.usuarioid }}</td> -->
+                    <td>{{ usuario.cedula }}</td>
+                    <td>{{ usuario.nombre }}</td>
+                    <td>{{ usuario.apellido }}</td>
+                    <!-- <td>{{ usuario.departamentoid }}</td> -->
+                    <td>{{ usuario.departamento }}</td>
+                    <td>
+                        <button (click)="editarUsuario(usuario)" class="ha-button ha-edit-button">
+                            <i class="pi pi-pencil"></i>
+                        </button>
+                        <button (click)="eliminarUsuario(usuario)" class="ha-button ha-delete-button">
+                            <i class="pi pi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="4">No se encontraron usuarios.</td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+
+  
+        </div>
+        <!-- Contenedor para alinear el botón a la derecha -->
+        <!-- <div class="button-container"> -->
+          <!-- Botón para mostrar los datos en JSON -->
+          <!-- <p-button severity="success" label="Guardar" icon="pi pi-save"></p-button> -->
+          <!-- Agrega otros botones aquí si es necesario -->
+        <!-- </div> -->
+      </form>
+    </div>
+  </div>
+  

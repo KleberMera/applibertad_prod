@@ -1,0 +1,120 @@
+// Contenedor principal
+.ha-container {
+    width: 100%;
+    max-width: 800px; // Ajusta el ancho máximo según tus necesidades
+    margin: 0 auto;
+    padding: 20px;
+  
+    // Título
+    .ha-title {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+  
+    // Componente p-fileUpload
+    .ha-file-upload {
+      margin-bottom: 20px;
+    }
+  
+    // Lista de archivos cargados
+    .ha-uploaded-files-list {
+      list-style: none;
+      padding: 0;
+    }
+  
+    // Elementos de la lista de archivos cargados
+    .ha-uploaded-file {
+      margin-bottom: 5px;
+    }
+  
+    // Tabla p-table
+    .ha-table {
+      width: 100%;
+      overflow-x: auto;
+  
+      // Cabecera de la tabla
+      .ha-table-header {
+        text-align: center;
+        white-space: nowrap;
+        background-color: #f2f2f2; // Cambia el color de fondo según tu diseño
+        font-weight: bold;
+        border-bottom: 1px solid #ccc; // Cambia el color del borde inferior según tu diseño
+      }
+  
+      // Cuerpo de la tabla
+      .ha-table-cell {
+        text-align: center;
+        white-space: nowrap;
+        border-bottom: 1px solid #ccc; // Cambia el color del borde inferior según tu diseño
+      }
+    }
+
+    /* Estilos para centrar verticalmente los botones del componente p-fileUpload */
+    .ha-file-upload .p-fileupload-buttonbar {
+      display: flex; /* Utiliza el sistema de alineación de Flexbox */
+      justify-content: center; /* Centra los elementos horizontalmente */
+      align-items: center; /* Centra los elementos verticalmente */
+      gap: 10px; /* Espacio entre los botones */
+    }
+
+    /* Estilo adicional para el span dentro del contenedor */
+    .ha-file-upload .p-fileupload-buttonbar span {
+      /* Ajusta la altura del span para que coincida con la altura de los botones */
+      height: 100%; /* Establece la altura al 100% del contenedor */
+      color: aqua;
+      background-color: aqua;
+    }
+
+    .ha-file-upload .p-fileupload-choose {
+    flex-grow: 1;
+    }
+
+    .ha-file-upload .p-fileupload-upload {
+    flex-grow: 1;
+    }
+
+    .ha-file-upload .p-fileupload-cancel {
+    flex-grow: 1;
+    }
+  }
+
+  p-button{
+    margin: 0.5rem;
+    font-size: small;
+    
+    button{
+       border-radius: 0.5rem;
+   };
+
+ /* Estilos personalizados para el botón de selección en p-fileUpload */
+::ng-deep .p-fileupload .p-fileupload-choose {
+  /* Estilos de texto */
+  color: #ffffff; /* Cambia el color del texto */
+  font-weight: bold; /* Aplica negrita al texto */
+
+  /* Estilos de fondo */
+  background-color: #007bff; /* Cambia el color de fondo */
+  border-color: #007bff; /* Cambia el color del borde */
+
+  /* Estilos de borde */
+  border-radius: 4px; /* Aplica un borde redondeado */
+  border-width: 1px; /* Ajusta el ancho del borde */
+
+  /* Estilos de espaciado y margen */
+  padding: 8px 16px; /* Aplica relleno interno */
+  margin-right: 8px; /* Aplica margen a la derecha para separarlo de otros elementos */
+}
+
+/* Estilos de hover para el botón de selección */
+::ng-deep .p-fileupload .p-fileupload-choose:hover {
+  background-color: #0056b3; /* Cambia el color de fondo al pasar el mouse sobre el botón */
+  border-color: #0056b3; /* Cambia el color del borde al pasar el mouse sobre el botón */
+}
+   
+  span{
+    background: darkgreen;
+  }
+
+}
+
+  

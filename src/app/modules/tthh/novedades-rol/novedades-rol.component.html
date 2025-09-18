@@ -1,0 +1,149 @@
+<div class="container">
+    <div class="form-container">
+      <h5 class="ha-title">Cargar Novedades Rol</h5>
+      <hr>
+      <form [formGroup]="formularioConceptosMensuales" class="ha-form">
+        <div class="form-content">
+          <!-- Formulario Visible 2 -->
+          <div *ngIf="formularioVisible2" class="form-section">
+            <div class="p-field-group caja_reporte_contratos">
+              <div class="p-field">
+                <p-dropdown
+                  [options]="fechaOptions"
+                  [(ngModel)]="selectedFecha"
+                  optionLabel="label"
+                  optionValue="value"
+                  placeholder="Seleccione Periodo"
+                  [disabled]="fechaOptions.length === 0"
+                  (onChange)="onFechaChange($event)">
+                </p-dropdown>
+              </div>
+              <div class="p-field d-flex">
+                <div style="display:flex;align-items: center;text-align: center;padding-right: 10px;">
+                  <button class="boton_faltantes" (click)="mostrarFaltantes2()">
+                    <i class="fa-solid fa-list-check"></i>
+                  </button>                    
+                </div>
+                <p-dropdown 
+                  formControlName="tipo"
+                  [options]="tipos" 
+                  optionLabel="DESCRIPCION" 
+                  optionValue="CODIGO" 
+                  [(ngModel)]="selectedTipo" 
+                  placeholder="Tipos de Conceptos">
+                </p-dropdown>
+              </div>
+              <div class="p-field ">
+                <div class="custom-file-upload">
+                  <label for="archivoExcel" class="btn-subir">📁 Seleccionar Archivo</label>
+                  <input
+                    type="file"
+                    id="archivoExcel"
+                    (change)="onExcelUpload($event)"
+                    accept=".xlsx, .xls"
+                    hidden
+                  />
+                </div>
+              </div>
+            </div>
+            <br>
+            <div class="p-field-group ">               
+              <div class="p-field button-container-centered">                 
+                <!-- Botón para Buscar -->                 
+                <p-button                    
+                  *ngIf="jsonValido"                    
+                  severity="primary"                    
+                  label="Cargar"                    
+                  icon="pi pi-upload"                    
+                  (click)="cargarDatos()"                    
+                  type="submit"                 
+                ></p-button>                 
+                <p-button                     
+                  severity="danger"                    
+                  label="Confirmar Carga"                    
+                  icon="pi pi-check"                    
+                  type="button"                   
+                  (click)="generarNovedades()"                    
+                  [disabled]="!cargaValida">                 
+                </p-button>               
+              </div>             
+            </div> 
+            <hr class="section-divider">
+          </div>
+          <!-- Formulario Visible -->
+          <div *ngIf="formularioVisible" class="form-section">
+            <div class="button-container">
+              <!-- Botón para Exportar a Excel -->
+              <!-- <p-button severity="success" label="Generar PDF" icon="pi pi-file-pdf" (click)="exportarPDF2()"></p-button> -->
+              <!-- <p-button severity="danger" label="Generar PDF" icon="pi pi-file-pdf" (click)="exportarPDF2()"></p-button> -->
+            </div>
+            <hr class="section-divider">
+          </div>
+      
+          <!-- Tabla de Datos -->
+          <div class="table-container">
+            <p-table
+              #tbHistorial
+              [value]="excelPreviewData"
+              [globalFilterFields]="['cedula']"
+              [paginator]="true"
+              [rows]="5"
+              [responsiveLayout]="'scroll'"
+              [scrollable]="true"
+              scrollHeight="400px"
+              styleClass="p-datatable-striped"
+            >
+              <ng-template pTemplate="caption">
+                <div class="flex justify-content-between align-items-center">
+                  <p-iconField iconPosition="left">
+                    <p-inputIcon class="input-icon">
+                      <i class="pi pi-search"></i>
+                    </p-inputIcon>
+                    <input
+                      pInputText
+                      type="text"
+                      (input)="applyFilterGlobal($event)"
+                      (keydown.enter)="$event.preventDefault()"
+                      placeholder="Buscar en tabla"
+                      class="input-text p-inputtext"
+                    />
+                  </p-iconField>
+                  
+                  <!-- Mostrar cédulas con error al lado derecho -->
+                  <div style="margin-top: 10px;" *ngIf="cedulasConError.length > 0" class="cedulas-error">
+                    <span class="error-label">Cédulas con valores en 0:</span>
+                    <span class="cedulas-list">{{ cedulasConError.join(', ') }}</span>
+                  </div>
+                </div>
+              </ng-template>
+
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>CEDULA</th>
+                  <th>VALOR</th>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="body" let-row>
+                <tr>
+                  <td>{{ row.cedula }}</td>
+                  <td>{{ row.valor }}</td>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="summary">
+                <div>Total de registros: {{ excelPreviewData.length }}</div>
+              </ng-template>
+
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="2">No se encontraron registros.</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  

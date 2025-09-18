@@ -1,0 +1,43 @@
+<div class="container">
+  <div class="form-container">
+    <h2 class="ha-title">Ingreso de Eventos</h2>
+
+    <form [formGroup]="formularioEvento" class="ha-form">
+      <div class="p-field">
+        <label for="descripcion" class="ha-label">Descripción</label>
+        <input id="descripcion" type="text" formControlName="descripcion" class="p-inputtext ha-input" required autocomplete="off">
+      </div>
+      <div class="p-field">
+        <label for="fecha_evento" class="ha-label">Fecha del Evento</label>
+        <p-calendar 
+          id="fecha_evento"
+          formControlName="fecha_evento"
+          dateFormat="yy-mm-dd"
+          required
+          showIcon="true"
+          class="ha-calendar"
+          [style.width]="'25%'"
+          [style.height]="'1px'"
+        />
+        <!-- <p-calendar 
+          id="fecha_evento"
+          formControlName="fecha_evento"
+          inputDateFormat="yy-mm-dd"
+          ngModelDateFormat="yy-mm-dd"
+          required
+          showIcon="true"
+          class="ha-calendar"
+          [style.width]="'25%'"
+          [style.height]="'1px'"
+        ></p-calendar> -->
+
+      </div>
+      <!-- Contenedor para alinear el botón a la derecha -->
+      <div class="button-container">
+        <!-- Botón para mostrar los datos en JSON -->
+        <p-button severity="success" label="Guardar" [disabled]="formularioEvento.invalid" (click)="saveEvent()" icon="pi pi-save"></p-button>
+        <!-- Agrega otros botones aquí si es necesario -->
+      </div>
+    </form>
+  </div>
+</div>

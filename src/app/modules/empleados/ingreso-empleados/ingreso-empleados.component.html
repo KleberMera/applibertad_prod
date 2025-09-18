@@ -1,0 +1,38 @@
+<div class="ha-container">
+  <h2 class="ha-title">Subir Archivo CSV de Empleados</h2>
+  <p-fileUpload class="ha-file-upload" 
+                name="demo[]" 
+                url="./upload.php" 
+                (onSelect)="onFileChange($event)" 
+                
+                accept=".csv">
+    <ng-template pTemplate="content">
+      <ul class="ha-uploaded-files-list" *ngIf="uploadedFiles.length > 0">
+        <li *ngFor="let file of uploadedFiles" class="ha-uploaded-file">{{file.name}} - {{file.size}} bytes</li>
+      </ul>
+    </ng-template>
+  </p-fileUpload>
+
+  
+   <!-- Botón para mostrar los datos en JSON -->
+   <p-button severity="success" label="Mostrar Datos en JSON" (click)="saveDataAsJson()" icon="pi pi-save"></p-button>
+
+
+  <!-- Tabla de datos -->
+  <p-table class="ha-table" 
+            [value]="data"
+            [paginator]="true" [rows]="10">
+    <ng-template pTemplate="header">
+      <tr>
+        <th *ngFor="let col of cols" class="ha-table-header">{{col.header}}</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData>
+      <tr>
+        <td *ngFor="let col of cols" class="ha-table-cell">{{rowData[col.field]}}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+  
+

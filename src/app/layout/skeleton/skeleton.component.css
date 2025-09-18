@@ -1,0 +1,4 @@
+.ha-skeleton-content {
+    min-height: calc(100vh - 60px - 40px);
+    background: rgba(211, 211, 211, 0.389);
+}

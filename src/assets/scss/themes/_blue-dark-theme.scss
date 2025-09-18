@@ -1,0 +1,23 @@
+// $blue_dark_theme: (
+//     // "primary" : #00171F,
+//     "primary" : #0c9ad3,
+    
+//     "secondary" : rgb(2, 57, 78),
+//     "light" : white,
+//     "border_primary" : 1px solid rgba(9, 71, 95, 0.15),
+//     "border_secondary" : 1px solid rgba(20, 64, 82, 0.75),
+//     "shadow" : 1px 1px 6px 0px rgba(0, 23, 31, 0.1)
+// );
+
+$blue_dark_theme: (
+    // "primary": #2E86AB, // Azul oscuro
+    "primary": #2d97d9, // Azul oscuro
+    "secondary": #ffffff, // Amarillo
+    "light": #FFFFFF, // Blanco
+    "dark": #1B262C, // Azul oscuro
+    "border_primary": 1px solid rgba(0, 0, 0, 0.1), // Borde primario
+    "border_secondary": 1px solid rgba(0, 0, 0, 0.2), // Borde secundario
+    "shadow": 0 2px 4px rgba(0, 0, 0, 0.1) // Sombra
+);
+
+

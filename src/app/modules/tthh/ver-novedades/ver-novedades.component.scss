@@ -1,0 +1,321 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    //height: 100vh;
+  }
+  
+  .form-container {
+    min-width: 400px;
+    width: 900px;
+    padding: 20px 40px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    //overflow: auto;
+  }
+
+  h5{
+    font-size: large;
+    color: slategrey;
+    font-weight: bold;
+  }
+  
+  .ha-title {
+    text-align: center;
+    //  margin-bottom: 20px;
+  }
+
+  .form-container {
+    overflow: hidden;
+  }
+
+  .form-content {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .ha-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .ha-input {
+    width: 100%;
+  }
+  
+  .p-table {
+    margin-top: 15px !important;
+    overflow-x: auto; /* Permitir desplazamiento horizontal si los datos son anchos */
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: flex-end;
+    // margin-top: 20px; /* Ajusta el margen superior según sea necesario */
+    p-button{
+      margin: 2px !important
+    }
+  }
+
+
+  .button-container_head {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 20px; /* Ajusta el margen superior según sea necesario */
+    p-button{
+      margin: 2px !important
+    }
+  }
+
+  .p-icon-field .p-input-icon {
+          margin-top: -10rem !important;
+      }
+  
+  @media screen and (max-width: 750px) {
+    .button-container {
+      justify-content: center;
+    }
+
+    .form-container {
+      min-width: 250px;
+      width: 400px;
+      padding: 20px 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+      overflow: auto;
+    }
+
+    .caja_reporte_contratos {
+      display: block !important;
+      .fecha {
+        margin-bottom: 12px;
+      }
+    }
+
+    ::ng-deep .p-calendar {
+      width: 20rem !important;
+    }
+  }
+
+  ::ng-deep .p-calendar .ui-datepicker {
+    z-index: 9999 !important; /* Asegúrate de que sea muy alto */
+  }
+
+
+  
+  .pi-plus::before{
+    margin-right: 15px !important;
+  }
+  
+  .ha-p-button {
+    margin: 0px !important;
+    padding: 0px !important;
+  }
+  
+  .pi {
+    margin-right: 5px !important;
+  }
+  
+  .p-field-group {
+    display: flex;
+    // flex-wrap: wrap; /* Permite que los elementos se envuelvan a una nueva línea en pantallas más pequeñas */
+    //margin-bottom: 0.5rem;
+  }
+  
+  .p-field {
+    // flex: 1 1 40%; /* El campo de código ocupa el 40% del ancho */
+    margin-right: 10px; /* Ajusta el espacio entre los campos */
+  }
+  
+  #descripcion {
+    flex: 1 1 calc(60% - 10px); /* El campo de descripción ocupa el resto del espacio (60% - 10px de margen) */
+  }
+  
+  /*estilo para botones de la tabla */
+  
+  .ha-button {
+    background-color: transparent; // Hacer el fondo transparente
+    border: none; // Eliminar el borde
+    padding: 0; // Eliminar el relleno
+    margin-right: 5px;
+  }
+  
+  .ha-edit-button .pi {
+    color: green; // Color del icono de editar
+    margin: 0 !important;
+  }
+  
+  .ha-delete-button .pi {
+    color: red; // Color del icono de eliminar
+    margin: 0 !important;
+  }
+  
+  
+  .ha-p-table-content{
+    padding: 10px !important;
+  }
+
+  :host ::ng-deep .p-dropdown {
+    width: 100%;
+  }
+
+  ::ng-deep .p-datatable-thead {
+    font-size: 11px !important;
+    text-align: center;
+  }
+
+  .p-datatable-thead {
+    font-size: 11px !important;
+    text-align: center;
+  }
+
+  ::ng-deep .p-element .p-datatable-tbody{
+    font-size: 10px !important;
+  }
+
+  .right-aligned-column {
+    text-align: right;
+  }
+
+  .text-right {
+    text-align: right;
+  }
+
+  .p-dropdown {
+    width: 100% !important;
+    max-width: 250px; /* Define un ancho máximo */
+  }
+  
+  .p-dropdown .p-dropdown-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .p-field {
+    flex: 1;
+    min-width: 0; // opcional, para evitar que se encojan mucho
+  }
+
+  .p-field-group {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 1rem; // espacio entre campos
+  }
+
+  .p-field .p-calendar,
+  .p-field .p-dropdown {
+    width: 100%;
+  }
+
+  // Estilos para hover personalizado en la tabla
+  ::ng-deep .custom-hover-table {
+    
+    // Efecto hover en las filas
+    .p-datatable-tbody > tr {
+      transition: background-color 0.2s ease;
+      cursor: pointer;
+      
+      &:hover {
+        background-color: rgba(0, 123, 255, 0.08) !important;
+        transform: scale(1.001);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      
+      // Para filas alternadas con hover
+      &:nth-child(even):hover {
+        background-color: rgba(0, 123, 255, 0.12) !important;
+      }
+    }
+    
+    // Hover en el header también
+    .p-datatable-thead > tr > th {
+      transition: background-color 0.2s ease;
+      
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.05) !important;
+      }
+    }
+    
+    // Mejorar el botón dentro de la tabla
+    .p-button {
+      transition: all 0.2s ease;
+      padding: 6px 12px !important;
+      font-size: 12px !important;
+      border-radius: 4px;
+      
+      &:hover:not(:disabled) {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      }
+      
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      
+      .pi {
+        font-size: 11px !important;
+        margin-right: 6px;
+      }
+    }
+    
+    // Reducir padding general de la tabla
+    .p-datatable-thead > tr > th {
+      padding: 10px 12px !important;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    
+    .p-datatable-tbody > tr > td {
+      padding: 8px 12px !important;
+      font-size: 12px;
+      vertical-align: middle;
+    }
+    
+    // Mejorar el input de búsqueda
+    .p-inputtext {
+      padding: 8px 12px !important;
+      font-size: 13px !important;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+      
+      &:focus {
+        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+        border-color: #007bff;
+      }
+    }
+  }
+
+  // Variante con hover más sutil
+  ::ng-deep .subtle-hover-table {
+    .p-datatable-tbody > tr {
+      transition: background-color 0.15s ease;
+      
+      &:hover {
+        background-color: rgba(121, 175, 230, 0.8) !important;
+      }
+    }
+  }
+
+  // Variante con hover colorido
+  ::ng-deep .colorful-hover-table {
+    .p-datatable-tbody > tr {
+      transition: all 0.2s ease;
+      
+      &:hover {
+        background: linear-gradient(135deg, rgba(0, 123, 255, 0.05), rgba(0, 123, 255, 0.1)) !important;
+        border-left: 3px solid #007bff;
+      }
+    }
+  }
+
+  .p-button:disabled {
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
+    color: #ffffff !important;
+    cursor: not-allowed !important;
+    opacity: 0.6 !important;
+  }

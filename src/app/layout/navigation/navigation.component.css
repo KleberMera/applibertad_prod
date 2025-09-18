@@ -1,0 +1,8 @@
+.ha-navigation{
+    height: 60px;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    background: rgba(11, 137, 191, 0.8);
+}

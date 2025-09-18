@@ -1,0 +1,45 @@
+<section class="ha-{{$theme}} {{showLeftNav ? 'ha-main-container' : 'ha-main-container-full'}}">
+    <!-- HEADER -->
+    <app-header class="ha-header" (showMenu)="toogleLeftNav()" style="background-color: #002373;">
+
+    </app-header> 
+    
+    <!-- LEFT NAV BAR -->
+    <!-- <app-left-nav style="background-color: #ffffff;" class="ha-left-nav" *ngIf="showLeftNav" (showMenu)="toogleLeftNav()"></app-left-nav>  -->
+    <!-- <app-left-nav class="ha-left-nav" [showLeftNav]="showLeftNav"></app-left-nav> -->
+    
+    <!-- MAIN CONTENT -->
+    <!-- <main class="ha-main-content">
+        <router-outlet></router-outlet>
+    </main> -->
+
+    <main class="ha-main-content">
+        <div class="ha-main-inner">
+            <!-- LEFT NAV DENTRO DEL MAIN -->
+            <app-left-nav 
+                *ngIf="showLeftNav" 
+                (showMenu)="toogleLeftNav()" 
+                class="ha-left-nav-inside" 
+                style="background-color: #ffffff;">
+            </app-left-nav> 
+
+            <!-- CONTENIDO PRINCIPAL -->
+            <div class="ha-main-router">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </main>
+    
+    <!-- FOOTER -->
+    <app-footer class="ha-footer" style="background-color: #002373;"></app-footer>
+</section>
+<!-- <app-navigation></app-navigation>
+<div class="container-fluid ha-skeleton-content">
+    <router-outlet></router-outlet>
+</div>
+<app-footer></app-footer> -->
+<ng-container *ngIf="isLoading">
+    <div class="ha-loader">
+        <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)" animationDuration=".8s"></p-progressSpinner>
+    </div>
+</ng-container>

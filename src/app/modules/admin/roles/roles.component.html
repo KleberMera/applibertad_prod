@@ -1,0 +1,174 @@
+<div class="container">
+    <div class="form-container">
+      <h5 class="ha-title">Roles de Usuario</h5>
+      <hr>
+
+      <form [formGroup]="formularioRoles" class="ha-form">
+        <div>
+          <div class="button-container_head">
+            <!-- Botón para mostrar el formulario -->
+            <p-button severity="primary" label="Agregar" icon="pi pi-plus" (click)="mostrarFormulario()"></p-button>
+            <p-button severity="primary" label="Buscar" icon="pi pi-search" (click)="mostrarFormulario2()"></p-button>
+            <!-- Agrega otros botones aquí si es necesario -->
+          </div>
+
+          <hr>
+
+          <!-- <div *ngIf="formularioVisible2" [@formularioAnimacion]>
+            <div class="p-field-group">
+              <div class="p-field" style="flex: 0 0 35%;"> -->
+                  <!-- <input id="cedula_search" 
+                    (keyup.enter)="clientesByCed()"
+                    (keydown.enter)="$event.preventDefault()" 
+                    type="text" 
+                    formControlName="cedula" 
+                    class="p-inputtext ha-input" 
+                    required 
+                    autocomplete="off"
+                    maxlength="10"
+                    pattern="[0-9]*"
+                    placeholder="Cédula"> -->
+              <!-- </div> -->
+              <!-- <div class="button-container" style="margin: 0px;">
+
+                <p-button severity="primary" label="" icon="pi pi-search" (click)="clientesByCed()"></p-button>
+
+                <p-button severity="danger" label="" icon="pi pi-times" (click)="ocultarFormulario2()"></p-button>
+                <p-button severity="success" label="" icon="pi pi-list" (click)="obtenerRoles()"></p-button>
+
+              </div> -->
+              
+            <!-- </div> -->
+            <!-- <hr style="margin-bottom: 1.5rem; margin-top: -0.5rem !important;"> -->
+          <!-- </div> -->
+        
+          <div *ngIf="formularioVisible" [@formularioAnimacion]>
+            <div class="p-field-group rol_caja">
+              <div class="p-field" style="flex: 0 0 35%;">
+                  <input id="rol" 
+                    (keydown.enter)="$event.preventDefault()" 
+                    type="text" 
+                    formControlName="rol" 
+                    class="p-inputtext ha-input" 
+                    required 
+                    autocomplete="off"
+                    placeholder="Rol">
+              </div>
+              <div class="p-field" style="flex: 1;">
+                  <input id="descripcion" 
+                    (keydown.enter)="$event.preventDefault()" 
+                    type="text" 
+                    formControlName="descripcion" 
+                    class="p-inputtext ha-input" 
+                    required 
+                    autocomplete="off"
+                    placeholder="Descripción">
+              </div>
+            </div>
+            <!-- <div class="p-field-group">
+              <div class="p-field" style="flex: 0 0 35%;">
+                  <input id="telefono" 
+                      (keydown.enter)="$event.preventDefault()" 
+                      type="text" 
+                      formControlName="telefono" 
+                      class="p-inputtext ha-input" 
+                      required 
+                      autocomplete="off"
+                      maxlength="10"
+                      pattern="[0-9]*"
+                      placeholder="Teléfono">
+              </div>
+              <div class="p-field" style="flex: 1;">
+                  <input id="email" 
+                          (keydown.enter)="$event.preventDefault()" 
+                          type="text" 
+                          formControlName="email" 
+                          class="p-inputtext ha-input" 
+                          required autocomplete="off"
+                          placeholder="Email">
+              </div>
+            </div> -->
+            <!-- <div class="p-field-group">
+              <div class="p-field" style="flex: 1;">
+                  <input id="direccion" 
+                          (keydown.enter)="$event.preventDefault()" 
+                          type="text" 
+                          formControlName="direccion" 
+                          class="p-inputtext ha-input" 
+                          required autocomplete="off"
+                          placeholder="Dirección">
+              </div>
+            </div> -->
+            <div class="button-container" style="margin: 0px;">
+              <!-- Botón para guardar -->
+              <p-button severity="success" label="Guardar" icon="pi pi-save" (click)="guardarRol()"></p-button>
+              <!-- Botón para cancelar -->
+              <p-button severity="danger" label="Cancelar" icon="pi pi-times" (click)="ocultarFormulario()"></p-button>
+              <!-- Agrega otros botones aquí si es necesario -->
+            </div>
+            <!-- <hr> -->
+          </div>
+          <div *ngIf="formularioVisible2" [@formularioAnimacion]>
+            <div class="p-table">
+              <p-table 
+                #tbRoles
+                [globalFilterFields]="['ROLE_ID', 'ROLE_NAME', 'DESCRIPTION']"
+                [value]="roles" 
+                styleClass="p-datatable-striped" 
+                dataKey="roleid"
+                [paginator]="true" 
+                [rows]="4">
+                <ng-template pTemplate="caption">
+                  <p-iconField iconPosition="left">
+                    <p-inputIcon class="input-icon">
+                      <i class="pi pi-search"></i>
+                    </p-inputIcon>
+                    <input 
+                      pInputText 
+                      type="text" 
+                      (input)="applyFilterGlobal($event)" 
+                      (keydown.enter)="$event.preventDefault()" 
+                      placeholder="Buscar en tabla" 
+                      class="input-text p-inputtext buscar_roles_usuarios"/>
+                  </p-iconField>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="ROLE_ID">ID <p-sortIcon field="ROLE_ID"></p-sortIcon></th>
+                        <th pSortableColumn="ROLE_NAME">Rol <p-sortIcon field="ROLE_NAME"></p-sortIcon></th>
+                        <th pSortableColumn="DESCRIPTION">Descripción <p-sortIcon field="DESCRIPTION"></p-sortIcon></th>
+                        <!-- <th pSortableColumn="telefono">Telefono <p-sortIcon field="telefono"></p-sortIcon></th>
+                        <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th> -->
+                        <!-- <th>Acciones</th> -->
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-role>
+                    <tr>
+                        <td>{{ role.ROLE_ID }}</td>
+                        <td>{{ role.ROLE_NAME }}</td>
+                        <td>{{ role.DESCRIPTION }}</td>
+                        <!-- <td>{{ usuario.telefono }}</td>
+                        <td>{{ usuario.email}}</td> -->
+                        <!-- <td>
+                            <button (click)="editarRol(role)" class="ha-button ha-edit-button">
+                                <i class="pi pi-pencil"></i>
+                            </button>
+                            <button (click)="eliminarRol(role)" class="ha-button ha-delete-button">
+                                <i class="pi pi-trash"></i>
+                            </button>
+                        </td> -->
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="4">No se encontraron usuarios.</td>
+                    </tr>
+                </ng-template>
+              </p-table>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  

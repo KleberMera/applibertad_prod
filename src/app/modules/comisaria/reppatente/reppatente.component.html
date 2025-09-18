@@ -1,0 +1,101 @@
+<div class="container">
+    <div class="form-container">
+      <h5 class="ha-title">Reporte de Patente y Permiso de Funcionamiento</h5>
+      <hr>
+  
+      <form [formGroup]="formularioRepPatente" class="ha-form">
+        <div class="button-container_head">
+            <p-button severity="primary" label="Cargar Datos" icon="pi pi-list" (click)="loadData()"></p-button>
+        </div>
+
+        <hr>
+
+        <div class="form-content">
+  
+            <div *ngIf="formularioVisible" class="form-section">
+                <div class="button-container">
+                <!-- Botón para Exportar a Excel -->
+                <p-button severity="success" label="Generar XLS" icon="pi pi-file-pdf" (click)="exportarExcel()"></p-button>
+                </div>
+                <hr class="section-divider">
+            </div>
+
+          <!-- Tabla de Datos -->
+          <div *ngIf="formularioVisible2" class="table-container">
+                <p-table
+                #tbRepPatente
+                [globalFilterFields]="[
+                  'IDLOCAL',
+                  'RAZON_SOCIAL_LOCAL',	
+                  'CONTRIB_NEGOCIO',	
+                  'CEDULA', 
+                  'IDCONTRI',
+                  'ACTIVIDAD_ECONOMICA',
+                  'COD_CATASTRAL',
+                  'SECTOR',
+                  'DIRECCION_LOCAL',
+                  'PATENTE_ULTIMA',
+                  'FUNCIONAMIENTO_ULTIMA',
+                  'ESTADO']"
+                [value]="reporte"
+                styleClass="p-datatable-striped"
+                dataKey="IDLOCAL"
+                [paginator]="true"
+                [rows]="10"
+                >
+                <ng-template pTemplate="caption">
+                    <p-iconField iconPosition="left">
+                    <p-inputIcon class="input-icon">
+                        <i class="pi pi-search"></i>
+                    </p-inputIcon>
+                    <input
+                        pInputText
+                        type="text"
+                        (input)="applyFilterGlobal($event)"
+                        (keydown.enter)="$event.preventDefault()"
+                        placeholder="Buscar en tabla"
+                        class="input-text p-inputtext buscar_patentes"
+                    />
+                    </p-iconField>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                      <th pSortableColumn="CONTRIB_NEGOCIO">Contribuyente</th>
+                      <th pSortableColumn="RAZON_SOCIAL_LOCAL" style="width: 4%;">Razón Social</th>
+                      <th pSortableColumn="ACTIVIDAD_ECONOMICA">Activ. Economica</th>
+                      <th pSortableColumn="SECTOR">Sector</th>
+                      <th pSortableColumn="PATENTE_ULTIMA">Patente</th>
+                      <th pSortableColumn="FUNCIONAMIENTO_ULTIMA">Permisio Funcionamiento</th>
+                      <th pSortableColumn="ESTADO">Estado</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-reporte>
+                    <tr>
+                      <td>{{ reporte.CONTRIB_NEGOCIO }}</td>
+                      <td>{{ reporte.RAZON_SOCIAL_LOCAL }}</td>
+                      <td>{{ reporte.ACTIVIDAD_ECONOMICA }}</td>
+                      <td>{{ reporte.SECTOR }}</td>
+                      <td>{{ reporte.PATENTE_ULTIMA }}</td>
+                      <td>{{ reporte.FUNCIONAMIENTO_ULTIMA}}</td>
+                      <!-- <td>{{ reporte.TASA }}</td> -->
+                      <td>{{ reporte.ESTADO}}</td>
+                   
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="flex align-items-center justify-content-between">
+                    Total de registros {{ reporte ? reporte.length : 0 }}.
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                    <td colspan="11">No se encontraron usuarios.</td>
+                    </tr>
+                </ng-template>
+                </p-table>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  

@@ -1,0 +1,112 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  //height: 100vh;
+}
+
+.form-container {
+  max-width: 750px;
+  width: 100%;
+  padding: 20px 40px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.ha-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.ha-form .p-field {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.ha-label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  flex-basis: 150px; // Establecer el ancho base del label
+}
+
+.ha-input {
+  flex-grow: 1; // Permitir que el input crezca para llenar el espacio restante
+  width: calc(70% - 10px);
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.p-field_search {
+  display: flex;
+  align-items: center;
+  justify-content: center; // Centrar los elementos horizontalmente
+  width: 75%; // Ajustar según sea necesario
+
+  input {
+    flex: 1; // El input ocupa todo el espacio disponible
+    margin-right: 10px; // Espacio entre el input y el botón
+  }
+
+  .p-button {
+    flex-shrink: 0; // El botón no se reduce en tamaño
+  }
+
+  @media screen and (max-width: 750px) {
+    width: 100%;
+    
+    //flex-direction: column; // Cambiar la dirección del flex para dispositivos móviles
+    //align-items: flex-start; // Alinear los elementos a la izquierda en dispositivos móviles
+
+    // input {
+    //   width: 100%; // El input ocupa todo el ancho disponible
+    //   margin-right: 0; // Eliminar el margen en dispositivos móviles
+    //   //margin-bottom: 10px; // Añadir espacio entre el input y el botón en dispositivos móviles
+    // }
+  }
+}
+
+
+input[readonly] {
+  // Deshabilitar la interacción
+  pointer-events: none;
+  // Estilo similar al texto estático
+  background-color: transparent;
+  border: none;
+  outline: none;
+  // Ajustar el cursor
+  cursor: default;
+  // Establecer el color del texto y la opacidad para que se vea como texto estático
+  color: #333;
+  opacity: 1;
+}
+
+@media screen and (max-width: 750px) {
+  .button-container {
+    justify-content: center;
+  }
+
+  .ha-form .p-field {
+    display: block;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ha-label {
+    width: auto;
+    margin-bottom: 5px;
+    text-align: left; // Alinea los labels a la izquierda en dispositivos móviles
+  }
+
+  .ha-input {
+    width: 100%;
+    margin-left: 0;
+  }
+}

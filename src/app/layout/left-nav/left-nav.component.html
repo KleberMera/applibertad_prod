@@ -1,0 +1,63 @@
+<div class="ha-left-nav-brand">
+    <fa-icon id="menuIconBars" [icon]="faBars" class="ha-left-nav-brand__menu" (click)="showMenu.emit()"></fa-icon>
+    <fa-icon [icon]="faXmark" class="ha-left-nav-brand__menu" (click)="showMenu.emit()"></fa-icon>
+    <!-- <i class="fas fa-bars ha-left-nav-brand__menu js-hide-show-menu"></i> -->
+    <div class="ha-left-nav-brand__logo">
+        <!-- <img [src]="logo" alt="ha-dev-logo"> -->
+        <!-- <img src="assets/images/logo.png" alt="ha-dev-logo"> -->
+        <span>GADMLL</span>
+    </div>
+</div>
+<div class="ha-left-nav-usr">
+    <!-- <div class="ha-left-nav-usr__avatar" [ngStyle]="{'background-image': 'url('+ avatar +')'}"></div> -->
+    <!-- <div style="padding-bottom: 3.7vh;"></div> -->
+    <!-- <div style="padding-bottom: 27px;"></div> -->
+    <!-- <img class="ha-left-nav-usr__avatar"  [src]="logo" alt="ha-dev-logo"> -->
+    <!-- Aqui va el nombre del usuario -->
+    <!-- <h4 class="ha-left-nav-usr__name">{{name}}</h4>  --> 
+     <!-- Aqui podrian ir los roles -->
+    <!-- <h6 class="ha-left-nav-usr__position">{{position}}</h6> -->
+    <!-- OCULTAMOS EL CERRAR SESION -->
+    <!-- <app-left-nav-menu [data]="logoutMenu"></app-left-nav-menu> -->
+    <!-- <img [src]="data.LOGO" alt="Logo" class="ha-left-nav-usr__logo"> -->
+</div>
+
+<div class="ha-left-nav-menu">
+    <h5 class="ha-left-nav-menu__title">Mi Perfil</h5>
+    <ul class="ha-left-nav-menu__links">
+
+        <ng-container>
+            <li class="ha-left-nav-menu__links-link">
+                <a style="text-decoration: none; color: inherit;" routerLink="/panel/welcome" class="ha-left-nav-menu__links-anchor">
+                <i class="fa-solid fa-home"></i>
+                <span>&nbsp;&nbsp;Inicio</span>
+                </a>
+            </li>
+            <li class="ha-left-nav-menu__links-link">
+                <a style="text-decoration: none; color: inherit;" routerLink="/panel/tthh/perfil" class="ha-left-nav-menu__links-anchor">
+                <i class="fa-solid fa-user"></i>
+                <span>&nbsp;&nbsp;Datos</span>
+                </a>
+            </li>
+            <li class="ha-left-nav-menu__links-link">
+                <a style="text-decoration: none; color: inherit;" routerLink="/panel/tthh/marcacionesindividuales" class="ha-left-nav-menu__links-anchor">
+                <i class="fa-solid fa-clock"></i>
+                <span>&nbsp;&nbsp;Marcaciones</span>
+                </a>
+            </li>
+            
+            <li class="ha-left-nav-menu__links-link">
+                <a style="text-decoration: none; color: inherit;" routerLink="/panel/tthh/rolesdepago" class="ha-left-nav-menu__links-anchor">
+                <i class="fa-solid fa-file-invoice"></i>
+                <span>&nbsp;&nbsp;Roles de Pago</span>
+                </a>
+            </li>
+        </ng-container>              
+    </ul>
+</div>
+
+<ng-container *ngFor="let menu of menus">
+    <!-- <div style="border: 1px solid #a09d9d; padding: auto;"> -->
+    <app-left-nav-menu [data]="menu"></app-left-nav-menu>
+    <!-- </div> -->
+</ng-container>

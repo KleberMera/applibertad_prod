@@ -1,0 +1,21 @@
+<div class="row">
+    <div class="col-12">
+        <!-- <app-title-h1 [text]="title" [pricePesos]="pricePesos" [data]="obj"></app-title-h1> -->
+        <!-- <app-title-h1 [text]="title" [pricePesos]="pricePesos"></app-title-h1>
+        <p-button severity="primary" label="Agregar 10 pesos" (onClick)="addAmount()" icon="pi pi-plus"></p-button> -->
+        <h1>Pipes</h1>
+        <p>JSON: {{obj | json}}</p>
+        <p>Texto: {{stringVar | titlecase}}</p>
+        <p>Date: {{dateVar | date}}</p>
+        <p>Date Medium: {{dateVar | date:'medium'}}</p>
+        <p>Date Full: {{dateVar | date:'full'}}</p>
+        <p>Date shortTime: {{dateVar | date:'shortTime'}}</p>
+        <p>Date mm:ss: {{dateVar | date:'mm:ss'}}</p>
+        <p>Date FullTime: {{dateVar | date:'fullTime'}}</p>
+        <p>Currency: {{currencyVar | currency}}</p>
+        <p>Currency: {{currencyVar | currency:'MXN'}}</p>
+        <p>Decimal: {{decimalVar | number:'1.2-5'}}</p> <!--Si hay menos de 2 decimales le agrega 0 ya q lo minimo es 2-->
+        <p>Procentaje: {{decimalVar | percent}}</p>
+        <p>Custom Pipe: {{user.name | greetings:user.gender:user.role}}</p>
+    </div> 
+</div>

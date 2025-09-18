@@ -1,0 +1,107 @@
+<div class="container">
+  <div class="form-container">
+    <h5 class="ha-title">Consulta de Rol de Pago</h5>
+    <hr />
+    <form [formGroup]="formularioRolPago" class="ha-form">
+      <div class="form-content">
+        <!-- Filtro por período -->
+        <div *ngIf="formularioVisible" class="form-section">
+          <div class="p-field-group">
+            <div class="p-field div_periodo">
+              <input
+                type="text"
+                pInputText
+                formControlName="periodo"
+                placeholder="Período"
+                class="p-inputtext periodo"
+                [value]="currentYear"
+                [maxLength]="4"
+              />
+            </div>
+            
+            <div class="button-container">
+              <p-button severity="primary" label="" icon="pi pi-search" (click)="loadDataRolPago()" type="submit"></p-button>
+              <p-button severity="danger" label="" icon="pi pi-times" (click)="ocultarFormulario2()"></p-button>
+            </div>
+          </div>
+          <hr class="section-divider" />
+        </div>
+        <!-- Tabla de Datos -->
+        <div *ngIf="formularioVisible && rolPagos.length > 0" class="table-container">
+          <p-table
+            #tbRolPago
+            [value]="rolPagos"
+            styleClass="p-datatable-striped"
+            [paginator]="true"
+            [rows]="10"
+            [sortField]="'PERIODO'"
+            [sortOrder]="-1"
+          >
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="CODIGO">
+                <span style="display: flex; align-items: center; gap: 5px;">
+                  Código <p-sortIcon field="CODIGO"></p-sortIcon>
+                </span>
+              </th>
+              <th pSortableColumn="CEDULA">
+                <span style="display: flex; align-items: center; gap: 5px;">
+                  Cédula <p-sortIcon field="CEDULA"></p-sortIcon>
+                </span>
+              </th>
+              <th pSortableColumn="EMPLEADO">
+                <span style="display: flex; align-items: center; gap: 5px;">
+                  Empleado <p-sortIcon field="EMPLEADO"></p-sortIcon>
+                </span>
+              </th>
+              <th pSortableColumn="PERIODO">
+                <span style="display: flex; align-items: center; gap: 5px;">
+                  Período <p-sortIcon field="PERIODO"></p-sortIcon>
+                </span>
+              </th>
+              <!-- <th pSortableColumn="FECHA_CONSULTA">
+                <span style="display: flex; align-items: center; gap: 5px;">
+                  Fecha Consulta <p-sortIcon field="FECHA_CONSULTA"></p-sortIcon>
+                </span>
+              </th> -->
+              <th>
+                Detalle
+              </th>
+            </tr>
+          </ng-template>          
+            <ng-template pTemplate="body" let-rol>
+              <tr>
+                <td>{{ rol.CODIGO }}</td>
+                <td>{{ rol.CEDULA }}</td>
+                <td>{{ rol.EMPLEADO }}</td>
+                <td>{{ rol.PERIODO }}</td>
+                <!-- <td>{{ rol.FECHA_CONSULTA }}</td> -->
+                <td>
+                  <p-button severity="primary" label="" icon="pi pi-ellipsis-v" (click)="verDetalle(rol)"></p-button>
+                  <!-- <button
+                    type="button"
+                    pButton
+                    icon="pi pi-ellipsis-v"
+                    class="p-button-rounded p-button-info p-button-sm"
+                    (click)="verDetalle(rol)"
+                    title="Ver detalle"
+                  ></button> -->
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="summary">
+              <div class="flex align-items-center justify-content-between">
+                Total de registros: {{ rolPagos.length || 0 }}.
+              </div>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="5">No se encontraron registros.</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

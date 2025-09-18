@@ -1,0 +1,98 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; // evita scroll de todo el body
+  }
+  
+
+.ha-skeleton-content {
+    min-height: calc(100vh - 60px - 40px);
+    // background: rgba(211, 211, 211, 0.389);
+}
+
+section {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; // ya lo tienes
+    width: 100%;
+    background-image: url("../../../assets/img/fondo.png") !important;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+
+}
+
+.ha-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999999;
+}
+
+
+.ha-main-inner {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.ha-left-nav-inside {
+    width: 250px; /* o el ancho que quieras */
+    flex-shrink: 0;
+
+
+    width: 250px;
+    flex-shrink: 0;
+    height: calc(100vh - 60px - 40px); // ocupa toda la altura de la ventana
+    overflow-y: auto !important; // scroll vertical
+    overflow-x: hidden; // para evitar desplazamiento horizontal
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: #999 transparent; /* Firefox */
+    padding-bottom: 20px;
+
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #999;
+        border-radius: 3px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    
+}
+
+.ha-main-router {
+    flex-grow: 1;
+    padding: 1rem; /* opcional, para que no pegue el contenido */
+}
+
+main.ha-main-content {
+    flex: 1; // ocupa todo el espacio disponible entre header y footer
+    display: flex;
+    overflow: hidden;
+  }
+  
+  .ha-main-inner {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    width: 100%;
+  }
+  
+  .ha-main-router {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 1rem; // ya lo tienes, queda bien
+  }
+  

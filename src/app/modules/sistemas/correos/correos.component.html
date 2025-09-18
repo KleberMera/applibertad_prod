@@ -1,0 +1,100 @@
+<div class="container">
+  <div class="form-container">
+    <h5 class="ha-title">Actualización de Correos Institucionales</h5>
+    <hr>
+    <form [formGroup]="correoForm" class="ha-form">
+      <div class="form-content">
+        <div class="form-section">
+          <div class="p-field-group">
+            <div class="p-field">
+              <p-iconField iconPosition="left">
+                <p-inputIcon class="input-icon">
+                  <i class="pi pi-user"></i>
+                </p-inputIcon>
+                <input 
+                  class="input-text p-inputtext" 
+                  pInputText pAutoFocus  
+                  [autofocus]="true" 
+                  placeholder="Cédula" 
+                  formControlName="cedula" 
+                  id="cedula" type="text" 
+                  maxlength="13" 
+                  [(ngModel)]="identificacion"
+                  (keydown.enter)="consultarCorreo()"
+                />
+              </p-iconField>
+            </div>
+            <div class="button-container">
+              <p-button (click)="consultarCorreo()" severity="primary" icon="pi pi-search" ></p-button>
+            </div>
+            <hr class="section-divider">
+          </div>
+        </div>
+      </div>
+    </form>
+    <hr>
+    <!-- Contenedor de funcionarios-->
+    <div class=" table-container" *ngIf="consultaRequisitos; else loaderComponent">
+      <!-- Requisitos -->
+      <!-- Datos del funcionario -->
+      <div class="d-flex">
+        <div class="modulo-cedula">
+          <h6 class="cedula-detalle-titulo">Cédula</h6> 
+          <p class="nombre-detalle">{{consultaRequisitos.CEDULA}}</p>
+        </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <div class="modulo-nombre">
+          <h6 class="cedula-detalle-titulo">Nombre</h6>
+          <p class="nombre-detalle">{{ consultaRequisitos.NOMBRES }} {{consultaRequisitos.APELLIDO1}} {{consultaRequisitos.APELLIDO2}} </p>
+        </div>
+      </div>
+      <!-- <p-divider></p-divider> -->
+      <hr class="section-divider">
+      <p class="p-requisitos-header" >Información de Contrato</p>
+      <div class="d-flex justify-content-between">
+        <p class="p-requisitos" >Existe Contrato</p>
+        <p class="p-requisitos" *ngIf="band"><i class="pi pi-check-circle" style="color: green;"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+        <p class="p-requisitos pl-1" *ngIf="!band"><i class="pi pi-times-circle" style="color: red;"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+      </div>
+      <div class="d-flex justify-content-between">
+        <p class="p-requisitos" >Contrato Vigente</p>
+        <p class="p-requisitos" *ngIf="estadoContrato"><i class="pi pi-check-circle" style="color: green;"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+        <p class="p-requisitos pl-1" *ngIf="!estadoContrato"><i class="pi pi-times-circle" style="color: red;"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+      </div>
+      <hr class="section-divider">
+      <!-- <p-divider></p-divider> -->
+    
+      <!-- Div para actualizar correos -->
+      <div class="" *ngIf="showCorreosActualizar">  
+        <label class="label-correotthh" for="correotthh">Correo Personal</label>
+        <br>
+        <label class="label-personal-input" id="correotthh" [(ngModel)]="correotthh" >{{consultaCorreos.CORREO_TTHH}}</label>
+      </div>
+      <!-- <p-divider></p-divider> -->
+      <hr class="section-divider">
+      <div *ngIf="showCorreosActualizar">  
+        <label class="label-correomail pt-1" for="correomail">Correo Institucional</label>
+        <br>
+        <div class="d-flex">
+          <input class="institucional-input" name="correomail" id="correomail" [disabled]="!band && !estadoContrato" [(ngModel)]="correomail" type="text" placeholder="{{placeholder}}" value="{{partesArroba}}">
+          <label class="lalibertad" for="" > &#64;lalibertad.gob.ec</label>
+        </div>
+      </div>
+      <br>
+      <div class="botones text-center d-flex justify-content-around">
+          <button type="button" pButton [disabled]="!band && !estadoContrato || !correomail.trim()" (click)="toggleAbrirCorreos()" class="p-button-info boton-limpiar" label=""><i class="fa-regular fa-pen-to-square"></i>&nbsp;Actualizar</button>
+          <button type="button" pButton (click)="atras()" class="p-button-info boton-limpiar boton-cerrar" label=""><i class="pi pi-angle-left"></i>&nbsp;Regresar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Cargando -->
+<ng-template class="cargando-gif" #loaderComponent>
+  <div class="text-center div-cargando" *ngIf="!showDivIngreso">
+      <div style="position: relative;">
+        <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="4" fill="transparent" animationDuration="1s"></p-progressSpinner>
+      </div>
+  </div>
+</ng-template>
+  

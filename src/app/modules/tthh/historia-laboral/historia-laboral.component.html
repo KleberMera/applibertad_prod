@@ -1,0 +1,209 @@
+<div class="container">
+    <div class="form-container">
+      <h5 class="ha-title">Historia Laboral</h5>
+      <hr>
+
+      <form [formGroup]="formularioHistoriaEmpleado" class="ha-form">
+        <div>
+          <!-- <div class="button-container_head"> -->
+            <!-- Botón para mostrar el formulario -->
+            <!-- <p-button severity="primary" label="Agregar" icon="pi pi-plus" (click)="mostrarFormulario()"></p-button> -->
+            <!-- <p-button severity="primary" label="Buscar" icon="pi pi-search" (click)="mostrarFormulario2()"></p-button> -->
+            <!-- Agrega otros botones aquí si es necesario -->
+          <!-- </div> -->
+
+          <!-- <hr> -->
+
+          <div *ngIf="formularioVisible2" [@formularioAnimacion]>
+            <div class="p-field-group">
+              <div class="p-field" style="flex: 0 0 35%;">
+                  <input id="cedula_search" 
+                    (keyup.enter)="historiaEmpleadoByCed()"
+                    (keydown.enter)="$event.preventDefault()" 
+                    type="text" 
+                    formControlName="cedula" 
+                    styleClass="p-datatable-striped" 
+                    class="p-inputtext ha-input" 
+                    required 
+                    autocomplete="off"
+                    maxlength="10"
+                    pattern="[0-9]*"
+                    placeholder="Cédula">
+              </div>
+              <div class="button-container" style="margin: 0px;">
+                <!-- Botón para Buscar -->
+                <p-button severity="primary" label="" icon="pi pi-search" (click)="historiaEmpleadoByCed()"></p-button>
+                <!-- Botón para cancelar -->
+                <p-button severity="danger" label="" icon="pi pi-times" (click)="ocultarFormulario2()"></p-button>
+                <!-- <p-button severity="success" label="" icon="pi pi-list" (click)="obtenerClientes()"></p-button> -->
+                <!-- Agrega otros botones aquí si es necesario -->
+              </div>
+              
+            </div>
+            <hr style="margin-bottom: 1.5rem; margin-top: -0.5rem !important;">
+          </div>
+        
+          <div *ngIf="formularioVisible2" [@formularioAnimacion]>
+            <div class="p-field-group caja_funcionario">
+              <div class="p-field" style="flex: 0 0 35%;">
+                  <input id="cedula" 
+                    (keydown.enter)="$event.preventDefault()" 
+                    type="text" 
+                    formControlName="cedula" 
+                    class="p-inputtext ha-input" 
+                    required 
+                    autocomplete="off"
+                    maxlength="10"
+                    pattern="[0-9]*"
+                    placeholder="Cédula"
+                    readonly> 
+              </div>
+              <div class="p-field" style="flex: 1;">
+                  <input id="nombre" 
+                    (keydown.enter)="$event.preventDefault()" 
+                    type="text" 
+                    formControlName="nombre" 
+                    class="p-inputtext ha-input" 
+                    required autocomplete="off"
+                    placeholder="Nombre"
+                    readonly>
+              </div>
+            </div>
+            <!-- <div class="p-field-group">
+              <div class="p-field" style="flex: 0 0 50%;">
+                  <input id="departamento" 
+                      (keydown.enter)="$event.preventDefault()" 
+                      type="text" 
+                      formControlName="departamento" 
+                      class="p-inputtext ha-input" 
+                      required 
+                      autocomplete="off"
+                      maxlength="10"
+                      pattern="[0-9]*"
+                      placeholder="Departamento">
+              </div>
+              <div class="p-field" style="flex: 1;">
+                  <input id="cargo" 
+                          (keydown.enter)="$event.preventDefault()" 
+                          type="text" 
+                          formControlName="cargo" 
+                          class="p-inputtext ha-input" 
+                          required autocomplete="off"
+                          placeholder="Cargo">
+              </div>
+            </div> -->
+            <!-- <div class="p-field-group">
+              <div class="p-field" style="flex: 1;">
+                  <input id="direccion" 
+                          (keydown.enter)="$event.preventDefault()" 
+                          type="text" 
+                          formControlName="direccion" 
+                          class="p-inputtext ha-input" 
+                          required autocomplete="off"
+                          placeholder="Dirección">
+              </div>
+            </div> -->
+            <div class="button-container" style="margin: 0px;">
+              <!-- Botón para guardar -->
+              <!-- <p-button severity="success" label="Guardar" icon="pi pi-save" (click)="guardarUsuario()"></p-button> -->
+              <!-- Botón para cancelar -->
+              <!-- <p-button severity="danger" label="Cancelar" icon="pi pi-times" (click)="ocultarFormulario()"></p-button> -->
+              <!-- Agrega otros botones aquí si es necesario -->
+               <p-button severity="success" label="Exportar Excel" icon="pi pi-file-excel" (click)="exportarExcel()"></p-button>
+            </div>
+            <hr>
+          </div>
+          <div *ngIf="formularioVisible2" [@formularioAnimacion]>
+              <div class="p-table">
+                  
+                <p-table 
+                  #tbHistorial
+                  [globalFilterFields]="['DEPARTAMENTO', 'CARGO', 'FECINIREL', 'FECFINREL', 'SUELDO', 'STATUS']"
+                  [value]="empleados" 
+                  dataKey="clienteid"
+                  [paginator]="true" 
+                  [rows]="5">
+                  <ng-template pTemplate="caption">
+                    <p-iconField iconPosition="left">
+                          <p-inputIcon class="input-icon">
+                              <i class="pi pi-search"></i>
+                          </p-inputIcon>
+                          <input 
+                              pInputText 
+                              type="text" 
+                              (input)="applyFilterGlobal($event)" 
+                              (keydown.enter)="$event.preventDefault()" 
+                              placeholder="Buscar en tabla" 
+                              class="input-text p-inputtext buscar_historia"/>
+                      </p-iconField>
+                  </ng-template>
+                  <ng-template pTemplate="header">
+                      <tr>
+                          <th pSortableColumn="DEPARTAMENTO">
+                            <span style="display: flex; align-items: center; gap: 5px;">
+                              Departamento <p-sortIcon field="DEPARTAMENTO"></p-sortIcon>
+                            </span>
+                          </th>
+                          <th pSortableColumn="CARGO">
+                            <span style="display: flex; align-items: center; gap: 5px;">
+                              Cargo<p-sortIcon field="CARGO"></p-sortIcon>
+                            </span>
+                          </th>
+                          <th pSortableColumn="FECINIREL">
+                            <span style="display: flex; align-items: center; gap: 5px;">
+                              FECINIREL <p-sortIcon field="FECINIREL"></p-sortIcon>
+                            </span>
+                          </th>
+                          <th pSortableColumn="FECFINREL">
+                            <span style="display: flex; align-items: center; gap: 5px;">
+                              FECFINREL <p-sortIcon field="FECFINREL"></p-sortIcon>
+                            </span>
+                          </th>
+                          <th pSortableColumn="SUELDO">
+                            <span style="display: flex; align-items: center; gap: 5px;">
+                              Sueldo <p-sortIcon field="SUELDO"></p-sortIcon>
+                            </span>
+                          </th>
+                          <th pSortableColumn="STATUS">
+                            <span style="display: flex; align-items: center; gap: 5px;">
+                              Estado <p-sortIcon field="STATUS"></p-sortIcon>
+                            </span>
+                          </th>
+                          <!-- <th>Acciones</th> -->
+                      </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-empleado>
+                      <tr>
+                          <td>{{ empleado.DEPARTAMENTO }}</td>
+                          <td>{{ empleado.CARGO }}</td>
+                          <td>{{ empleado.FECINIREL }}</td>
+                          <td>{{ empleado.FECFINREL }}</td>
+                          <td>{{ empleado.SUELDO}}</td>
+                          <td>{{ empleado.STATUS | status}}</td>
+                          <!-- <td>
+                              <button (click)="editarUsuario(empleado)" class="ha-button ha-edit-button">
+                                  <i class="pi pi-pencil"></i>
+                              </button>
+                              <button (click)="eliminarUsuario(empleado)" class="ha-button ha-delete-button">
+                                  <i class="pi pi-trash"></i>
+                              </button>
+                          </td> -->
+                      </tr>
+                  </ng-template>
+                  <ng-template pTemplate="emptymessage">
+                      <tr>
+                          <td colspan="5">No se encontraron usuarios.</td>
+                      </tr>
+                  </ng-template>
+              </p-table>
+            </div>
+
+
+
+    
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  

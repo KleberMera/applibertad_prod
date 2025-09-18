@@ -1,0 +1,93 @@
+<!-- <div class="ha-left-nav-menu">
+    <h5 class="ha-left-nav-menu__title">{{data?.title}}</h5>
+    <ul class="ha-left-nav-menu__links">
+        <ng-container *ngFor="let link of data?.links">
+            <li 
+                class="ha-left-nav-menu__links-link"
+                [routerLink]="link.link ? link.link :  null"
+                (click)="link.method ? link.method() : null"
+            >
+                <fa-icon [icon]="link.icon"></fa-icon>
+                <span>{{link.name}}</span>
+            </li>
+        </ng-container>
+    </ul>
+</div> -->
+
+
+<!-- left-nav-menu.component.html -->
+<!-- <div class="ha-left-nav-menu">
+    <h5 class="ha-left-nav-menu__title">{{data?.title}}</h5>
+    <ul class="ha-left-nav-menu__links">
+        <ng-container *ngFor="let link of data?.links">
+            <li class="ha-left-nav-menu__links-link"
+                [class.has-submenu]="link.subLinks"
+                [routerLink]="link.link ? link.link : null"
+                (click)="toggleSubmenu(link)">
+                <fa-icon [icon]="link.icon"></fa-icon>
+                <span>{{link.name}}</span>
+                <fa-icon
+                    *ngIf="link.subLinks?.length"
+                    [icon]="expandedLink === link ? faChevronUp : faChevronDown"
+                    class="submenu-icon"
+                ></fa-icon>
+
+            </li>
+            <ul *ngIf="link.subLinks && expandedLink === link" class="ha-left-nav-menu__sub-links">
+                <li *ngFor="let subLink of link.subLinks" class="ha-left-nav-menu__sub-links-item">
+                    <fa-icon [icon]="subLink.icon"></fa-icon>
+                    <span>{{subLink.name}}</span>
+                </li>
+            </ul>
+        </ng-container>
+    </ul>
+</div> -->
+
+<div class="ha-left-nav-menu" *ngIf="isAuthorized">
+    <!-- <h5 class="ha-left-nav-menu__title">{{data?.title}}</h5> -->
+    <!-- <div *ngIf="isAuthorized"> Solo muestra si está autorizado -->
+    <h5 class="ha-left-nav-menu__title">{{data?.title}}</h5>
+    <!-- </div> -->
+    <ul class="ha-left-nav-menu__links">
+        <!-- <ng-container *ngFor="let link of data?.links"> -->
+
+        <ng-container *ngFor="let link of filteredMenu">
+            <!-- Enlace INTERNO (usa método de click) -->
+            <li *ngIf="!link.external"
+                class="ha-left-nav-menu__links-link"
+                [class.has-submenu]="link.subLinks"
+                (click)="handleLinkClick(link)">
+                <fa-icon [icon]="link.icon"></fa-icon>
+                <span>{{link.name}}</span>
+                <fa-icon
+                *ngIf="link.subLinks?.length"
+                [icon]="expandedLink === link ? faChevronUp : faChevronDown"
+                class="submenu-icon"
+                ></fa-icon>
+            </li>
+            
+            <!-- Enlace EXTERNO (abre nueva pestaña) -->
+            <li *ngIf="link.external"
+                class="ha-left-nav-menu__links-link">
+                <a style="text-decoration: none; color: inherit;" [href]="link.link" target="_blank" rel="noopener noreferrer">
+                <fa-icon [icon]="link.icon"></fa-icon>
+                <span>  {{link.name}}</span>
+                </a>
+            </li>
+            
+            <!-- Sublinks -->
+            <ul *ngIf="link.subLinks && expandedLink === link"
+                class="ha-left-nav-menu__sub-links">
+                <li *ngFor="let subLink of link.subLinks"
+                    class="ha-left-nav-menu__sub-links-item"
+                    (click)="handleLinkClick(subLink)">
+                <fa-icon [icon]="subLink.icon"></fa-icon>
+                <span>{{subLink.name}}</span>
+                </li>
+            </ul>
+        </ng-container>              
+    </ul>
+</div>
+
+
+
