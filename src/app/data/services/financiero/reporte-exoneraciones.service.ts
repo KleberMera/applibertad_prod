@@ -117,8 +117,8 @@ export class ReporteExoneracionesService {
             CONTRIBUYENTE: { halign: 'left', cellWidth: 48, fontSize: 8 },
             DETALLE: { halign: 'left', cellWidth: 60, fontSize: 8 },
             PORCENTAJE_EXONERACION: { halign: 'center', cellWidth: 25, fontSize: 8 },
-            DESCRIPCION_INGRESO: { halign: 'left', cellWidth: 35, fontSize: 8 },
-            FECHA_EMISION: { halign: 'center', cellWidth: 25, fontSize: 8 },
+            DESCRIPCION_INGRESO: { halign: 'left', cellWidth: 38, fontSize: 8 },
+            FECHA_EMISION: { halign: 'center', cellWidth: 23, fontSize: 8 },
             TITULO: { halign: 'center', cellWidth: 30, fontSize: 8 },
             EMITIDO_POR: { halign: 'left', cellWidth: 25, fontSize: 8 },
             VALOR: { halign: 'right', cellWidth: 25, fontSize: 8 },
@@ -170,36 +170,45 @@ export class ReporteExoneracionesService {
             currentY = margins.top + 25;
           }
           
-          // Agregar tabla de totales
+          // Agregar tabla de totales con las mismas dimensiones que la tabla principal
           autoTable(doc, {
-            body: [[
-              { 
-                content: 'Total Exonerado:', 
-                colSpan: 7, 
-                styles: { 
-                  halign: 'right', 
-                  fontStyle: 'bold', 
-                  fontSize: 9,
-                  font: 'helvetica',
-                  cellPadding: 2
-                } 
-              },
-              { 
-                content: totalValor.toLocaleString('es-EC', { 
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2
-                }), 
-                styles: { 
-                  halign: 'right', 
-                  fontStyle: 'bold', 
-                  fontSize: 9,
-                  font: 'helvetica',
-                  cellPadding: 2
-                } 
-              }
-            ]],
+            body: [
+              [
+                { content: '', styles: { cellWidth: 48 } }, // Ancho de columna Contribuyente
+                { content: '', styles: { cellWidth: 60 } }, // Ancho de columna Detalle
+                { content: '', styles: { cellWidth: 25 } }, // Ancho de columna % Exoneración
+                { content: '', styles: { cellWidth: 38 } }, // Ancho de columna Concepto
+                { content: '', styles: { cellWidth: 23 } }, // Ancho de columna Fecha Emisión
+                { content: '', styles: { cellWidth: 30 } }, // Ancho de columna Título Crédito
+                { 
+                  content: 'Total Exonerado:', 
+                  styles: { 
+                    halign: 'left', 
+                    fontStyle: 'bold', 
+                    fontSize: 9,
+                    font: 'helvetica',
+                    cellWidth: 25,
+                    cellPadding: 2
+                  } 
+                },
+                { 
+                  content: totalValor.toLocaleString('es-EC', { 
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                  }), 
+                  styles: { 
+                    halign: 'right', 
+                    fontStyle: 'bold', 
+                    fontSize: 9,
+                    font: 'helvetica',
+                    cellWidth: 25,
+                    cellPadding: 2
+                  } 
+                }
+              ]
+            ],
             startY: currentY,
-            theme: 'grid',
+            theme: 'plain',
             styles: { 
               fontSize: 9, 
               textColor: [0, 0, 0],
