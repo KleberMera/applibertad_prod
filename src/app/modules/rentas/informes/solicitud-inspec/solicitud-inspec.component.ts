@@ -6,6 +6,7 @@ import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import Swal from 'sweetalert2';
+import { environment } from 'environments/environment';
 @Component({
   selector: 'app-solicitud-inspec',
   templateUrl: './solicitud-inspec.component.html',
@@ -16,6 +17,7 @@ export class SolicitudInspecComponent {
     inspecciones: any[] = []; // Para mostrar los datos en la tabla
     datos: any[] = [];
     globalFilter: string = ''; 
+    urlApi = environment.uri;
   
     constructor(private fb: FormBuilder, private http: HttpClient) {
       this.inspeccionForm = this.fb.group({
@@ -70,7 +72,7 @@ export class SolicitudInspecComponent {
       // Realizar la petición POST
      // this.http.post('https://www.lalibertad.gob.ec/wsLibertad_v2/api/rentas/solicitudRecorrido/', body.toString(), { headers })
       // this.http.post('http://120.40.73.73:8080/wsLibertad_v2/api/rentas/solicitudRecorrido/', body.toString(), { headers })
-      this.http.post('http://localhost:8080/wsLibertad_v2/api/rentas/solicitudRecorrido/', body.toString(), { headers })
+      this.http.post(this.urlApi + 'rentas/solicitudRecorrido/', body.toString(), { headers })
       .subscribe((response: any) => {
         if (response.data && response.data.length > 0) {
           this.inspecciones = response.data; // Guardamos los resultados en la tabla
