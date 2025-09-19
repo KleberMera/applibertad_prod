@@ -28,6 +28,7 @@ export class ReporteExoneracionesService {
           const pageHeight = doc.internal.pageSize.getHeight();
           const margins = { top: 15, bottom: 15, left: 15, right: 15 };
           const paginasConEncabezado = new Set<number>();
+          const headerHeight = 20;
           
           const drawEncabezado = () => {
             const currentPage = doc.getCurrentPageInfo().pageNumber;
@@ -69,20 +70,24 @@ export class ReporteExoneracionesService {
           
             doc.setFont('helvetica', 'bold');
             doc.setFontSize(11);
-            doc.text('Emision Diarias de Exoneraciones', pageWidth / 2, yBase + 10, { align: 'center' });
+            doc.text('Emisión Diaria de Exoneraciones', pageWidth / 2, yBase + 10, { align: 'center' });
             doc.setFont('helvetica', 'normal');
             doc.setFontSize(10);
             doc.text(`Período: ${fechaFormateada}`, pageWidth / 2, yBase + 16, { align: 'center' });
           
+            doc.setFont('helvetica', 'normal');
             doc.setFontSize(8);
-            doc.text(`Página ${currentPage} de ${totalPagesExp}`, rightX + 25.65, yBase + 4, { align: 'right' });
-            doc.text(`Usuario: ${usuario}`, rightX - 6, yBase + 10, { align: 'right' });
-            doc.text(fechaHora, rightX - 6, yBase + 16, { align: 'right' });
+            // Ajustar la posición vertical del texto de página para alinearlo con el usuario y fecha
+            doc.text(`Página ${currentPage} de ${totalPagesExp}`, rightX + 30, yBase + 4, { align: 'right' });
+            doc.text(`Usuario: ${usuario}`, rightX, yBase + 10, { align: 'right' });
+            doc.text(fechaHora, rightX, yBase + 16, { align: 'right' });
           
+            // Ajustar la línea horizontal para que sea un poco más larga y coincida con el diseño
             doc.setDrawColor(150);
-            doc.line(margins.left, yBase + 20, pageWidth - margins.right, yBase + 20);
+            doc.line(margins.left, yBase + 20, pageWidth - margins.right + 6, yBase + 20);
           };
           
+          // Definir las columnas según el requerimiento
           // Definir las columnas según el requerimiento
           const columns: ColumnInput[] = [
             { header: 'Contribuyente', dataKey: 'CONTRIBUYENTE' },
@@ -109,14 +114,14 @@ export class ReporteExoneracionesService {
           
           // Estilos para las columnas
           const columnStyles: { [key: string]: Partial<Styles> } = {
-            CONTRIBUYENTE: { halign: 'left', cellWidth: 50 },
-            DETALLE: { halign: 'left', cellWidth: 60 },
-            PORCENTAJE_EXONERACION: { halign: 'center', cellWidth: 25 },
-            DESCRIPCION_INGRESO: { halign: 'left', cellWidth: 40 },
-            FECHA_EMISION: { halign: 'center', cellWidth: 25 },
-            TITULO: { halign: 'center', cellWidth: 30 },
-            EMITIDO_POR: { halign: 'left', cellWidth: 25 },
-            VALOR: { halign: 'right', cellWidth: 15 },
+            CONTRIBUYENTE: { halign: 'left', cellWidth: 48, fontSize: 8 },
+            DETALLE: { halign: 'left', cellWidth: 60, fontSize: 8 },
+            PORCENTAJE_EXONERACION: { halign: 'center', cellWidth: 25, fontSize: 8 },
+            DESCRIPCION_INGRESO: { halign: 'left', cellWidth: 35, fontSize: 8 },
+            FECHA_EMISION: { halign: 'center', cellWidth: 25, fontSize: 8 },
+            TITULO: { halign: 'center', cellWidth: 30, fontSize: 8 },
+            EMITIDO_POR: { halign: 'left', cellWidth: 25, fontSize: 8 },
+            VALOR: { halign: 'right', cellWidth: 25, fontSize: 8 },
           };
           
           // Dibujar la tabla principal
@@ -129,7 +134,12 @@ export class ReporteExoneracionesService {
               fillColor: [0, 35, 115],
               halign: 'center',
               textColor: 255,
-              fontSize: 8
+              fontSize: 8,
+              font: 'helvetica',
+              fontStyle: 'bold',
+              lineWidth: 0.1,
+              lineColor: [255, 255, 255],
+              cellPadding: 2
             },
             bodyStyles: { 
               fontSize: 8,
@@ -137,13 +147,14 @@ export class ReporteExoneracionesService {
               overflow: 'linebreak',
               lineWidth: 0.1,
               textColor: [0, 0, 0],
-              font: 'helvetica'
+              font: 'helvetica',
+              lineColor: [200, 200, 200]
             },
             alternateRowStyles: {
               fillColor: [245, 245, 245]
             },
             columnStyles,
-            margin: { top: 35, left: margins.left, right: margins.right, bottom: margins.bottom },
+            margin: { top: margins.top + 25, left: margins.left, right: margins.right, bottom: margins.bottom },
             didDrawPage: () => {
               drawEncabezado();
             }
@@ -162,17 +173,41 @@ export class ReporteExoneracionesService {
           // Agregar tabla de totales
           autoTable(doc, {
             body: [[
-              { content: 'Total Exonerado:', colSpan: 7, styles: { halign: 'right', fontStyle: 'bold', fontSize: 9 } },
-              { content: totalValor.toLocaleString('es-EC', { minimumFractionDigits: 2 }), styles: { halign: 'right', fontStyle: 'bold', fontSize: 9 } }
+              { 
+                content: 'Total Exonerado:', 
+                colSpan: 7, 
+                styles: { 
+                  halign: 'right', 
+                  fontStyle: 'bold', 
+                  fontSize: 9,
+                  font: 'helvetica',
+                  cellPadding: 2
+                } 
+              },
+              { 
+                content: totalValor.toLocaleString('es-EC', { 
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                }), 
+                styles: { 
+                  halign: 'right', 
+                  fontStyle: 'bold', 
+                  fontSize: 9,
+                  font: 'helvetica',
+                  cellPadding: 2
+                } 
+              }
             ]],
             startY: currentY,
             theme: 'grid',
             styles: { 
               fontSize: 9, 
-              textColor: 20, 
+              textColor: [0, 0, 0],
+              font: 'helvetica',
               fontStyle: 'bold',
               lineColor: [0, 0, 0],
               lineWidth: 0.1,
+              cellPadding: 2
             },
             margin: { left: margins.left, right: margins.right },
             didDrawPage: () => {
@@ -186,7 +221,7 @@ export class ReporteExoneracionesService {
           // Agregar resumen de registros
           doc.setFont('helvetica', 'bold');
           doc.setFontSize(10);
-          doc.text(`Total de registros: ${data.length}`, margins.left, currentY);
+          doc.text(`Total de registros: ${data.length}`, margins.left, currentY + 2);
           
           // Finalizar el PDF
           doc.putTotalPages('{total_pages_count_string}');
