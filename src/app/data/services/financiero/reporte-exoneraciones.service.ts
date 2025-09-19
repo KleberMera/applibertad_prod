@@ -208,15 +208,16 @@ export class ReporteExoneracionesService {
               ]
             ],
             startY: currentY,
-            theme: 'plain',
+            theme: 'striped',
             styles: { 
               fontSize: 9, 
               textColor: [0, 0, 0],
               font: 'helvetica',
-              fontStyle: 'bold',
-              lineColor: [0, 0, 0],
+             // fontStyle: 'bold',
+              //lineColor: [0, 0, 0],
               lineWidth: 0.1,
-              cellPadding: 2
+              cellPadding: 2,
+              fillColor: [245, 245, 245]
             },
             margin: { left: margins.left, right: margins.right },
             didDrawPage: () => {
