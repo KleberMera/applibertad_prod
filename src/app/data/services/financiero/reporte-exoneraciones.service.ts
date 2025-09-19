@@ -88,16 +88,15 @@ export class ReporteExoneracionesService {
           };
           
           // Definir las columnas según el requerimiento
-          // Definir las columnas según el requerimiento
           const columns: ColumnInput[] = [
             { header: 'Contribuyente', dataKey: 'CONTRIBUYENTE' },
             { header: 'Detalle', dataKey: 'DETALLE' },
-            { header: '% Exoneración', dataKey: 'PORCENTAJE_EXONERACION' },
+            { header: '% Exonerado', dataKey: 'PORCENTAJE_EXONERACION' },
             { header: 'Concepto', dataKey: 'DESCRIPCION_INGRESO' },
-            { header: 'Fecha Emisión', dataKey: 'FECHA_EMISION' },
+            { header: 'F. Emisión', dataKey: 'FECHA_EMISION' },
             { header: 'Título Crédito', dataKey: 'TITULO' },
             { header: 'Emitido por', dataKey: 'EMITIDO_POR' },
-            { header: 'Valor Exonerado', dataKey: 'VALOR' },
+            { header: 'V. Exonerado', dataKey: 'VALOR' },
           ];
           
           // Preparar los datos para la tabla
@@ -130,17 +129,22 @@ export class ReporteExoneracionesService {
             body,
             startY: margins.top + 25,
             theme: 'grid',
-            headStyles: {
+          headStyles: {
               fillColor: [0, 35, 115],
               halign: 'center',
               textColor: 255,
-              fontSize: 8,
+              fontSize: 9,
               font: 'helvetica',
               fontStyle: 'bold',
               lineWidth: 0.1,
               lineColor: [255, 255, 255],
               cellPadding: 2
             },
+            /*headStyles: {
+              fillColor: [0, 35, 115],
+              halign: 'center',
+              textColor: 255
+            },*/
             bodyStyles: { 
               fontSize: 8,
               cellPadding: 2,
@@ -213,13 +217,13 @@ export class ReporteExoneracionesService {
               fontSize: 9, 
               textColor: [0, 0, 0],
               font: 'helvetica',
-             // fontStyle: 'bold',
+              // fontStyle: 'bold',
               //lineColor: [0, 0, 0],
               lineWidth: 0.1,
               cellPadding: 2,
               fillColor: [245, 245, 245]
             },
-            margin: { left: margins.left, right: margins.right },
+            margin: { left: margins.left },
             didDrawPage: () => {
               drawEncabezado();
             }
@@ -228,11 +232,83 @@ export class ReporteExoneracionesService {
           // Actualizar currentY después de la tabla de totales
           currentY = (doc as any).lastAutoTable.finalY + 10;
           
-          // Agregar resumen de registros
+          // Verificar si hay suficiente espacio para la sección de resumen por usuario
+          if (currentY + 50 > pageHeight - margins.bottom) {
+            doc.addPage();
+            drawEncabezado();
+            currentY = margins.top + 25;
+          }
+          
+          // SECCIÓN: RESUMEN POR USUARIO
+          // Contar por usuario (EMITIDO_POR)
+          const resumenPorUsuario = data.reduce((acc, row) => {
+            const usuario = row.EMITIDO_POR || 'Sin especificar';
+            acc[usuario] = (acc[usuario] || 0) + 1;
+            return acc;
+          }, {} as { [key: string]: number });
+          
+          // Ordenar usuarios alfabéticamente
+          const usuariosOrdenados = Object.keys(resumenPorUsuario).sort();
+          
+          // Crear el cuerpo de la tabla
+          const resumenBody = usuariosOrdenados.map(usuario => [
+            usuario,
+            resumenPorUsuario[usuario].toString()
+          ]);
+          
+          // Agregar total general
+          resumenBody.push([
+            'TOTAL GENERAL:',
+            data.length.toString()
+          ]);
+          
+          // Agregar título
           doc.setFont('helvetica', 'bold');
           doc.setFontSize(10);
-          doc.text(`Total de registros: ${data.length}`, margins.left, currentY + 2);
+          doc.text('TOTAL DE REGISTRO POR USUARIO:', margins.left, currentY);
+          currentY += 3;
           
+          // Agregar tabla de resumen por usuario
+          autoTable(doc, {
+            head: [['Usuario', 'Cantidad']],
+            body: resumenBody,
+            startY: currentY,
+            theme: 'grid',
+            headStyles: {
+              fillColor: [0, 35, 115],
+              halign: 'center',
+              textColor: 255,
+              fontSize: 9,
+              font: 'helvetica',
+              fontStyle: 'bold',
+              lineWidth: 0.1,
+              lineColor: [255, 255, 255],
+              cellPadding: 2
+            },
+            bodyStyles: { 
+              fontSize: 9,
+              cellPadding: 2,
+              lineWidth: 0.1,
+              font: 'helvetica',
+              lineColor: [200, 200, 200]
+            },
+            columnStyles: {
+              0: { halign: 'left', cellWidth: 100 },
+              1: { halign: 'center', cellWidth: 30 }
+            },
+            margin: { left: margins.left },
+            didDrawPage: () => {
+              drawEncabezado();
+            },
+            didParseCell: (data) => {
+              // Hacer bold la fila del total
+              if (data.row.index === resumenBody.length - 1) {
+                data.cell.styles.fontStyle = 'bold';
+              }
+            }
+          });
+          
+       
           // Finalizar el PDF
           doc.putTotalPages('{total_pages_count_string}');
           
