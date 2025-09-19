@@ -12,6 +12,7 @@ import * as XLSX from 'xlsx';
 import { API_ROUTES } from '@data/constants/routes';
 import * as FileSaver from 'file-saver';
 import { FinancieroService } from '@data/services/financiero/financiero.service';
+import { AuthService } from '@data/services/api/auth.service';
 
 @Component({
   selector: 'app-generadas',
@@ -54,7 +55,8 @@ export class GeneradasComponent {
       private fb: FormBuilder,
       private tthhService: TthhService,
       private http: HttpClient,
-      private financieroService: FinancieroService
+      private financieroService: FinancieroService,
+      private authService: AuthService
     ) { }
   
   
@@ -242,7 +244,20 @@ export class GeneradasComponent {
       });
     }
 
-    exportarPDF() {
+    loadImageBase64(url: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      fetch(url)
+        .then(res => res.blob())
+        .then(blob => {
+          reader.onloadend = () => resolve(reader.result as string);
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        });
+    });
+  }
+
+  exportarPDF() {
       const fecha_desde = this.formularioMarcaciones.get('fecha_desde')?.value;
       const fecha_hasta = this.formularioMarcaciones.get('fecha_hasta')?.value;
       const usuario = this.formularioMarcaciones.get('usuario')?.value;
@@ -266,36 +281,52 @@ export class GeneradasComponent {
         }
       });
 
-      // Preparar los datos para el nuevo formato (sin agrupar por usuario)
-      const datosExoneraciones = this.marcaciones.map(e => ({
-        CONTRIBUYENTE: e.CONTRIBUYENTE || '',
-        DETALLE: e.DETALLE || '',
-        PORCENTAJE_EXONERACION: e.PORCENTAJE_EXONERACION || '100',
-        DESCRIPCION_INGRESO: e.DESCRIPCION_INGRESO || '',
-        FECHA_EMISION: e.FECHA_EMISION || '',
-        TITULO: e.TITULO || '',
-        EMITIDO_POR: e.EMITIDO_POR || '',
-        VALOR: e.VALOR || 0,
-        FECHA_EXONERACION: e.FECHA_EXONERACION || ''
-      }));
+      // Cargar el logo y obtener el usuario
+      this.loadImageBase64('assets/img/logo2.png')
+        .then(base64Logo => {
+          // Obtener el usuario desde authService
+          const usuarioData = this.authService.getUserFromLocalStorage();
+          const usuarioNombre = usuarioData?.username || 'Usuario desconocido';
 
-      // Llamar al servicio para generar el PDF con el nuevo formato
-      this.financieroService.generateReporteExoneracionesPDF(
-        datosExoneraciones,
-        'Sistema de Exoneraciones',
-        `${formattedFecha_desde} - ${formattedFecha_hasta}`
-      ).subscribe({
-        next: (response: Blob) => {
+          // Preparar los datos para el nuevo formato (sin agrupar por usuario)
+          const datosExoneraciones = this.marcaciones.map(e => ({
+            CONTRIBUYENTE: e.CONTRIBUYENTE || '',
+            DETALLE: e.DETALLE || '',
+            PORCENTAJE_EXONERACION: e.PORCENTAJE_EXONERACION || '100',
+            DESCRIPCION_INGRESO: e.DESCRIPCION_INGRESO || '',
+            FECHA_EMISION: e.FECHA_EMISION || '',
+            TITULO: e.TITULO || '',
+            EMITIDO_POR: e.EMITIDO_POR || '',
+            VALOR: e.VALOR || 0,
+            FECHA_EXONERACION: e.FECHA_EXONERACION || ''
+          }));
+
+          // Llamar al servicio para generar el PDF con el nuevo formato
+          this.financieroService.generateReporteExoneracionesPDF(
+            datosExoneraciones,
+            'Sistema de Exoneraciones',
+            `${formattedFecha_desde} - ${formattedFecha_hasta}`,
+            usuarioNombre,
+            base64Logo
+          ).subscribe({
+            next: (response: Blob) => {
+              Swal.close();
+              const blob = new Blob([response], { type: 'application/pdf' });
+              const fileName = `Reporte_Exoneraciones_${formattedFecha_desde}_a_${formattedFecha_hasta}.pdf`;
+              FileSaver.saveAs(blob, fileName);
+            },
+            error: (error: any) => {
+              Swal.close();
+              console.error('Error al generar el PDF:', error);
+              Swal.fire('Error', 'No se pudo generar el PDF', 'error');
+            }
+          });
+        })
+        .catch(err => {
           Swal.close();
-          const blob = new Blob([response], { type: 'application/pdf' });
-          const fileName = `Reporte_Exoneraciones_${formattedFecha_desde}_a_${formattedFecha_hasta}.pdf`;
-          FileSaver.saveAs(blob, fileName);
-        },
-        error: (error: any) => {
-          console.error('Error al generar el PDF:', error);
-          Swal.fire('Error', 'No se pudo generar el PDF', 'error');
-        }
-      });
+          console.error('Error cargando el logo:', err);
+          Swal.fire('Error', 'No se pudo cargar el logo para el PDF', 'error');
+        });
     }
 
     verDetalle(row: any) {

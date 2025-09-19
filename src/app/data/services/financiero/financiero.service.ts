@@ -96,7 +96,9 @@ export class FinancieroService {
   generateReporteExoneracionesPDF(
     data: any[],
     titulo: string,
-    fechaConsulta: string
+    fechaConsulta: string,
+    usuario: string = '',
+    base64Logo: string = ''
   ): Observable<Blob> {
     return new Observable(observer => {
       import('jspdf').then(jsPDFModule => {
@@ -142,9 +144,9 @@ export class FinancieroService {
             const rightX = pageWidth - 10;
           
             // Agregar logo si está disponible
-            // if (base64Logo) {
-            //   doc.addImage(base64Logo, 'PNG', margins.left, yBase, 40, 15);
-            // }
+            if (base64Logo) {
+              doc.addImage(base64Logo, 'PNG', margins.left, yBase, 40, 15);
+            }
           
             doc.setFont('helvetica', 'bold');
             doc.setFontSize(12);
@@ -159,7 +161,7 @@ export class FinancieroService {
           
             doc.setFontSize(8);
             doc.text(`Página ${currentPage} de ${totalPagesExp}`, rightX + 25.65, yBase + 4, { align: 'right' });
-            // doc.text(`Usuario: ${usuario}`, rightX - 6, yBase + 10, { align: 'right' });
+            doc.text(`Usuario: ${usuario}`, rightX - 6, yBase + 10, { align: 'right' });
             doc.text(fechaHora, rightX - 6, yBase + 16, { align: 'right' });
           
             doc.setDrawColor(150);
@@ -171,11 +173,11 @@ export class FinancieroService {
             { header: 'Contribuyente', dataKey: 'CONTRIBUYENTE' },
             { header: 'Detalle', dataKey: 'DETALLE' },
             { header: '% Exoneración', dataKey: 'PORCENTAJE_EXONERACION' },
-            { header: 'Descripción', dataKey: 'DESCRIPCION_INGRESO' },
+            { header: 'Concepto', dataKey: 'DESCRIPCION_INGRESO' },
             { header: 'Fecha Emisión', dataKey: 'FECHA_EMISION' },
-            { header: 'Título', dataKey: 'TITULO' },
+            { header: 'Título Crédito', dataKey: 'TITULO' },
             { header: 'Emitido por', dataKey: 'EMITIDO_POR' },
-            { header: 'Valor', dataKey: 'VALOR' },
+            { header: 'Valor Exonerado', dataKey: 'VALOR' },
           ];
           
           // Preparar los datos para la tabla
