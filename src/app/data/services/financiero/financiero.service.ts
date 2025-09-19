@@ -154,7 +154,7 @@ export class FinancieroService {
           
             doc.setFont('helvetica', 'bold');
             doc.setFontSize(11);
-            doc.text('Reporte de Exoneraciones', pageWidth / 2, yBase + 10, { align: 'center' });
+            doc.text('Emision Diarias de Exoneraciones', pageWidth / 2, yBase + 10, { align: 'center' });
             doc.setFont('helvetica', 'normal');
             doc.setFontSize(10);
             doc.text(`Período: ${fechaFormateada}`, pageWidth / 2, yBase + 16, { align: 'center' });
@@ -196,12 +196,12 @@ export class FinancieroService {
           const columnStyles: { [key: string]: Partial<Styles> } = {
             CONTRIBUYENTE: { halign: 'left', cellWidth: 50 },
             DETALLE: { halign: 'left', cellWidth: 60 },
-            PORCENTAJE_EXONERACION: { halign: 'center', cellWidth: 20 },
+            PORCENTAJE_EXONERACION: { halign: 'center', cellWidth: 25 },
             DESCRIPCION_INGRESO: { halign: 'left', cellWidth: 40 },
             FECHA_EMISION: { halign: 'center', cellWidth: 25 },
-            TITULO: { halign: 'center', cellWidth: 25 },
-            EMITIDO_POR: { halign: 'left', cellWidth: 30 },
-            VALOR: { halign: 'right', cellWidth: 20 },
+            TITULO: { halign: 'center', cellWidth: 30 },
+            EMITIDO_POR: { halign: 'left', cellWidth: 25 },
+            VALOR: { halign: 'right', cellWidth: 15 },
           };
           
           // Dibujar la tabla principal

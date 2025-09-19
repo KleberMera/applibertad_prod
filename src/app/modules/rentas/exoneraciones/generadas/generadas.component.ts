@@ -13,6 +13,7 @@ import { API_ROUTES } from '@data/constants/routes';
 import * as FileSaver from 'file-saver';
 import { FinancieroService } from '@data/services/financiero/financiero.service';
 import { AuthService } from '@data/services/api/auth.service';
+import { ReporteExoneracionesService } from '@data/services/financiero/reporte-exoneraciones.service';
 
 @Component({
   selector: 'app-generadas',
@@ -55,7 +56,7 @@ export class GeneradasComponent {
       private fb: FormBuilder,
       private tthhService: TthhService,
       private http: HttpClient,
-      private financieroService: FinancieroService,
+      private reporteExonesarionesService: ReporteExoneracionesService,
       private authService: AuthService
     ) { }
   
@@ -302,7 +303,7 @@ export class GeneradasComponent {
           }));
 
           // Llamar al servicio para generar el PDF con el nuevo formato
-          this.financieroService.generateReporteExoneracionesPDF(
+          this.reporteExonesarionesService.generateReporteExoneracionesPDF(
             datosExoneraciones,
             'Sistema de Exoneraciones',
             `${formattedFecha_desde} - ${formattedFecha_hasta}`,
