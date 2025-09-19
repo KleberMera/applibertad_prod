@@ -266,39 +266,22 @@ export class GeneradasComponent {
         }
       });
 
-      // Agrupar por usuario
-      const groupedByUser = this.marcaciones.reduce((acc, item) => {
-        const user = item.EXONERADO_POR || 'Sin usuario';
-        if (!acc[user]) {
-          acc[user] = [];
-        }
-        acc[user].push(item);
-        return acc;
-      }, {} as { [key: string]: any[] });
+      // Preparar los datos para el nuevo formato (sin agrupar por usuario)
+      const datosExoneraciones = this.marcaciones.map(e => ({
+        CONTRIBUYENTE: e.CONTRIBUYENTE || '',
+        DETALLE: e.DETALLE || '',
+        PORCENTAJE_EXONERACION: e.PORCENTAJE_EXONERACION || '100',
+        DESCRIPCION_INGRESO: e.DESCRIPCION_INGRESO || '',
+        FECHA_EMISION: e.FECHA_EMISION || '',
+        TITULO: e.TITULO || '',
+        EMITIDO_POR: e.EMITIDO_POR || '',
+        VALOR: e.VALOR || 0,
+        FECHA_EXONERACION: e.FECHA_EXONERACION || ''
+      }));
 
-      // Convertir a array de objetos con usuario y sus exoneraciones
-      const usersWithExoneraciones = Object.entries(groupedByUser).map((entry) => {
-        const [usuario, exoneraciones] = entry as [string, any[]];
-        return {
-          usuario,
-          exoneraciones: exoneraciones.map((e: any) => ({
-          FECHA_EXONERACION: e.FECHA_EXONERACION ? new Date(e.FECHA_EXONERACION).toLocaleDateString() : '',
-          CONTRIBUYENTE: e.CONTRIBUYENTE,
-          CEDULA: e.CEDULA,
-          CODIGO_DACTILAR: e.CODIGO_DACTILAR,
-          TITULO: e.TITULO,
-          FECHA_EMISION: e.FECHA_EMISION ? new Date(e.FECHA_EMISION).toLocaleDateString() : '',
-          EMITIDO_POR: e.EMITIDO_POR,
-          DESCRIPCION_INGRESO: e.DESCRIPCION_INGRESO,
-          DETALLE: e.DETALLE
-        }))
-        };
-      });
-
-      // Llamar al servicio para generar el PDF
-      // @ts-ignore - El método será implementado en el servicio
+      // Llamar al servicio para generar el PDF con el nuevo formato
       this.financieroService.generateReporteExoneracionesPDF(
-        usersWithExoneraciones,
+        datosExoneraciones,
         'Sistema de Exoneraciones',
         `${formattedFecha_desde} - ${formattedFecha_hasta}`
       ).subscribe({
