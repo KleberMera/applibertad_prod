@@ -13,6 +13,7 @@ import saveAs from 'file-saver';
 import * as XLSX from 'xlsx';
 import { API_ROUTES } from '@data/constants/routes';
 import * as FileSaver from 'file-saver';
+import { ReporteExoneracionesService } from '@data/services/financiero/reporte-exoneraciones.service';
 
 @Component({
   selector: 'app-generadas-liquidadores',
@@ -53,9 +54,14 @@ export class GeneradasLiquidadoresComponent {
       username: string = '';
      
       constructor(
+        private departamentosService: DepartamentosService,
+        private usuariosService: UsuariosService,
         private fb: FormBuilder,
         private tthhService: TthhService,
-        private http: HttpClient
+        private http: HttpClient,
+        private financieroService: FinancieroService,
+        private sisoService: SisoService,
+        private reporteExoneracionesService: ReporteExoneracionesService,
       ) { 
         const userDataString = sessionStorage.getItem('currentUserGADMLL');
         if (userDataString) {
@@ -253,7 +259,85 @@ export class GeneradasLiquidadoresComponent {
         });
       }
 
-      verDetalle(row: any) {
+      generarPDF() {
+    if (!this.formularioMarcaciones.valid) {
+      Swal.fire('Error', 'Por favor complete los campos requeridos', 'error');
+      return;
+    }
+
+    const fecha_desde = this.formularioMarcaciones.get('fecha_desde')?.value;
+    const fecha_hasta = this.formularioMarcaciones.get('fecha_hasta')?.value;
+    
+    if (!fecha_desde || !fecha_hasta) {
+      Swal.fire('Error', 'Por favor seleccione ambas fechas', 'error');
+      return;
+    }
+
+    // Formatear fechas para mostrarlas en el PDF
+    const formatDate = (date: Date) => {
+      const year = date.getFullYear();
+      const month = ('0' + (date.getMonth() + 1)).slice(-2);
+      const day = ('0' + date.getDate()).slice(-2);
+      return `${year}-${month}-${day}`;
+    };
+
+    const formattedFecha_desde = formatDate(new Date(fecha_desde));
+    const formattedFecha_hasta = formatDate(new Date(fecha_hasta));
+
+    // Mostrar loading
+    Swal.fire({
+      title: 'Generando reporte PDF...',
+      text: 'Por favor espere',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+
+    // Mapear los datos para el PDF
+    const datosExoneraciones = this.marcaciones.map((item, index) => ({
+      'N°': (index + 1).toString(),
+      'Cédula': item.CEDULA || '-',
+      'Contribuyente': item.CONTRIBUYENTE || '-',
+      'Código Dactilar': item.CODIGO_DACTILAR || '-',
+      'Título': item.TITULO || '-',
+      'Fecha Emisión': item.FECHA_EMISION ? new Date(item.FECHA_EMISION).toLocaleDateString() : '-',
+      'Emitido por': item.EMITIDO_POR || '-',
+      'Descripción Ingreso': item.DESCRIPCION_INGRESO || '-',
+      'Valor': item.VALOR ? parseFloat(item.VALOR).toFixed(2) : '0.00',
+      'Exonerado por': item.EXONERADO_POR || '-',
+      'Fecha Exoneración': item.FECHA_EXONERACION ? new Date(item.FECHA_EXONERACION).toLocaleDateString() : '-',
+    }));
+
+    // Llamar al servicio para generar el PDF
+    // Obtener el nombre de usuario del localStorage
+    const userDataString = sessionStorage.getItem('currentUserGADMLL');
+    let username = 'Usuario';
+    if (userDataString) {
+      const userData = JSON.parse(userDataString);
+      username = userData.username || 'Usuario';
+    }
+    
+    this.reporteExoneracionesService.generateReporteExoneracionesPDF(
+      datosExoneraciones,
+      'Sistema de Exoneraciones - Liquidadores',
+      `Período: ${formattedFecha_desde} - ${formattedFecha_hasta}`,
+      username
+    ).subscribe({
+      next: (response: Blob) => {
+        Swal.close();
+        const blobFile = new Blob([response], { type: 'application/pdf' });
+        const fileName = `Reporte_Exoneraciones_Liquidadores_${formattedFecha_desde}_a_${formattedFecha_hasta}.pdf`;
+        FileSaver.saveAs(blobFile, fileName);
+      },
+      error: (error: any) => {
+        console.error('Error al generar el PDF:', error);
+        Swal.fire('Error', 'Ocurrió un error al generar el PDF', 'error');
+      }
+    });
+  }
+
+  verDetalle(row: any) {
         Swal.fire({
           html: `
             <div style="margin: 0; background: white; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid #ccc; border-radius: 8px;">
