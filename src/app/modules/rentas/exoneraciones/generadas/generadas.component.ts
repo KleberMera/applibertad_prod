@@ -160,10 +160,17 @@ export class GeneradasComponent {
               Swal.close(); // Oculta el loading si hay error
               console.error('Error en la petición:', error);
 
-              Swal.fire({
+            /*  Swal.fire({
                 icon: 'error',
                 title: 'Error',
                 text: 'Hubo un error al realizar la consulta.',
+              });*/
+
+            Swal.fire({
+                icon: error.error?.msg ? "info" : "error",
+                title: error.error?.msg ? "Información" : "Error",
+                text: error.error?.msg || "Ocurrió un error al realizar la consulta.",
+                //footer: error.error?.info ? `<span style="color: orange;">${error.error.info}</span>` : ''
               });
             }
           );
@@ -199,34 +206,33 @@ export class GeneradasComponent {
 
       const nombreArchivo = `EXONERACIONES_${formattedFecha_desde}_a_${formattedFecha_hasta}.xlsx`;
 
-      // Mostrar loader
-      Swal.fire({
-        title: 'Generando archivo Excel...',
-        text: 'Por favor, espere',
-        allowOutsideClick: false,
-        didOpen: () => Swal.showLoading()
-      });
-
       // Validar que haya datos
       if (!this.marcaciones || this.marcaciones.length === 0) {
-        Swal.close();
-        Swal.fire('Info', 'No hay datos para exportar.', 'info');
-        return;
+      Swal.fire('Info', 'No hay datos para exportar.', 'info');
+      return;
       }
+
+      // Mostrar loader
+      Swal.fire({
+      title: 'Generando archivo Excel...',
+      text: 'Por favor, espere',
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading()
+      });
 
       // Reordenar y transformar datos
       const data = this.marcaciones.map(m => ({
-        'FECHA_EXONERACION': m.FECHA_EXONERACION?.split(' ')[0], // quitar hora
-        'EXONERADO_POR': m.EXONERADO_POR,
-        'CONTRIBUYENTE': m.CONTRIBUYENTE,
-        'CEDULA': m.CEDULA,
-        'CODIGO_DACTILAR': m.CODIGO_DACTILAR,
-        'TITULO': m.TITULO,
-        'FECHA_EMISION': m.FECHA_EMISION?.split(' ')[0],
-        'EMITIDO_POR': m.EMITIDO_POR,
-        'DESCRIPCION_INGRESO': m.DESCRIPCION_INGRESO,
-        'DETALLE': m.DETALLE,
-        'VALOR': m.VALOR
+      'FECHA_EXONERACION': m.FECHA_EXONERACION?.split(' ')[0], // quitar hora
+      'EXONERADO_POR': m.EXONERADO_POR,
+      'CONTRIBUYENTE': m.CONTRIBUYENTE,
+      'CEDULA': m.CEDULA,
+      'CODIGO_DACTILAR': m.CODIGO_DACTILAR,
+      'TITULO': m.TITULO,
+      'FECHA_EMISION': m.FECHA_EMISION?.split(' ')[0],
+      'EMITIDO_POR': m.EMITIDO_POR,
+      'DESCRIPCION_INGRESO': m.DESCRIPCION_INGRESO,
+      'DETALLE': m.DETALLE,
+      'VALOR': m.VALOR
       }));
 
       // Crear hoja y archivo
@@ -238,10 +244,10 @@ export class GeneradasComponent {
       Swal.close();
 
       Swal.fire({
-        icon: 'success',
-        title: 'Archivo Excel generado exitosamente',
-        showConfirmButton: false,
-        timer: 1500
+      icon: 'success',
+      title: 'Archivo Excel generado exitosamente',
+      showConfirmButton: false,
+      timer: 1500
       });
     }
 
@@ -259,76 +265,81 @@ export class GeneradasComponent {
   }
 
   exportarPDF() {
-      const fecha_desde = this.formularioMarcaciones.get('fecha_desde')?.value;
-      const fecha_hasta = this.formularioMarcaciones.get('fecha_hasta')?.value;
-      const usuario = this.formularioMarcaciones.get('usuario')?.value;
-      const username = usuario ? usuario : '';
+    const fecha_desde = this.formularioMarcaciones.get('fecha_desde')?.value;
+    const fecha_hasta = this.formularioMarcaciones.get('fecha_hasta')?.value;
+    const usuario = this.formularioMarcaciones.get('usuario')?.value;
+    const username = usuario ? usuario : '';
 
-      if (!fecha_desde || !fecha_hasta) {
-        Swal.fire('Error', 'Debe seleccionar un rango de fechas', 'error');
-        return;
-      }
-
-      const formattedFecha_desde = this.formatDate(fecha_desde);
-      const formattedFecha_hasta = this.formatDate(fecha_hasta);
-
-      // Mostrar loading
-      Swal.fire({
-        title: 'Generando reporte PDF...',
-        text: 'Por favor espere',
-        allowOutsideClick: false,
-        didOpen: () => {
-          Swal.showLoading();
-        }
-      });
-
-      // Cargar el logo y obtener el usuario
-      this.loadImageBase64('assets/img/logo2.png')
-        .then(base64Logo => {
-          // Obtener el usuario desde authService
-          const usuarioData = this.authService.getUserFromLocalStorage();
-          const usuarioNombre = usuarioData?.username || 'Usuario desconocido';
-
-          // Preparar los datos para el nuevo formato (sin agrupar por usuario)
-          const datosExoneraciones = this.marcaciones.map(e => ({
-            CONTRIBUYENTE: e.CONTRIBUYENTE || '',
-            DETALLE: e.DETALLE || '',
-            PORCENTAJE_EXONERACION: e.PORCENTAJE_EXONERACION || '100',
-            DESCRIPCION_INGRESO: e.DESCRIPCION_INGRESO || '',
-            FECHA_EMISION: e.FECHA_EMISION || '',
-            TITULO: e.TITULO || '',
-            EMITIDO_POR: e.EMITIDO_POR || '',
-            VALOR: e.VALOR || 0,
-            FECHA_EXONERACION: e.FECHA_EXONERACION || ''
-          }));
-
-          // Llamar al servicio para generar el PDF con el nuevo formato
-          this.reporteExonesarionesService.generateReporteExoneracionesPDF(
-            datosExoneraciones,
-            'Sistema de Exoneraciones',
-            `${formattedFecha_desde} - ${formattedFecha_hasta}`,
-            usuarioNombre,
-            base64Logo
-          ).subscribe({
-            next: (response: Blob) => {
-              Swal.close();
-              const blob = new Blob([response], { type: 'application/pdf' });
-              const fileName = `Reporte_Exoneraciones_${formattedFecha_desde}_a_${formattedFecha_hasta}.pdf`;
-              FileSaver.saveAs(blob, fileName);
-            },
-            error: (error: any) => {
-              Swal.close();
-              console.error('Error al generar el PDF:', error);
-              Swal.fire('Error', 'No se pudo generar el PDF', 'error');
-            }
-          });
-        })
-        .catch(err => {
-          Swal.close();
-          console.error('Error cargando el logo:', err);
-          Swal.fire('Error', 'No se pudo cargar el logo para el PDF', 'error');
-        });
+    if (!fecha_desde || !fecha_hasta) {
+      Swal.fire('Error', 'Debe seleccionar un rango de fechas', 'error');
+      return;
     }
+
+    if (!this.marcaciones || this.marcaciones.length === 0) {
+      Swal.fire('Info', 'No hay datos para exportar.', 'info');
+      return;
+    }
+
+    const formattedFecha_desde = this.formatDate(fecha_desde);
+    const formattedFecha_hasta = this.formatDate(fecha_hasta);
+
+    // Mostrar loading
+    Swal.fire({
+      title: 'Generando reporte PDF...',
+      text: 'Por favor espere',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+
+    // Cargar el logo y obtener el usuario
+    this.loadImageBase64('assets/img/logo2.png')
+      .then(base64Logo => {
+        // Obtener el usuario desde authService
+        const usuarioData = this.authService.getUserFromLocalStorage();
+        const usuarioNombre = usuarioData?.username || 'Usuario desconocido';
+
+        // Preparar los datos para el nuevo formato (sin agrupar por usuario)
+        const datosExoneraciones = this.marcaciones.map(e => ({
+          CONTRIBUYENTE: e.CONTRIBUYENTE || '',
+          DETALLE: e.DETALLE || '',
+          PORCENTAJE_EXONERACION: e.PORCENTAJE_EXONERACION || '100',
+          DESCRIPCION_INGRESO: e.DESCRIPCION_INGRESO || '',
+          FECHA_EMISION: e.FECHA_EMISION || '',
+          TITULO: e.TITULO || '',
+          EMITIDO_POR: e.EMITIDO_POR || '',
+          VALOR: e.VALOR || 0,
+          FECHA_EXONERACION: e.FECHA_EXONERACION || ''
+        }));
+
+        // Llamar al servicio para generar el PDF con el nuevo formato
+        this.reporteExonesarionesService.generateReporteExoneracionesPDF(
+          datosExoneraciones,
+          'Sistema de Exoneraciones',
+          `${formattedFecha_desde} - ${formattedFecha_hasta}`,
+          usuarioNombre,
+          base64Logo
+        ).subscribe({
+          next: (response: Blob) => {
+            Swal.close();
+            const blob = new Blob([response], { type: 'application/pdf' });
+            const fileName = `Reporte_Exoneraciones_${formattedFecha_desde}_a_${formattedFecha_hasta}.pdf`;
+            FileSaver.saveAs(blob, fileName);
+          },
+          error: (error: any) => {
+            Swal.close();
+            console.error('Error al generar el PDF:', error);
+            Swal.fire('Error', 'No se pudo generar el PDF', 'error');
+          }
+        });
+      })
+      .catch(err => {
+        Swal.close();
+        console.error('Error cargando el logo:', err);
+        Swal.fire('Error', 'No se pudo cargar el logo para el PDF', 'error');
+      });
+  }
 
     verDetalle(row: any) {
       Swal.fire({
