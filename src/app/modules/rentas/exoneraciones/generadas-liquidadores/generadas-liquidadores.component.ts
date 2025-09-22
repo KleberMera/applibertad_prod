@@ -171,9 +171,9 @@ export class GeneradasLiquidadoresComponent {
                 console.error('Error en la petición:', error);
   
                 Swal.fire({
-                  icon: 'error',
-                  title: 'Error',
-                  text: 'Hubo un error al realizar la consulta.',
+                  icon: error.error?.msg ? 'info' : 'error',
+                  title: error.error?.msg ? 'Información' : 'Error',
+                  text: error.error?.msg || 'Ocurrió un error al realizar la consulta.',
                 });
               }
             );
