@@ -103,6 +103,7 @@ export const LEFT_NAV_MENU: ILeftNavMenu[] = [
             "Admin", 
             "JefeTTHH", 
             "AsistTTHH",
+            "rolTthhConceptosMensuales",
             "SISO",
             "rolTthhConsultaMarcaciones",
             "rolTthhConsultaRolesPago"
@@ -158,7 +159,10 @@ export const LEFT_NAV_MENU: ILeftNavMenu[] = [
                 icon: faBuildingShield,
                 name: "Roles de Pago",
                 roles: [
-                    "Admin", 
+                    "Admin",
+                     "JefeTTHH", 
+                    "AsistTTHH",
+                    "rolTthhConceptosMensuales", 
                     "rolTthhConsultaRolesPago"
                 ],
                 subLinks: [
@@ -177,6 +181,9 @@ export const LEFT_NAV_MENU: ILeftNavMenu[] = [
                         link: INTERNAL_ROUTES.PANEL_TTHH_NOVEDADES_ROL,
                         roles: [
                             "Admin",
+                            "JefeTTHH", 
+                            "AsistTTHH",
+                            "rolTthhConceptosMensuales",
                         ]
                     },
                     {
