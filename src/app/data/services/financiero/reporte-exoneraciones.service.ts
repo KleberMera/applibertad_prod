@@ -78,8 +78,7 @@ export class ReporteExoneracionesService {
             doc.setFont('helvetica', 'normal');
             doc.setFontSize(8);
             // Ajustar la posición vertical del texto de página para alinearlo con el usuario y fecha
-            doc.text(`Página ${currentPage} de ${totalPagesExp}`, rightX + 30, yBase + 4, { align: 'right' });
-            //doc.text(`Página ${currentPage} de ${totalPagesExp}`, rightX, yBase + 4, { align: 'right' });
+            doc.text(`Página ${currentPage} de ${totalPagesExp}`, rightX, yBase + 4, { align: 'right' });
             doc.text(`Usuario: ${usuario}`, rightX, yBase + 10, { align: 'right' });
             doc.text(fechaHora, rightX, yBase + 16, { align: 'right' });
           
@@ -179,7 +178,7 @@ export class ReporteExoneracionesService {
           autoTable(doc, {
             body: [
               [
-                { content: '', styles: { cellWidth: 48 } }, // Ancho de columna Contribuyente
+                { content: '', styles: { cellWidth: 42 } }, // Ancho de columna Contribuyente
                 { content: '', styles: { cellWidth: 60 } }, // Ancho de columna Detalle
                 { content: '', styles: { cellWidth: 25 } }, // Ancho de columna % Exoneración
                 { content: '', styles: { cellWidth: 38 } }, // Ancho de columna Concepto
@@ -188,36 +187,36 @@ export class ReporteExoneracionesService {
                 { 
                   content: 'Total Exonerado:', 
                   styles: { 
-                    halign: 'left', 
-                    fontStyle: 'bold', 
-                    fontSize: 9,
-                    font: 'helvetica',
-                    cellWidth: 25,
-                    cellPadding: 2
+                  halign: 'left', 
+                  fontStyle: 'bold', 
+                  fontSize: 9,
+                  font: 'helvetica',
+                  cellWidth: 25,
+                  cellPadding: 2
                   } 
                 },
                 { 
-                  content: totalValor.toLocaleString('es-EC', { 
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
+                  content: '$ ' + totalValor.toLocaleString('es-EC', { 
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
                   }), 
                   styles: { 
-                    halign: 'right', 
-                    fontStyle: 'bold', 
-                    fontSize: 9,
-                    font: 'helvetica',
-                    cellWidth: 25,
-                    cellPadding: 2
+                  halign: 'right', 
+                  fontStyle: 'bold', 
+                  fontSize: 9,
+                  font: 'helvetica',
+                  cellWidth: 25,
+                  cellPadding: 2
                   } 
                 }
-              ]
-            ],
-            startY: currentY,
-            theme: 'striped',
-            styles: { 
-              fontSize: 9, 
-              textColor: [0, 0, 0],
-              font: 'helvetica',
+                ]
+              ],
+              startY: currentY,
+              theme: 'striped',
+              styles: { 
+                fontSize: 9, 
+                textColor: [0, 0, 0],
+                font: 'helvetica',
               // fontStyle: 'bold',
               //lineColor: [0, 0, 0],
               lineWidth: 0.1,
@@ -295,7 +294,7 @@ export class ReporteExoneracionesService {
             },
             columnStyles: {
               0: { halign: 'left', cellWidth: 100 },
-              1: { halign: 'center', cellWidth: 30 }
+              1: { halign: 'right', cellWidth: 30 }
             },
             margin: { left: margins.left },
             didDrawPage: () => {

@@ -147,7 +147,6 @@ export class GeneradasComponent {
 
               if (response.data && response.data.length > 0) {
                 this.marcaciones = response.data;
-                console.log(response.data);
               } else {
                 Swal.fire({
                   icon: 'warning',
