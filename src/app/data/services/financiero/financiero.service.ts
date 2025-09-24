@@ -92,7 +92,6 @@ export class FinancieroService {
     );
   }
 
-  
   generateReportePDF(data: any[], usuario: string, fechaConsulta: string, base64Logo: string) {
     const doc = new jsPDF('landscape');
     const redondear = (n: number) => Number(n || 0).toFixed(2);
