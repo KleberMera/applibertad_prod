@@ -57,7 +57,7 @@ export class ReporteExoneracionesService {
             }
           
             const yBase = margins.top;
-            const rightX = pageWidth - 10;
+            const rightX = pageWidth - margins.right;
           
             // Agregar logo si está disponible
             if (base64Logo) {
@@ -79,12 +79,13 @@ export class ReporteExoneracionesService {
             doc.setFontSize(8);
             // Ajustar la posición vertical del texto de página para alinearlo con el usuario y fecha
             doc.text(`Página ${currentPage} de ${totalPagesExp}`, rightX + 30, yBase + 4, { align: 'right' });
+            //doc.text(`Página ${currentPage} de ${totalPagesExp}`, rightX, yBase + 4, { align: 'right' });
             doc.text(`Usuario: ${usuario}`, rightX, yBase + 10, { align: 'right' });
             doc.text(fechaHora, rightX, yBase + 16, { align: 'right' });
           
             // Ajustar la línea horizontal para que sea un poco más larga y coincida con el diseño
             doc.setDrawColor(150);
-            doc.line(margins.left, yBase + 20, pageWidth - margins.right + 6, yBase + 20);
+            doc.line(margins.left, yBase + 20, pageWidth - margins.right, yBase + 20);
           };
           
           // Definir las columnas según el requerimiento
@@ -113,7 +114,7 @@ export class ReporteExoneracionesService {
           
           // Estilos para las columnas
           const columnStyles: { [key: string]: Partial<Styles> } = {
-            CONTRIBUYENTE: { halign: 'left', cellWidth: 48, fontSize: 8 },
+            CONTRIBUYENTE: { halign: 'left', cellWidth: 42, fontSize: 8 },
             DETALLE: { halign: 'left', cellWidth: 60, fontSize: 8 },
             PORCENTAJE_EXONERACION: { halign: 'center', cellWidth: 25, fontSize: 8 },
             DESCRIPCION_INGRESO: { halign: 'left', cellWidth: 38, fontSize: 8 },
