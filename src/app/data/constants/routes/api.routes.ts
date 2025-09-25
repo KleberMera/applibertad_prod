@@ -56,6 +56,7 @@ export const API_ROUTES = {
       CONS_PERMISOS : `${ENV.uri}siso/getPermisosAprobados`,
     },
     MARCACIONES: `${ENV.uri}tthh/getMarcacionesByCedulaFecha`,
+    RESUMEN_MARCACIONES: `${ENV.uri}tthh/getResumenMarcaciones`,
     ROLES: `${ENV.uri}tthh/getRolDePagoIndividual`,
     ROLESCABECERA: `${ENV.uri}tthh/getRolDePagoIndividualCab`,
     ROLESDETALLE: `${ENV.uri}tthh/getRolDePagoIndividualDet`,

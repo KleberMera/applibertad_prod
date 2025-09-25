@@ -155,6 +155,28 @@ export const LEFT_NAV_MENU: ILeftNavMenu[] = [
                     // "MarcaTTHH"
                 ]
             },
+            /*{
+                icon: faClock,
+                name: "Marcaciones",
+                roles: [
+                    "Admin", 
+                    "rolTthhConsultaMarcaciones"
+                ],
+                subLinks: [
+                    {
+                        icon: faClock,
+                        name: "Marcaciones",
+                        link: INTERNAL_ROUTES.PANEL_TTHH_MARCACIONES,
+                        roles: ["Admin", "rolTthhConsultaMarcaciones"]
+                    },
+                    {
+                        icon: faUserTie,
+                        name: "Marcaciones por Obrero",
+                        link: INTERNAL_ROUTES.PANEL_TTHH_MARCACIONES_OBREROS,
+                        roles: ["Admin", "rolTthhConsultaMarcaciones"]
+                    }
+                ]
+            },*/
             {
                 icon: faBuildingShield,
                 name: "Roles de Pago",
