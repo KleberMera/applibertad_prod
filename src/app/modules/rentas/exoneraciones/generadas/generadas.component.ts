@@ -147,7 +147,6 @@ export class GeneradasComponent {
 
               if (response.data && response.data.length > 0) {
                 this.marcaciones = response.data;
-                console.log(response.data);
               } else {
                 Swal.fire({
                   icon: 'warning',
@@ -298,7 +297,7 @@ export class GeneradasComponent {
       .then(base64Logo => {
         // Obtener el usuario desde authService
         const usuarioData = this.authService.getUserFromLocalStorage();
-        const usuarioNombre = usuarioData?.username || 'Usuario desconocido';
+        const usuarioNombre = usuarioData?.username || 'Usuario desconocido';  
 
         // Preparar los datos para el nuevo formato (sin agrupar por usuario)
         const datosExoneraciones = this.marcaciones.map(e => ({
@@ -308,7 +307,7 @@ export class GeneradasComponent {
           DESCRIPCION_INGRESO: e.DESCRIPCION_INGRESO || '',
           FECHA_EMISION: e.FECHA_EMISION || '',
           TITULO: e.TITULO || '',
-          EMITIDO_POR: e.EMITIDO_POR || '',
+          EMITIDO_POR: e.EXONERADO_POR || '',
           VALOR: e.VALOR || 0,
           FECHA_EXONERACION: e.FECHA_EXONERACION || ''
         }));
