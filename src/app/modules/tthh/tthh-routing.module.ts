@@ -13,6 +13,7 @@ import { EmpleadoAcademicoComponent } from "./empleado-academico/empleado-academ
 import { EmpleadoCorreosComponent } from "./empleado-correos/empleado-correos.component";
 import { NovedadesRolComponent } from "./novedades-rol/novedades-rol.component";
 import { VerNovedadesComponent } from "./ver-novedades/ver-novedades.component";
+import { MarcacionesObrerosComponent } from "./marcaciones-obreros/marcaciones-obreros.component";
 
 const routes: Routes = [
     {
@@ -80,10 +81,15 @@ const routes: Routes = [
       component: VerNovedadesComponent,
       canActivate: [AuthGuard]
     },
+    {
+      path:'marcaciones-obreros',
+      component: MarcacionesObrerosComponent,
+      canActivate: [AuthGuard]
+    },
   ];
 
   @NgModule({
     imports: [RouterModule.forChild(routes)],
-    exports: [RouterModule]
+
   })
   export class TthhRoutingModule { }

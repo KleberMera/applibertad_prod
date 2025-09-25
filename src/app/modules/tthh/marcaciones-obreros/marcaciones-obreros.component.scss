@@ -1,0 +1,461 @@
+/* Estilos generales */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-container {
+  min-width: 400px;
+  width: 900px;
+  padding: 20px 40px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  overflow: hidden;
+}
+
+h5 {
+  font-size: large;
+  color: slategrey;
+  font-weight: bold;
+  margin: 0 0 10px 0;
+}
+
+.ha-title {
+  text-align: center;
+  color: slategrey;
+  font-size: large;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+hr {
+  margin: 0.5rem 0;
+  border: 0;
+  border-top: 1px solid #dee2e6;
+}
+
+.section-divider.high {
+  margin: 0.7rem 0;
+}
+
+/* Estilos del formulario */
+.ha-form {
+  margin-top: 10px;
+  font-size: 0.9rem; /* Tamaño de fuente más pequeño para el formulario */
+}
+
+/* Estilos para la tabla */
+::ng-deep .p-datatable .p-datatable-thead > tr > th {
+  font-size: 0.85rem !important;
+  padding: 0.5rem 1rem !important;
+}
+
+::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+  font-size: 0.85rem !important;
+  padding: 0.5rem 1rem !important;
+}
+
+::ng-deep .p-paginator {
+  font-size: 0.85rem !important;
+}
+
+.form-content {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Estilos para celdas vacías */
+:host ::ng-deep {
+  .p-datatable {
+    .empty-cell {
+      background-color: #f8f9fa;
+      color: #6c757d;
+      font-style: italic;
+      text-align: center;
+      
+      &:not(:empty) {
+        font-style: normal;
+        color: inherit;
+        background-color: transparent;
+      }
+      
+      &[title="Sin registro"] {
+        &::before {
+          content: "-";
+          display: inline-block;
+          width: 100%;
+          text-align: center;
+          color: #6c757d;
+        }
+        
+        &:empty::before {
+          content: "Sin registro";
+        }
+      }
+    }
+    
+    /* Asegurar que las celdas tengan un ancho consistente */
+    th, td {
+      white-space: nowrap;
+      padding: 0.5rem 0.75rem;
+      
+      /* Ajustar el ancho de las columnas de marcación */
+      &:nth-child(4),
+      &:nth-child(5),
+      &:nth-child(6),
+      &:nth-child(7) {
+        min-width: 120px;
+        text-align: center;
+      }
+    }
+  }
+}
+
+/* Grupo de campos */
+.p-field-group {
+  display: flex;
+  margin-bottom: 0.5rem;
+  align-items: flex-end;
+  gap: 10px;
+  flex-wrap: nowrap;
+  
+  /* Contenedor de botones */
+  .button-container {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    margin-bottom: 0.25rem; /* Ajuste fino para alinear con los campos */
+    
+    p-button {
+      margin: 0 2px;
+      display: flex;
+      align-items: center;
+      height: 100%;
+      
+      button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 38px; /* Misma altura que los campos de entrada */
+        min-width: 38px; /* Ancho mínimo para mantener la proporción */
+        padding: 0 0.75rem;
+        
+        .p-button-icon {
+          font-size: 1rem;
+        }
+        
+        &:not(:last-child) {
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+}
+
+/* Campos individuales */
+.p-field {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  
+  label {
+    margin-bottom: 4px;
+    font-size: 0.85rem;
+    color: #495057;
+  }
+  
+  .p-icon-field, .p-calendar {
+    width: 100%;
+    height: 38px; /* Altura fija para mantener consistencia */
+    
+    .p-inputtext {
+      width: 100%;
+      padding: 0.5rem 0.75rem;
+      font-size: 1rem;
+      border-radius: 4px;
+      height: 38px;
+    }
+    
+    .p-input-icon {
+      color: #6c757d;
+    }
+  }
+  
+  .p-calendar {
+    width: 100%;
+    
+    .p-inputtext {
+      width: 100%;
+      padding: 0.5rem 0.75rem;
+      font-size: 1rem;
+      border-radius: 4px;
+      height: 38px;
+    }
+    
+    .p-datepicker-trigger {
+      width: 2.5rem;
+      height: 38px;
+      border-radius: 0 4px 4px 0;
+      background: #f8f9fa;
+      border: 1px solid #ced4da;
+      border-left: none;
+      
+      &:hover {
+        background: #e9ecef;
+      }
+    }
+  }
+  
+  .fechas {
+    width: 200px;
+  }
+}
+
+/* Contenedor de botones */
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 5px;
+  margin-bottom: 1px;
+  
+  .p-button {
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    .p-button-icon {
+      font-size: 1.2rem;
+    }
+  }
+}
+
+/* Tabla de resultados */
+// Estilos para el diálogo de empleados
+:host ::ng-deep {
+  .p-button.p-button-sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.875rem;
+    
+    .p-button-icon {
+      font-size: 0.875rem;
+    }
+  }
+  
+  .dialog-empleados {
+    .p-dialog-content {
+      padding: 1.25rem;
+      
+      .p-fluid {
+        .p-grid {
+          margin-bottom: 1rem;
+          
+          .p-input-icon-left {
+            width: 100%;
+            
+            input {
+              width: 100%;
+              padding-left: 2.5rem;
+            }
+            
+            i {
+              left: 1rem;
+              color: #6c757d;
+            }
+          }
+          
+          .p-text-right {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            
+            .p-button {
+              padding: 0.5rem 1rem;
+              
+              .p-button-icon {
+                font-size: 1rem;
+              }
+            }
+          }
+        }
+        
+        .employee-table-container {
+          max-height: 400px;
+          overflow-y: auto;
+          border: 1px solid #dee2e6;
+          border-radius: 4px;
+          
+          .p-datatable {
+            .p-datatable-thead > tr > th {
+              position: sticky;
+              top: 0;
+              z-index: 1;
+              background-color: #f8f9fa;
+              font-weight: 600;
+              white-space: nowrap;
+              
+              .p-checkbox {
+                vertical-align: middle;
+                
+                .p-checkbox-box {
+                  width: 1.25rem;
+                  height: 1.25rem;
+                  
+                  .p-checkbox-icon {
+                    font-size: 0.8rem;
+                  }
+                }
+              }
+            }
+            
+            .p-datatable-tbody > tr {
+              cursor: pointer;
+              
+              &:hover {
+                background-color: #f8f9fa;
+              }
+              
+              > td {
+                vertical-align: middle;
+                padding: 0.5rem 1rem !important;
+                
+                .p-checkbox {
+                  .p-checkbox-box {
+                    width: 1.25rem;
+                    height: 1.25rem;
+                    
+                    .p-checkbox-icon {
+                      font-size: 0.75rem;
+                    }
+                  }
+                }
+              }
+            }
+            
+            .p-paginator {
+              position: sticky;
+              bottom: 0;
+              background-color: #f8f9fa;
+              border-top: 1px solid #dee2e6;
+              padding: 0.5rem 1rem;
+            }
+          }
+        }
+      }
+    }
+    
+    .p-dialog-footer {
+      padding: 1rem 1.25rem;
+      border-top: 1px solid #dee2e6;
+      background-color: #f8f9fa;
+      border-bottom-left-radius: 4px;
+      border-bottom-right-radius: 4px;
+      
+      .p-d-flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        
+        .p-text-secondary {
+          color: #6c757d;
+          font-size: 0.9rem;
+        }
+        
+        .p-button {
+          margin-left: 0.5rem;
+          
+          &:first-child {
+            margin-left: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+.table-container {
+  margin-top: 15px;
+  overflow-x: auto;
+  
+  .p-datatable {
+    font-size: 0.9rem;
+    
+    .p-datatable-thead > tr > th {
+      background-color: #f8f9fa;
+      color: #212529;
+      font-weight: 600;
+      padding: 8px 12px;
+      border: 1px solid #dee2e6;
+      font-size: 0.85rem;
+      text-align: center;
+    }
+    
+    .p-datatable-tbody > tr > td {
+      padding: 8px 12px;
+      border: 1px solid #dee2e6;
+      vertical-align: middle;
+    }
+    
+    .p-paginator {
+      padding: 10px 0;
+      background: transparent;
+      border: none;
+      border-top: 1px solid #dee2e6;
+      
+      .p-paginator-pages .p-paginator-page {
+        min-width: 2rem;
+        height: 2rem;
+      }
+    }
+  }
+}
+
+/* Estilos para el buscador de la tabla */
+.buscar_marcaciones {
+  width: 250px;
+  padding: 0.5rem 0.75rem 0.5rem 2.5rem !important;
+  border-radius: 4px;
+  border: 1px solid #ced4da;
+}
+
+/* Estilos responsivos */
+@media screen and (max-width: 992px) {
+  .form-container {
+    width: 95%;
+    padding: 15px;
+  }
+  
+  .p-field-group {
+    flex-wrap: wrap;
+    
+    .p-field {
+      flex: 1 1 calc(50% - 10px);
+      min-width: 150px;
+      margin-bottom: 10px;
+    }
+    
+    .button-container {
+      width: 100%;
+      justify-content: flex-start;
+      margin-top: 5px;
+    }
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .form-container {
+    min-width: 280px;
+    width: 100%;
+    padding: 15px;
+  }
+  
+  .p-field-group .p-field {
+    flex: 1 1 100%;
+  }
+}

@@ -1,0 +1,350 @@
+<div class="container">
+    <div class="form-container">
+      <h5 class="ha-title">Marcaciones de Obreros</h5>
+      <hr>
+
+      <form [formGroup]="formulario" class="ha-form">
+        <div class="form-content">
+          <!-- Formulario de búsqueda -->
+          <div *ngIf="formularioVisible" class="form-section">
+            <div class="p-field-group caja_fechas">
+              <div class="p-field calendar-field fechas">
+                <p-calendar 
+                  formControlName="fecha_desde"
+                  [iconDisplay]="'input'" 
+                  [showIcon]="true" 
+                  dateFormat="yy-mm-dd"
+                  placeholder="Fecha desde">
+                </p-calendar>
+              </div>
+              <div class="p-field calendar-field fechas">
+                <p-calendar 
+                  formControlName="fecha_hasta"
+                  [iconDisplay]="'input'" 
+                  [showIcon]="true" 
+                  dateFormat="yy-mm-dd"
+                  placeholder="Fecha hasta">
+                </p-calendar>
+              </div>
+              <div class="button-container">
+                <p-button 
+                  severity="primary" 
+                  icon="pi pi-search" 
+                  (click)="cargarDatos()"
+                  [disabled]="formulario.invalid"
+                  pTooltip="Buscar"
+                  tooltipPosition="top">
+                </p-button>
+                <p-button 
+                  severity="danger" 
+                  icon="pi pi-times" 
+                  (click)="limpiarFiltros()"
+                  pTooltip="Limpiar"
+                  tooltipPosition="top">
+                </p-button>
+                <p-button 
+                  [style]="{'margin-right': '5px'}"
+                  icon="pi pi-filter" 
+                  (click)="abrirDialogoEmpleados()"
+                  [disabled]="marcaciones.length === 0"
+                  pTooltip="Filtrar empleados"
+                  tooltipPosition="top"
+                  label="Filtrar">
+                </p-button>
+                <p-button 
+                  severity="success" 
+                  icon="pi pi-file-excel" 
+                  (click)="exportarExcel()"
+                  [disabled]="marcaciones.length === 0"
+                  pTooltip="Exportar a Excel"
+                  tooltipPosition="top">
+                </p-button>
+              </div>
+            </div>
+            <hr class="section-divider high">
+          </div>
+
+          <!-- Tabla de resultados -->
+          <div *ngIf="formularioVisible" class="table-container">
+            <p-table
+              #dt
+              [value]="marcacionesFiltradas.length > 0 ? marcacionesFiltradas : marcaciones"
+              [globalFilterFields]="['NOM_EMPLEADO', 'CEDULA', 'FECHA', 'HORA_MINIMA', 'HORA_MAXIMA', 'MARCACION1', 'MARCACION2', 'MARCACION3', 'MARCACION4', 'DES_DEPARTAMENTO', 'DES_CARGO', 'DES_TIPO_ROL']"
+              styleClass="p-datatable-striped"
+              [paginator]="true"
+              [rows]="10"
+              [rowsPerPageOptions]="[10, 25, 50]">
+              
+              <ng-template pTemplate="caption">
+                <p-iconField iconPosition="left">
+                  <p-inputIcon class="input-icon">
+                    <i class="pi pi-search"></i>
+                  </p-inputIcon>
+                  <input
+                    pInputText
+                    type="text"
+                    (input)="filtrarTabla($event)"
+                    (keydown.enter)="$event.preventDefault()"
+                    placeholder="Buscar en tabla"
+                    class="input-text p-inputtext buscar_marcaciones"
+                    #buscarInput
+                  />
+                </p-iconField>
+              </ng-template>
+              
+              <ng-template pTemplate="header">
+                <tr>
+                  <th pSortableColumn="FECHA">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Fecha <p-sortIcon field="FECHA"></p-sortIcon>
+                    </span>
+                  </th>
+                  <th pSortableColumn="NOM_EMPLEADO">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Empleado <p-sortIcon field="NOM_EMPLEADO"></p-sortIcon>
+                    </span>
+                  </th>
+                  <th pSortableColumn="CEDULA">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Cédula <p-sortIcon field="CEDULA"></p-sortIcon>
+                    </span>
+                  </th>
+                  <th pSortableColumn="MARCACION1">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Marcación 1 <p-sortIcon field="MARCACION1"></p-sortIcon>
+                    </span>
+                  </th>
+                  <th pSortableColumn="MARCACION2">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Marcación 2 <p-sortIcon field="MARCACION2"></p-sortIcon>
+                    </span>
+                  </th>
+                  <th pSortableColumn="MARCACION3">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Marcación 3 <p-sortIcon field="MARCACION3"></p-sortIcon>
+                    </span>
+                  </th>
+                  <th pSortableColumn="MARCACION4">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Marcación 4 <p-sortIcon field="MARCACION4"></p-sortIcon>
+                    </span>
+                  </th>
+                  <th pSortableColumn="HORA_MINIMA">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Hora Mínima <p-sortIcon field="HORA_MINIMA"></p-sortIcon>
+                    </span>
+                  </th>
+                  <th pSortableColumn="HORA_MAXIMA">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Hora Máxima <p-sortIcon field="HORA_MAXIMA"></p-sortIcon>
+                    </span>
+                  </th>
+                  <th pSortableColumn="DES_DEPARTAMENTO">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Departamento <p-sortIcon field="DES_DEPARTAMENTO"></p-sortIcon>
+                    </span>
+                  </th>
+                  <th pSortableColumn="DES_CARGO">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Cargo <p-sortIcon field="DES_CARGO"></p-sortIcon>
+                    </span>
+                  </th>
+                  <th pSortableColumn="DES_TIPO_ROL">
+                    <span style="display: flex; align-items: center; gap: 5px;">
+                      Tipo de Rol <p-sortIcon field="DES_TIPO_ROL"></p-sortIcon>
+                    </span>
+                  </th>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="body" let-marcacion>
+                <tr>
+                  <td>{{ marcacion.FECHA | date:'dd/MM/yyyy' }}</td>
+                  <td>{{ marcacion.NOM_EMPLEADO }}</td>
+                  <td>{{ marcacion.CEDULA }}</td>
+                  <td [class.empty-cell]="!marcacion.MARCACION1">{{ marcacion.MARCACION1 || 'Sin registro' }}</td>
+                  <td [class.empty-cell]="!marcacion.MARCACION2">{{ marcacion.MARCACION2 || 'Sin registro' }}</td>
+                  <td [class.empty-cell]="!marcacion.MARCACION3">{{ marcacion.MARCACION3 || 'Sin registro' }}</td>
+                  <td [class.empty-cell]="!marcacion.MARCACION4">{{ marcacion.MARCACION4 || 'Sin registro' }}</td>
+                  <td>{{ marcacion.HORA_MINIMA }}</td>
+                  <td>{{ marcacion.HORA_MAXIMA }}</td>
+                  <td>{{ marcacion.DES_DEPARTAMENTO }}</td>
+                  <td>{{ marcacion.DES_CARGO }}</td>
+                  <td>{{ marcacion.DES_TIPO_ROL }}</td>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="summary">
+                <div class="flex align-items-center justify-content-between">
+                  <div>
+                    <span *ngIf="marcacionesFiltradas.length > 0">
+                      Mostrando {{ marcacionesFiltradas.length }} de {{ marcaciones.length }} registros
+                    </span>
+                    <span *ngIf="marcacionesFiltradas.length === 0">
+                      Total de registros: {{ marcaciones.length || 0 }}
+                    </span>
+                  </div>
+                  <button 
+                    *ngIf="marcacionesFiltradas.length > 0" 
+                    pButton 
+                    icon="pi pi-times" 
+                    class="p-button-text p-button-sm"
+                    (click)="marcacionesFiltradas = [];">
+                    Limpiar filtros
+                  </button>
+                </div>
+              </ng-template>
+
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td [attr.colspan]="12">No se encontraron registros.</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<p-toast></p-toast>
+
+<!-- Diálogo para filtrar empleados -->
+<p-dialog 
+  header="Filtrar empleados" 
+  [(visible)]="mostrarDialogEmpleados" 
+  [style]="{width: '800px'}"
+  [modal]="true" 
+  [draggable]="false" 
+  [resizable]="false"
+  [contentStyle]="{'max-height': '600px'}"
+  [breakpoints]="{'960px': '75vw', '641px': '90vw'}"
+  [styleClass]="'dialog-empleados'">
+  
+  <div class="p-fluid">
+    <div class="p-grid p-mb-3">
+      <div class="p-col-12 p-md-6">
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input 
+            type="text" 
+            pInputText 
+            placeholder="Buscar empleado..." 
+            (input)="filtrarEmpleados($event)"
+            class="p-mr-2"
+            style="width: 100%">
+        </span>
+      </div>
+      <div class="p-col-12 p-md-6 p-text-right">
+        <p-button 
+          label="Seleccionar todos" 
+          icon="pi pi-check-square" 
+          styleClass="p-button-text p-button-sm p-button-success"
+          (click)="seleccionarTodos(true)">
+        </p-button>
+        <p-button 
+          label="Deseleccionar todos" 
+          icon="pi pi-times-circle" 
+          styleClass="p-button-text p-button-sm p-button-danger p-ml-2"
+          (click)="seleccionarTodos(false)">
+        </p-button>
+      </div>
+    </div>
+
+    <div class="employee-table-container">
+      <p-table 
+        [value]="empleadosFiltro" 
+        [scrollable]="true" 
+        scrollHeight="flex"
+        [rows]="5"
+        [paginator]="true"
+
+        [globalFilterFields]="['nombre', 'cedula', 'departamento']"
+        [loading]="cargandoEmpleados"
+        [lazy]="false"
+        [(selection)]="empleadosFiltroSeleccionados"
+        dataKey="cedula"
+        selectionMode="multiple"
+        styleClass="p-datatable-sm p-datatable-gridlines"
+        [rowHover]="true">
+        
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 3rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="nombre">
+              Nombre <p-sortIcon field="nombre"></p-sortIcon>
+            </th>
+            <th pSortableColumn="cedula" style="width: 120px">
+              Cédula <p-sortIcon field="cedula"></p-sortIcon>
+            </th>
+            <th pSortableColumn="departamento">
+              Departamento <p-sortIcon field="departamento"></p-sortIcon>
+            </th>
+          </tr>
+        </ng-template>
+        
+        <ng-template pTemplate="body" let-empleado let-rowIndex="rowIndex">
+          <tr [pSelectableRow]="empleado" [pSelectableRowIndex]="rowIndex">
+            <td (click)="$event.stopPropagation()">
+              <p-tableCheckbox [value]="empleado"></p-tableCheckbox>
+            </td>
+            <td>{{empleado.nombre}}</td>
+            <td>{{empleado.cedula}}</td>
+            <td>{{empleado.departamento || 'N/A'}}</td>
+          </tr>
+        </ng-template>
+        
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="4" class="p-text-center">
+              <div class="p-p-4">
+                <i class="pi pi-search" style="font-size: 2rem"></i>
+                <p>No se encontraron empleados</p>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+        
+        <ng-template pTemplate="loadingbody">
+          <tr>
+            <td colspan="4" class="p-text-center">
+              <div class="p-p-4">
+                <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+                <p>Cargando empleados...</p>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="p-d-flex p-jc-between p-ai-center">
+      <span class="p-text-secondary">
+        {{ empleadosFiltroSeleccionados.length }} empleado(s) seleccionado(s)
+      </span>
+      <div>
+        <button 
+          pButton 
+          type="button" 
+          label="Cancelar" 
+          icon="pi pi-times" 
+          class="p-button-text" 
+          (click)="mostrarDialogEmpleados = false">
+        </button>
+        <button 
+          pButton 
+          type="button" 
+          label="Aplicar filtros" 
+          icon="pi pi-check" 
+          class="p-button-success" 
+          (click)="aplicarFiltroEmpleados()"
+          [disabled]="empleadosFiltroSeleccionados.length === 0">
+        </button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>

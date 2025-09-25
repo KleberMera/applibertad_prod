@@ -1,4 +1,6 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HistoriaLaboralComponent } from './historia-laboral/historia-laboral.component';
 import { SharedModule } from '@shared/shared.module';
 import { TthhRoutingModule } from './tthh-routing.module';
@@ -10,8 +12,14 @@ import { InputIconModule } from 'primeng/inputicon';
 import { DropdownModule } from 'primeng/dropdown';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { PermisosAprobadosComponent } from './siso/permisos-aprobados/permisos-aprobados.component';
+import { DialogModule } from 'primeng/dialog';
+import { CheckboxModule } from 'primeng/checkbox';
+import { InputTextModule } from 'primeng/inputtext';
 
 import { CalendarModule } from 'primeng/calendar';
+import { ToolbarModule } from 'primeng/toolbar';
+import { ToastModule } from 'primeng/toast';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { MarcacionesComponent } from './marcaciones/marcaciones.component';
 import { RolesdepagoComponent } from './rolesdepagoindividales/rolesdepago.component';
 import { PerfilComponent } from './perfil/perfil.component';
@@ -22,6 +30,8 @@ import { EmpleadoAcademicoComponent } from './empleado-academico/empleado-academ
 import { EmpleadoCorreosComponent } from './empleado-correos/empleado-correos.component';
 import { NovedadesRolComponent } from './novedades-rol/novedades-rol.component';
 import { VerNovedadesComponent } from './ver-novedades/ver-novedades.component';
+import { MarcacionesObrerosComponent } from './marcaciones-obreros/marcaciones-obreros.component';
+import { MessageService } from 'primeng/api';
 
 @NgModule({
   declarations: [
@@ -36,9 +46,13 @@ import { VerNovedadesComponent } from './ver-novedades/ver-novedades.component';
     EmpleadoAcademicoComponent,
     EmpleadoCorreosComponent,
     NovedadesRolComponent,
-    VerNovedadesComponent
+    VerNovedadesComponent,
+    MarcacionesObrerosComponent
   ],
   imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     SharedModule,
     TthhRoutingModule,
     ButtonModule,
@@ -46,8 +60,15 @@ import { VerNovedadesComponent } from './ver-novedades/ver-novedades.component';
     IconFieldModule,
     InputIconModule,
     DropdownModule,
+    ToolbarModule,
+    ToastModule,
+    ProgressSpinnerModule,
     FloatLabelModule,
-    CalendarModule
-  ]
+    CalendarModule,
+    DialogModule,
+    CheckboxModule,
+    InputTextModule
+  ],
+  providers: [MessageService]
 })
 export class TthhModule { }

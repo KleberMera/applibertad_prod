@@ -79,6 +79,21 @@ export class TthhService {
     return formBody.join("&");
   }
 
+  // Método para obtener el resumen de marcaciones de obreros
+  getResumenMarcaciones(params: string): Observable<any> {
+    const httpOptions = this.getHttpOptions('application/x-www-form-urlencoded');
+    return this.http.post<any>(
+      API_ROUTES.TTHH.RESUMEN_MARCACIONES,
+      params,
+      httpOptions
+    ).pipe(
+      catchError(error => {
+        console.error('Error en getResumenMarcaciones:', error);
+        return of({ error: true, msg: 'Error al obtener el resumen de marcaciones', data: null });
+      })
+    );
+  }
+
   // Método para obtener la relación laboral del empleado
   getEmployeeRelation(cedula: string): Observable<{ error: boolean; msg: string; data: any }> {
     // Convertir datos a formato application/x-www-form-urlencoded
