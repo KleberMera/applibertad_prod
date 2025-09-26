@@ -6,6 +6,7 @@ import { Dialog } from 'primeng/dialog';
 import { formatDate } from '@angular/common';
 import Swal from 'sweetalert2';
 import { CheckboxChangeEvent } from 'primeng/checkbox';
+import { AuthService } from '@data/services/api/auth.service';
 
 interface EmpleadoFiltro {
   nombre: string;
@@ -35,15 +36,69 @@ export class MarcacionesObrerosComponent implements OnInit {
   formularioVisible = false;
   loading = false;
   cargandoEmpleados = false;
+  filtroAplicado = false;
 
   constructor(
     private fb: FormBuilder,
-    private tthhService: TthhService
+    private tthhService: TthhService,
+    private authService: AuthService
   ) {
     this.formulario = this.fb.group({
       fecha_desde: [null],
       fecha_hasta: [null]
     });
+  }
+
+  // Helper para cargar imagen en base64
+  private loadImageBase64(url: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      fetch(url)
+        .then(res => res.blob())
+        .then(blob => {
+          reader.onloadend = () => resolve(reader.result as string);
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        })
+        .catch(reject);
+    });
+  }
+
+  exportarPDFObreros(): void {
+    const datos = this.marcacionesFiltradas.length > 0 ? this.marcacionesFiltradas : this.marcaciones;
+    if (!datos || datos.length === 0) {
+      Swal.fire('Info', 'No hay datos para exportar.', 'info');
+      return;
+    }
+
+    const formData = this.formulario.value;
+    const fechaDesde = formatDate(formData.fecha_desde, 'yyyy-MM-dd', 'en-US');
+    const fechaHasta = formatDate(formData.fecha_hasta, 'yyyy-MM-dd', 'en-US');
+
+    const usuarioData = this.authService.getUserFromLocalStorage();
+    const usuarioNombre = usuarioData?.username || 'Usuario desconocido';
+
+    this.loadImageBase64('assets/img/logo2.png')
+      .then(logo => {
+        this.tthhService.generateMarcacionesObrerosPDF(
+          datos,
+          usuarioNombre,
+          fechaDesde,
+          fechaHasta,
+          logo
+        );
+      })
+      .catch(err => {
+        console.error('Error cargando el logo:', err);
+        // Si falla el logo, continuar sin él
+        this.tthhService.generateMarcacionesObrerosPDF(
+          datos,
+          usuarioNombre,
+          fechaDesde,
+          fechaHasta,
+          ''
+        );
+      });
   }
 
   ngOnInit(): void {
@@ -66,6 +121,21 @@ export class MarcacionesObrerosComponent implements OnInit {
   limpiarFiltros(): void {
     this.formulario.reset();
     this.mostrarDialogEmpleados = false;
+    // Limpiar datos de la tabla y estado de filtros
+    this.marcaciones = [];
+    this.marcacionesFiltradas = [];
+    this.filtroAplicado = false;
+    // Limpiar filtros de la tabla y paginación
+    if (this.dt) {
+      if (typeof (this.dt as any).clear === 'function') {
+        (this.dt as any).clear();
+      }
+      this.dt.first = 0;
+    }
+    // Limpiar cuadro de búsqueda si existe
+    if (this.buscarInput && this.buscarInput.nativeElement) {
+      this.buscarInput.nativeElement.value = '';
+    }
   }
 
   get todosSeleccionados(): boolean {
@@ -118,7 +188,9 @@ export class MarcacionesObrerosComponent implements OnInit {
         this.loading = false;
         if (response && response.data) {
           this.marcaciones = response.data;
-          this.marcacionesFiltradas = [...this.marcaciones];
+          // Reiniciar filtro aplicado al cargar nuevos datos
+          this.marcacionesFiltradas = [];
+          this.filtroAplicado = false;
           this.cargarListaEmpleados();
           if (this.marcaciones.length === 0) {
             Swal.fire('Información', 'No se encontraron registros para los filtros seleccionados', 'info');
@@ -228,31 +300,37 @@ export class MarcacionesObrerosComponent implements OnInit {
   }
 
   cargarListaEmpleados(): void {
-    const empleadosUnicos = new Map<string, EmpleadoFiltro>();
-    
-    this.marcaciones.forEach(marcacion => {
-      const clave = `${marcacion.CEDULA}-${marcacion.NOM_EMPLEADO}`;
-      if (!empleadosUnicos.has(clave)) {
-        empleadosUnicos.set(clave, {
-          nombre: marcacion.NOM_EMPLEADO,
-          cedula: marcacion.CEDULA,
-          departamento: marcacion.DES_DEPARTAMENTO,
-          seleccionado: true
-        });
+    this.cargandoEmpleados = true;
+    this.tthhService.getListaEmpleadosFiltro().subscribe({
+      next: (resp: any) => {
+        this.cargandoEmpleados = false;
+        const lista = Array.isArray(resp?.data) ? resp.data : [];
+        this.empleadosFiltro = lista.map((e: any) => ({
+          nombre: e.NOM_EMPLEADO,
+          cedula: e.CEDULA,
+          departamento: e.DES_DEPARTAMENTO,
+          seleccionado: true,
+        })).sort((a: EmpleadoFiltro, b: EmpleadoFiltro) => a.nombre.localeCompare(b.nombre));
+
+        // Guardar copia original para el filtrado
+        this.empleadosFiltroOriginal = [...this.empleadosFiltro];
+
+        // Inicializar la selección
+        this.empleadosFiltroSeleccionados = [];
+
+        // Seleccionar todos por defecto
+        this.seleccionarTodos(true);
+      },
+      error: (err) => {
+        this.cargandoEmpleados = false;
+        console.error('Error al cargar lista de empleados:', err);
+        Swal.fire('Error', 'No se pudo cargar la lista de empleados para el filtro', 'error');
+        // Asegurar estados consistentes
+        this.empleadosFiltro = [];
+        this.empleadosFiltroOriginal = [];
+        this.empleadosFiltroSeleccionados = [];
       }
     });
-    
-    this.empleadosFiltro = Array.from(empleadosUnicos.values())
-      .sort((a, b) => a.nombre.localeCompare(b.nombre));
-    
-    // Guardar copia original para el filtrado
-    this.empleadosFiltroOriginal = [...this.empleadosFiltro];
-    
-    // Inicializar la selección
-    this.empleadosFiltroSeleccionados = [];
-    
-    // Seleccionar todos por defecto
-    this.seleccionarTodos(true);
   }
 
   abrirDialogoEmpleados(): void {
@@ -262,14 +340,22 @@ export class MarcacionesObrerosComponent implements OnInit {
   aplicarFiltroEmpleados(): void {
     if (this.empleadosFiltroSeleccionados.length > 0) {
       const cedulasSeleccionadas = this.empleadosFiltroSeleccionados.map(e => e.cedula);
-      this.marcacionesFiltradas = this.marcaciones.filter(m => 
+      this.marcacionesFiltradas = this.marcaciones.filter(m =>
         cedulasSeleccionadas.includes(m.CEDULA)
       );
+      // Aplicar el estado de filtro incluso si el resultado es vacío
+      this.filtroAplicado = true;
     } else {
-      // Si no hay empleados seleccionados, mostramos todos
-      this.marcacionesFiltradas = [...this.marcaciones];
+      // Si no hay empleados seleccionados, quitamos el filtro
+      this.marcacionesFiltradas = [];
+      this.filtroAplicado = false;
     }
-    
+
+    // Resetear paginación a la primera página para reflejar cambios
+    if (this.dt) {
+      this.dt.first = 0;
+    }
+
     this.mostrarDialogEmpleados = false;
   }
 
@@ -296,5 +382,14 @@ export class MarcacionesObrerosComponent implements OnInit {
       const data: Blob = new Blob([buffer], { type: EXCEL_TYPE });
       FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
     });
+  }
+
+  // Limpiar el filtro aplicado a la tabla
+  limpiarFiltroTabla(): void {
+    this.marcacionesFiltradas = [];
+    this.filtroAplicado = false;
+    if (this.dt) {
+      this.dt.first = 0;
+    }
   }
 }

@@ -59,6 +59,14 @@
                   pTooltip="Exportar a Excel"
                   tooltipPosition="top">
                 </p-button>
+                <p-button 
+                  severity="help" 
+                  icon="pi pi-file-pdf" 
+                  (click)="exportarPDFObreros()"
+                  [disabled]="marcaciones.length === 0"
+                  pTooltip="Exportar a PDF"
+                  tooltipPosition="top">
+                </p-button>
               </div>
             </div>
             <hr class="section-divider high">
@@ -68,7 +76,7 @@
           <div *ngIf="formularioVisible" class="table-container">
             <p-table
               #dt
-              [value]="marcacionesFiltradas.length > 0 ? marcacionesFiltradas : marcaciones"
+              [value]="filtroAplicado ? marcacionesFiltradas : marcaciones"
               [globalFilterFields]="['NOM_EMPLEADO', 'CEDULA', 'FECHA', 'HORA_MINIMA', 'HORA_MAXIMA', 'MARCACION1', 'MARCACION2', 'MARCACION3', 'MARCACION4', 'DES_DEPARTAMENTO', 'DES_CARGO', 'DES_TIPO_ROL']"
               styleClass="p-datatable-striped"
               [paginator]="true"
@@ -160,7 +168,7 @@
               <ng-template pTemplate="body" let-marcacion>
                 <tr>
                   <td>{{ marcacion.FECHA | date:'dd/MM/yyyy' }}</td>
-                  <td>{{ marcacion.NOM_EMPLEADO }}</td>
+                  <td>{{ marcacion.NOM_EMPLEADO | cleanName }}</td>
                   <td>{{ marcacion.CEDULA }}</td>
                   <td [class.empty-cell]="!marcacion.MARCACION1">{{ marcacion.MARCACION1 || 'Sin registro' }}</td>
                   <td [class.empty-cell]="!marcacion.MARCACION2">{{ marcacion.MARCACION2 || 'Sin registro' }}</td>
@@ -175,23 +183,26 @@
               </ng-template>
 
               <ng-template pTemplate="summary">
-                <div class="flex align-items-center justify-content-between">
-                  <div>
-                    <span *ngIf="marcacionesFiltradas.length > 0">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                  <div style="display: flex; align-items: center; gap: .5rem;">
+                    <span *ngIf="filtroAplicado">
                       Mostrando {{ marcacionesFiltradas.length }} de {{ marcaciones.length }} registros
                     </span>
-                    <span *ngIf="marcacionesFiltradas.length === 0">
+                    <span *ngIf="!filtroAplicado">
                       Total de registros: {{ marcaciones.length || 0 }}
                     </span>
                   </div>
-                  <button 
-                    *ngIf="marcacionesFiltradas.length > 0" 
-                    pButton 
-                    icon="pi pi-times" 
-                    class="p-button-text p-button-sm"
-                    (click)="marcacionesFiltradas = [];">
-                    Limpiar filtros
-                  </button>
+                  <div>
+                    <p-button 
+                      *ngIf="filtroAplicado"
+                      type="button"
+                      label="Limpiar filtros"
+                      icon="pi pi-times"
+                      severity="secondary"
+                      styleClass="p-button-text p-button-sm"
+                      (click)="limpiarFiltroTabla()">
+                    </p-button>
+                  </div>
                 </div>
               </ng-template>
 
@@ -290,7 +301,7 @@
             <td (click)="$event.stopPropagation()">
               <p-tableCheckbox [value]="empleado"></p-tableCheckbox>
             </td>
-            <td>{{empleado.nombre}}</td>
+            <td>{{empleado.nombre | cleanName}}</td>
             <td>{{empleado.cedula}}</td>
             <td>{{empleado.departamento || 'N/A'}}</td>
           </tr>
@@ -327,23 +338,21 @@
         {{ empleadosFiltroSeleccionados.length }} empleado(s) seleccionado(s)
       </span>
       <div>
-        <button 
-          pButton 
+        <p-button 
           type="button" 
           label="Cancelar" 
           icon="pi pi-times" 
-          class="p-button-text" 
+          styleClass="p-button-text" 
           (click)="mostrarDialogEmpleados = false">
-        </button>
-        <button 
-          pButton 
+        </p-button>
+        <p-button 
           type="button" 
           label="Aplicar filtros" 
           icon="pi pi-check" 
-          class="p-button-success" 
+          styleClass="p-button-success" 
           (click)="aplicarFiltroEmpleados()"
           [disabled]="empleadosFiltroSeleccionados.length === 0">
-        </button>
+        </p-button>
       </div>
     </div>
   </ng-template>

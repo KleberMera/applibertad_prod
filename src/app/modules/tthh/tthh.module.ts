@@ -31,6 +31,7 @@ import { EmpleadoCorreosComponent } from './empleado-correos/empleado-correos.co
 import { NovedadesRolComponent } from './novedades-rol/novedades-rol.component';
 import { VerNovedadesComponent } from './ver-novedades/ver-novedades.component';
 import { MarcacionesObrerosComponent } from './marcaciones-obreros/marcaciones-obreros.component';
+import { CleanNamePipe } from './pipes/clean-name.pipe';
 import { MessageService } from 'primeng/api';
 
 @NgModule({
@@ -47,7 +48,8 @@ import { MessageService } from 'primeng/api';
     EmpleadoCorreosComponent,
     NovedadesRolComponent,
     VerNovedadesComponent,
-    MarcacionesObrerosComponent
+    MarcacionesObrerosComponent,
+    CleanNamePipe
   ],
   imports: [
     CommonModule,
@@ -69,6 +71,7 @@ import { MessageService } from 'primeng/api';
     CheckboxModule,
     InputTextModule
   ],
-  providers: [MessageService]
+  providers: [MessageService],
+  exports: [CleanNamePipe]
 })
 export class TthhModule { }

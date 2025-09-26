@@ -67,6 +67,7 @@ export const API_ROUTES = {
     TIPOEMPLEADO: `${ENV.uri}tthh/getListaTipoEmpleado`,
     VERNOVEDADES: `${ENV.uri}tthh/getNovedadesGeneradas`,
     EDITARROL: `${ENV.uri}tthh/actualizarNovedadesByEmpleado`,
+    LISTA_EMPLEADOS_FILTRO: `${ENV.uri}tthh/getListaEmpleadosFiltro`,
   },
   COMISARIA: {
     REP_PATENTE : `${ENV.uri}comisaria/repPatente`,
