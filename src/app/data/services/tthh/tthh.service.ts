@@ -329,15 +329,90 @@ export class TthhService {
       currentY = (doc as any).lastAutoTable?.finalY ? (doc as any).lastAutoTable.finalY + 8 : currentY + 8;
     });
 
-    // Totales y resumen simple (global)
-    if (currentY + 12 > pageHeight - margins.bottom) {
+    // Página/resumen: colocar inmediatamente después de la última tabla si hay espacio
+    const resumenTitleYCandidate = ((doc as any).lastAutoTable?.finalY || (margins.top + 25)) + 8;
+    let yPosResumen: number;
+    const neededForTitleAndOneRow = 22; // título + header + 1 fila aprox
+    let startingOnNewPageForResumen = false;
+    if (resumenTitleYCandidate + neededForTitleAndOneRow <= pageHeight - margins.bottom) {
+      // Cabe en la página actual
+      yPosResumen = resumenTitleYCandidate;
+    } else {
+      // No cabe, crear nueva página
       doc.addPage();
       drawEncabezado();
-      currentY = margins.top + 25;
+      yPosResumen = margins.top + 25;
+      startingOnNewPageForResumen = true;
     }
+
+    // Título del resumen
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(10);
-    doc.text(`TOTAL DE REGISTROS: ${totalRegistros}`, margins.left, currentY);
+    doc.setFontSize(11);
+    // Añadir un espacio adicional si inicia en nueva página
+    yPosResumen += startingOnNewPageForResumen ? 8 : 4;
+    doc.text('TOTAL DE REGISTROS POR DEPARTAMENTO:', margins.left, yPosResumen);
+
+    // Construir datos de resumen
+    const resumenRows = sortedDeps.map(dep => ({
+      DEPARTAMENTO: dep,
+      CANTIDAD: (gruposPorDepartamento.get(dep) || []).length
+    }));
+    const totalGeneral = resumenRows.reduce((acc, r) => acc + r.CANTIDAD, 0);
+
+    // Tabla del resumen (autopaginada por autoTable si fuera necesario)
+    autoTable(doc, {
+      columns: [
+        { header: 'Departamento', dataKey: 'DEPARTAMENTO' },
+        { header: 'Cantidad', dataKey: 'CANTIDAD' },
+      ],
+      body: resumenRows,
+      startY: yPosResumen + 4,
+      theme: 'grid',
+      headStyles: { fillColor: [0, 35, 115], halign: 'center', textColor: 255, fontSize: 9 },
+      bodyStyles: { fontSize: 8 },
+      columnStyles: {
+        DEPARTAMENTO: { cellWidth: 120 },
+        CANTIDAD: { halign: 'right', cellWidth: 25 },
+      },
+      // Importante: aumentar el margen superior para evitar chocar con la línea gris (y=35)
+      // En páginas nuevas, autoTable usa este margen para posicionar el encabezado de la tabla
+      margin: { top: 43, left: margins.left, right: margins.right, bottom: margins.bottom },
+      didDrawPage: () => {
+        drawEncabezado();
+      }
+    });
+
+    // Dibujar TOTAL GENERAL justo después de la tabla de resumen
+    const afterResumenY = (doc as any).lastAutoTable?.finalY || (yPosResumen + 20);
+    const totalHeight = 10;
+    if (afterResumenY + totalHeight > pageHeight - margins.bottom) {
+      doc.addPage();
+      drawEncabezado();
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(11);
+      const resumenTop = margins.top + 25 + 8; // más espacio cuando comienza en nueva página
+      doc.text('TOTAL DE REGISTROS POR DEPARTAMENTO:', margins.left, resumenTop);
+    }
+    autoTable(doc, {
+      columns: [
+        { header: 'Departamento', dataKey: 'DEPARTAMENTO' },
+        { header: 'Cantidad', dataKey: 'CANTIDAD' },
+      ],
+      body: [ { DEPARTAMENTO: 'TOTAL GENERAL:', CANTIDAD: totalGeneral } ],
+      startY: ((doc as any).lastAutoTable?.finalY || (margins.top + 25 + 4)) + 4,
+      theme: 'grid',
+      headStyles: { fillColor: [255, 255, 255], textColor: 0, lineWidth: 0 },
+      showHead: 'never',
+      bodyStyles: { fontSize: 8, fontStyle: 'bold' },
+      columnStyles: {
+        DEPARTAMENTO: { cellWidth: 120 },
+        CANTIDAD: { halign: 'right', cellWidth: 25 },
+      },
+      margin: { top: 35, left: margins.left, right: margins.right, bottom: margins.bottom },
+      didDrawPage: () => {
+        drawEncabezado();
+      }
+    });
 
     // Segunda pasada: dibujar paginación con el total real y alineada al margen derecho
     const totalPages = (doc as any).internal.getNumberOfPages();
