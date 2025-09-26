@@ -30,22 +30,21 @@ export class ReporteExoneracionesService {
           const paginasConEncabezado = new Set<number>();
           const headerHeight = 20;
           
+          // Nueva lógica de paginación similar a tthh.service.ts
           const drawEncabezado = () => {
-            const currentPage = doc.getCurrentPageInfo().pageNumber;
+            const currentPage = (doc as any).getCurrentPageInfo()?.pageNumber || 1;
             if (paginasConEncabezado.has(currentPage)) return;
             paginasConEncabezado.add(currentPage);
-          
-            const totalPagesExp = '{total_pages_count_string}';
+
             const pad = (n: number) => n.toString().padStart(2, '0');
             const mesesAbreviados = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEPT', 'OCT', 'NOV', 'DIC'];
-          
+
             const now = new Date();
             const hours = now.getHours();
             const ampm = hours >= 12 ? 'PM' : 'AM';
             const hour12 = hours % 12 || 12;
-          
             const fechaHora = `${pad(now.getDate())}/${mesesAbreviados[now.getMonth()]}/${now.getFullYear()}, ${pad(hour12)}:${pad(now.getMinutes())}:${pad(now.getSeconds())} ${ampm}`;
-          
+
             // Formatear la fecha de consulta para mostrarla en el encabezado
             let fechaFormateada = fechaConsulta;
             if (fechaConsulta.includes(' - ')) {
@@ -55,34 +54,30 @@ export class ReporteExoneracionesService {
               const nombreMes = mesesAbreviados[parseInt(month, 10) - 1];
               fechaFormateada = `${pad(parseInt(day))}/${nombreMes}/${year}`;
             }
-          
+
             const yBase = margins.top;
             const rightX = pageWidth - margins.right;
-          
+
             // Agregar logo si está disponible
             if (base64Logo) {
               doc.addImage(base64Logo, 'PNG', margins.left, yBase, 40, 15);
             }
-          
+
             doc.setFont('helvetica', 'bold');
             doc.setFontSize(12);
             doc.text('GAD Municipal del Cantón La Libertad', pageWidth / 2, yBase + 4, { align: 'center' });
-          
+
             doc.setFont('helvetica', 'bold');
             doc.setFontSize(11);
             doc.text('Emisión Diaria de Exoneraciones', pageWidth / 2, yBase + 10, { align: 'center' });
             doc.setFont('helvetica', 'normal');
             doc.setFontSize(10);
             doc.text(`Período: ${fechaFormateada}`, pageWidth / 2, yBase + 16, { align: 'center' });
-          
-            doc.setFont('helvetica', 'normal');
+
             doc.setFontSize(8);
-            // Ajustar la posición vertical del texto de página para alinearlo con el usuario y fecha
-            doc.text(`Página ${currentPage} de ${totalPagesExp}`, rightX, yBase + 4, { align: 'right' });
             doc.text(`Usuario: ${usuario}`, rightX, yBase + 10, { align: 'right' });
             doc.text(fechaHora, rightX, yBase + 16, { align: 'right' });
-          
-            // Ajustar la línea horizontal para que sea un poco más larga y coincida con el diseño
+
             doc.setDrawColor(150);
             doc.line(margins.left, yBase + 20, pageWidth - margins.right, yBase + 20);
           };
@@ -309,9 +304,20 @@ export class ReporteExoneracionesService {
           });
           
        
-          // Finalizar el PDF
-          doc.putTotalPages('{total_pages_count_string}');
-          
+          // Segunda pasada: dibujar paginación con el total real y alineada al margen derecho
+          const totalPages = (doc as any).internal.getNumberOfPages();
+          for (let i = 1; i <= totalPages; i++) {
+            (doc as any).setPage(i);
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(8);
+            const rightX = pageWidth - margins.right;
+            const yBase = margins.top;
+            const pageLabel = `Página ${i} de ${totalPages}`;
+            const labelWidth = doc.getTextWidth(pageLabel);
+            const x = rightX - labelWidth;
+            doc.text(pageLabel, x, yBase + 4);
+          }
+
           // Generar el PDF como Blob
           const pdfBlob = doc.output('blob');
           observer.next(pdfBlob);
