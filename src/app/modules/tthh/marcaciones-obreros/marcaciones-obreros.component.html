@@ -60,7 +60,7 @@
                   tooltipPosition="top">
                 </p-button>
                 <p-button 
-                  severity="help" 
+                  severity="danger" 
                   icon="pi pi-file-pdf" 
                   (click)="exportarPDFObreros()"
                   [disabled]="marcaciones.length === 0"
@@ -248,13 +248,13 @@
       </div>
       <div class="p-col-12 p-md-6 p-text-right">
         <p-button 
-          label="Seleccionar todos" 
+          label="Marcar todos" 
           icon="pi pi-check-square" 
           styleClass="p-button-text p-button-sm p-button-success"
           (click)="seleccionarTodos(true)">
         </p-button>
         <p-button 
-          label="Deseleccionar todos" 
+          label="Desmarcar todos" 
           icon="pi pi-times-circle" 
           styleClass="p-button-text p-button-sm p-button-danger p-ml-2"
           (click)="seleccionarTodos(false)">
